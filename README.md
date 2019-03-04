@@ -1,11 +1,20 @@
 # First CTF
 
-## Startinf CTFd
+
+
+## Start an empty CTFd
 
 ```bash
-sudo docker-compose -d up
+git clone https://github.com/CTFd/CTFd
+docker-compose up -d
 ```
 
+Browse localhost:8000 
+Create admin account
+import martine-ctf.zip  <== Once build :)
+
+
+## Buils challenges VMs and martine-ctf.zip
 
 ```bash
 sudo docker-compose down
