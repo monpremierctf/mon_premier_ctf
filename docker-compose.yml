@@ -1,0 +1,17 @@
+ctf-shell:
+  image: ctf-shell:latest
+  ports:
+    - "22:2222"
+  environment:
+    - ROOT_PASSWORD=password
+    - USER1_NAME=user1
+    - USER1_PASSWORD=password
+
+ctf-escalation:
+  image: ctf-escalation:latest
+  ports:
+    - "22:2223"
+  environment:
+    - ROOT_PASSWORD=password
+    - USER1_NAME=user1
+    - USER1_PASSWORD=password

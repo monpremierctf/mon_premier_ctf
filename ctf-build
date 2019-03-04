@@ -1,0 +1,21 @@
+#/bin/bash
+#
+# Build Docker images for the CTF
+#
+
+# Build sshd image on Ubuntu
+sudo docker build -t ctf-sshd ./ctf-sshd
+
+# Add users and Flags for Shell
+# Files attibutes are copied in images
+# Make Flags read only for owner
+chmod 400 ctf-shell/flag*
+sudo docker build -t ctf-shell ./ctf-shell
+chmod 744 ctf-shell/flag*
+
+# Add users and Flags for Shell
+# Files attibutes are copied in images
+# Make Flags read only for owner
+chmod 400 ctf-escalation/flag*
+sudo docker build -t ctf-escalation ./ctf-escalation
+chmod 744 ctf-escalation/flag*
