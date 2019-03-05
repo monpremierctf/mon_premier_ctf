@@ -20,7 +20,11 @@ Connection: close
 Upgrade-Insecure-Requests: 1
 
 nonce=79e67c31b3b45520fbb1f014ee59f0f20bf53a090f8d0ce8633a4d74222dc175&ctf_name=yolo&name=admin&email=admin%40localhost&password=toor&user_mode=teams
+````
+
 ## Add a challenge
+
+````http
 POST /api/v1/challenges HTTP/1.1
 Host: localhost:8000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0
@@ -47,7 +51,7 @@ Content-Length: 563
 Date: Tue, 05 Mar 2019 08:39:07 GMT
 
 {"data": {"category": "Category1", "state": "hidden", "name": "ChallengeName", "type_data": {"templates": {"create": "/plugins/challenges/assets/create.html", "update": "/plugins/challenges/assets/update.html", "view": "/plugins/challenges/assets/view.html"}, "scripts": {"create": "/plugins/challenges/assets/create.js", "update": "/plugins/challenges/assets/update.js", "view": "/plugins/challenges/assets/view.js"}, "id": "standard", "name": "standard"}, "max_attempts": 0, "type": "standard", "id": 1, "value": 42, "description": "Message"}, "success": true}
-
+````
 
 ## Get challenges page (full response at the end)
 
@@ -112,7 +116,8 @@ Connection: close
 ````
 
 Response:
-````
+
+````http
 HTTP/1.1 200 OK
 Content-Type: application/json
 Content-Length: 326
