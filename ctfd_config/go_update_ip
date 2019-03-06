@@ -1,0 +1,31 @@
+#!/bin/bash
+
+#
+# Usage
+#
+if [ $# -lt 2 ]; then
+    echo "Usage: $0 [config.zip] [IP Server]"
+    exit 0;
+fi
+
+#
+# Extract zip 
+#
+if [ -d tmp ]; then
+    rm -R tmp
+fi
+mkdir tmp
+unzip -d tmp $1
+
+echo "Replacing IPSERVER by $2"
+sed -i "s/IPSERVER/$2/g" ./tmp/*/*.json 
+echo "done"
+
+#
+# Rebuild zip
+# 
+mv $1 $1.sav
+cd ./tmp
+zip -r ../$1 ./*
+cd -
+echo "$1 updated"

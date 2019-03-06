@@ -1,0 +1,98 @@
+.site-body {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  line-height: 1.5;
+  color: #24292e;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+
+.site-body code,
+.site-body kbd,
+.site-body pre {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+
+
+.site-body code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-size: 12px;
+}
+
+.site-body pre {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-size: 12px;
+}
+
+
+.site-body h1,
+.site-body h2,
+.site-body h3,
+.site-body h4,
+.site-body h5,
+.site-body h6 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.site-body h1 {
+  font-size: 28px;
+  font-weight: 300;
+}
+
+.site-body h2 {
+  font-size: 21px;
+  font-weight: 400;
+}
+
+.site-body h3 {
+  font-size: 20px;
+  font-weight: 400;
+}
+
+
+.site-body p {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+
+.site-body code {
+  padding: 0.2em 0.4em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(27,31,35,0.05);
+  border-radius: 3px;
+}
+
+.site-body pre {
+  word-wrap: normal;
+}
+
+.site-body pre>code {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  word-break: normal;
+  white-space: pre;
+  
+  border: 1;
+}
+
+.site-body * {
+  box-sizing: border-box;
+}
+
+
+.site-body blockquote {
+  padding: 0 1em;
+  color: #6a737d;
+  border-left: 0.25em solid #dfe2e5;
+}
+

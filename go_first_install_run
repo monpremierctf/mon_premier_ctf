@@ -1,0 +1,43 @@
+#!/bin/bash
+
+#
+# is Docker running ?
+# service docker start
+
+#
+# is CTFD clean ?
+# check if .data exist
+
+#
+# Launch CTFd 
+# 
+cd CTFd
+docker-compose up -d
+# wait for containers are up ?
+
+
+
+#
+# Update ctfd config with IP and ports
+#
+
+
+#
+# Copy and import ctfd config
+#
+cp ../ctfd_config/myctf.zip .
+docker exec ctfd_ctfd_1 python import.py myctf.zip
+
+
+#
+# Start Dockers for challenges
+#
+
+
+#
+# Start vitualbox VMs for challenges
+#
+
+
+
+
