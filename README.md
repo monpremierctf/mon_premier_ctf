@@ -9,7 +9,7 @@ Vous trouverez ici, une série de challenges destinés à permettre aux particip
 ## Start an empty CTFd
 
 ```bash
-git clone https://github.com/CTFd/CTFd
+cd ctfd
 docker-compose up -d
 ```
 
