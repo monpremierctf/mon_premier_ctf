@@ -25,7 +25,7 @@ unzip -q -d ctfd_config/tmp $1
 # Generate config from challenge directories
 #
 echo "Generating config"
-python ./go_generate_config.py
+python ./gen_config.py
 
 #
 # Update IPSERVER in challenge descriptions
