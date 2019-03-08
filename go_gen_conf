@@ -1,0 +1,44 @@
+#!/bin/bash
+
+#
+# Usage
+# 
+# ./go_gen_conf empty_conf.zip 11.0.0.11
+#
+if [ $# -lt 2 ]; then
+    echo "Usage: $0 [config.zip] [IP Server]"
+    exit 0;
+fi
+
+#
+# Extract default config   
+#
+echo "Extracting default config"
+if [ -d ctfd_config/tmp ]; then
+    rm -R ctfd_config/tmp
+fi
+mkdir ctfd_config/tmp
+unzip -q -d ctfd_config/tmp $1
+
+
+#
+# Generate config from challenge directories
+#
+echo "Generating config"
+python ./go_generate_config.py
+
+#
+# Update IPSERVER in challenge descriptions
+#
+echo "Replacing IPSERVER by $2"
+sed -i "s/IPSERVER/$2/g" ./ctfd_config/tmp/*/*.json 
+
+
+#
+# Rebuild zip
+# 
+#mv $1 $1.sav
+cd ./ctfd_config/tmp
+zip -q -r ../../myconfig.zip ./*
+cd -
+echo "myconfig.zip generated for ctfd"
