@@ -184,6 +184,7 @@ Les coéquipers font **[Join unofficial team]**
 ## Lancement des Dockers et VMs des challenges
 
 Pour l'instant les dockers se lancent manuellement dans chaque répertoire.
+!! Seuls quelques répertoires sont bien configurés. !!
 
 Par exemple pour ctf-sqli:
 ```bash
