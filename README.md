@@ -148,5 +148,36 @@ FilesystemUploader:copyfileobj(fileobj, /var/uploads/ctf-transfert/dechiffre_03,
 $ 
 ```
 
+</br>
+
+## Première utilisation Admin
+
+Lancer un navigateur sur http://localhost:8000
+
+Clicker sur **[Login]** et se loguer en tant que *admin* avec le mot de passe *CTFPasswordZ*.
+
+L'admin peut se créer une équipe, mais ce n'est pas souhaitable. Il faut ignorer cette première page.
+
+Cliquer sur **[Admin]**, puis **[Challenges]**. Il est possible d'éditer les challenges dans l'interface.
+
+
+
+</br>
+
+## Première utilisation Participant
+
+Lancer un navigateur sur http://localhost:8000
+Si vous êtes loggué en Admin, Cliquer à gauche sur **[CTFd]**, à droite sur **[logout]**.
+
+Cliquer sur **[Register]**.
+
+Créer un user qui sera capitaine...
+
+Puis faire **[Create unofficial team]**
+Le capitaine d'équipe créé l'équipe et partage le mot de passe avec ses coéquipiers.
+
+Les coéquipers font **[Join unofficial team]**
+
+</br>
 
 Cette doc est temporaire, on fera quelque-chose de mieux packagé rapidement.
