@@ -26,6 +26,6 @@ echo "done"
 # 
 mv $1 $1.sav
 cd ./tmp
-zip -r ../$1 ./*
+zip -r -D ../$1 ./*
 cd -
 echo "$1 updated"

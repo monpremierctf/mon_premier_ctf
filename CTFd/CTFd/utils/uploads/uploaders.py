@@ -41,6 +41,7 @@ class FilesystemUploader(BaseUploader):
         if not os.path.exists(directory):
             os.makedirs(directory)
 
+        print("FilesystemUploader:copyfileobj(fileobj, "+location+", 16384)")
         with open(location, 'wb') as dst:
             copyfileobj(fileobj, dst, 16384)
 

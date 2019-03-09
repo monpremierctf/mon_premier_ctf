@@ -38,7 +38,8 @@ sed -i "s/IPSERVER/$2/g" ./ctfd_config/tmp/*/*.json
 # Rebuild zip
 # 
 #mv $1 $1.sav
+# zip must not contain dir entries (-D option)
 cd ./ctfd_config/tmp
-zip -q -r ../../myconfig.zip ./*
+zip -r -D ../../myconfig.zip ./*
 cd -
 echo "myconfig.zip generated for ctfd"

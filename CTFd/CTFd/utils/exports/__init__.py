@@ -213,9 +213,12 @@ def import_ctf(backup, erase=True):
                     )
 
     # Extracting files
+    print("backup.namelist()=")
+    print(backup.namelist())
     files = [f for f in backup.namelist() if f.startswith('uploads/')]
     uploader = get_uploader()
     for f in files:
+        print("Extracting :"+f)
         filename = f.split(os.sep, 1)
 
         if len(filename) < 2:  # just an empty uploads directory (e.g. uploads/)

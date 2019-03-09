@@ -39,11 +39,11 @@ def add_challenge(name, desc, value, category):
     challenge_id+=1
     challenges.append({
             "id": int(challenge_id), 
-            "name": name, 
-            "description": desc, 
+            "name": str(name), 
+            "description": str(desc), 
             "max_attempts": 0, 
             "value": int (value), 
-            "category": category, 
+            "category": str(category), 
             "type": "standard", 
             "state": "visible", 
             "requirements": "null"
@@ -59,14 +59,14 @@ def add_flag(flag):
         "id": int(flag_id), 
         "challenge_id": challenge_id, 
         "type": "static", 
-        "content": flag, 
+        "content": str(flag), 
         "data": ""}
     )
 
 def copy_file(challenge_dir, filename):
     src = challenge_dir+"/"+filename
-    dst = "uploads/"+challenge_dir+"/"+filename
-    dst_tmp = "ctfd_config/tmp/"+dst
+    dst = challenge_dir+"/"+filename
+    dst_tmp = "ctfd_config/tmp/uploads/"+dst
     directory = os.path.dirname(dst_tmp)
     if not os.path.exists(directory):
         os.makedirs(directory)
@@ -84,7 +84,7 @@ def add_file(challenge_dir, filename):
     files.append({
         "id": int(file_id), 
         "type": "challenge", 
-        "location": filename_dest, 
+        "location": str(filename_dest), 
         "challenge_id": int(challenge_id), 
         "page_id": None}
     )
@@ -107,19 +107,19 @@ def parse_dir(challenge_dir):
     for challenge in config.sections():
         print "- Processing "+challenge
         name = config.get(challenge, 'name')
-        name = name.encode('string-escape')
+        #name = name.encode('string-escape')
         desc = config.get(challenge, 'description')
         #print(desc)
-        desc_enc = desc.encode('string-escape') #unicode-escape
+        #desc_enc = desc.encode('string-escape') #unicode-escape
         #print(desc_enc)
         value = config.get(challenge, 'value')
         category = config.get(challenge, 'category')
-        category = category.encode('string-escape')
+        #category = category.encode('string-escape')
         filename = getParam(config, challenge, 'file')
         flag = getParam(config, challenge, 'flag')
         #print(name)
         #print (description)
-        add_challenge(name, desc_enc, value, category)
+        add_challenge(name, desc, value, category)
         add_flag(flag)
         add_file(challenge_dir, filename) 
 
@@ -134,7 +134,7 @@ if __name__ == '__main__':
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-    with io.open(out_dir+'challenges.json', 'w', encoding='latin-1') as outfile:
+    with io.open(out_dir+'challenges.json', 'w', encoding='utf8') as outfile:
         outfile.write(unicode('{"count": '+str(challenge_id)+', "results": '))
         str_ = json.dumps(challenges,
                         indent=4, sort_keys=False,
