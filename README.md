@@ -64,6 +64,7 @@ ex: [ctf-net-pcap//challenges.cfg](ctf-net-pcap/challenges.cfg)
 
 
 On utilise *go_gen_conf  [IP du serveur à insérer dans les descriptions]* pour générer le fichier de config.
+Il faut peut-être faire un sudo suivant le répertoire d'installation.
 ```bash
 $ cd ~/mon_premier_ctf
 $ ./go_gen_conf  12.0.0.12
