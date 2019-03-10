@@ -3,10 +3,10 @@
 #
 # Usage
 # 
-# ./go_gen_conf empty_conf.zip 11.0.0.11
+# ./go_gen_conf 11.0.0.11
 #
-if [ $# -lt 2 ]; then
-    echo "Usage: $0 [config.zip] [IP Server]"
+if [ $# -lt 1 ]; then
+    echo "Usage: $0 [IP Server]"
     exit 0;
 fi
 
@@ -18,7 +18,7 @@ if [ -d ctfd_config/tmp ]; then
     rm -R ctfd_config/tmp
 fi
 mkdir ctfd_config/tmp
-unzip -q -d ctfd_config/tmp $1
+unzip -q -d ctfd_config/tmp ctfd_config/empty_conf.zip
 
 
 #
@@ -30,8 +30,8 @@ python ./gen_config.py
 #
 # Update IPSERVER in challenge descriptions
 #
-echo "Replacing IPSERVER by $2"
-sed -i "s/IPSERVER/$2/g" ./ctfd_config/tmp/*/*.json 
+echo "Replacing IPSERVER by $1"
+sed -i "s/IPSERVER/$1/g" ./ctfd_config/tmp/*/*.json 
 
 
 #

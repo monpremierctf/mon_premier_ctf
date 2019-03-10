@@ -16,6 +16,7 @@ challenges_dir_list = [
 ]
 
 def read_challenges_dir_list():
+    global challenges_dir_list
     in_file = open("challenges_list.cfg", 'r')
     for line in in_file.readlines():
         line = textwrap.dedent(line)
@@ -26,6 +27,9 @@ def read_challenges_dir_list():
             continue
         challenges_dir_list.append(line)
     in_file.close()
+    challenges_dir_list = challenges_dir_list[::-1]
+    print(challenges_dir_list)
+
 
 challenges=[]
 challenge_id=0
