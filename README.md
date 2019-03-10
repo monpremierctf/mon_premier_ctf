@@ -60,7 +60,7 @@ ctf-sqli
 
 Dans Chaque répertoire le fichier challenges.cfg détaille les challenges.
 
-ex: [ctf-pcap//challenges.cfg](ctf-pcap/challenges.cfg)
+ex: [ctf-net-pcap//challenges.cfg](ctf-net-pcap/challenges.cfg)
 
 
 On utilise *go_gen_conf  [IP du serveur à insérer dans les descriptions]* pour générer le fichier de config.
