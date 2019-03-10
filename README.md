@@ -10,6 +10,8 @@ Vous trouverez ici, une série de challenges destinés à permettre aux particip
 ## Prerequis
 
 Testé sur Ubuntu 18.04.01-desktop  avec un utilisateur ayant les droits sudo.
+Dans un VM il faut au moins 2,5G de mémoire.
+Avec 2G, on manque de mémoire pour lancer le dernier docker.
 
 ```bash
 $ sudo apt-get update
@@ -28,6 +30,26 @@ $ git clone https://github.com/monpremierctf/mon_premier_ctf.git
 $ cd mon_premier_ctf
 $ cd CTFd
 $ sudo docker-compose up
+Creating network "ctfd_default" with the default driver
+Creating network "ctfd_internal" with the default driver
+Pulling cache (redis:4)...
+4: Pulling from library/redis
+f7e2b70d04ae: Pull complete
+421427137c28: Pull complete
+[..]
+db_1     | 2019-03-10 19:43:12 0 [Warning] 'proxies_priv' entry '@% root@4f47270c6554' ignored in --skip-name-resolve mode.
+db_1     | 2019-03-10 19:43:12 0 [Note] mysqld: ready for connections.
+db_1     | Version: '10.4.3-MariaDB-1:10.4.3+maria~bionic'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  mariadb.org binary distribution
+ctfd_1   | ..................db is ready
+ctfd_1   |  * Loaded module, <module 'CTFd.plugins.challenges' from '/opt/CTFd/CTFd/plugins/challenges/__init__.py'>
+ctfd_1   |  * Loaded module, <module 'CTFd.plugins.dynamic_challenges' from '/opt/CTFd/CTFd/plugins/dynamic_challenges/__init__.py'>
+ctfd_1   |  * Loaded module, <module 'CTFd.plugins.flags' from '/opt/CTFd/CTFd/plugins/flags/__init__.py'>
+ctfd_1   | Starting CTFd
+ctfd_1   | [2019-03-10 19:43:17 +0000] [1] [INFO] Starting gunicorn 19.9.0
+ctfd_1   | [2019-03-10 19:43:17 +0000] [1] [INFO] Listening at: http://0.0.0.0:8000 (1)
+ctfd_1   | [2019-03-10 19:43:17 +0000] [1] [INFO] Using worker: geventwebsocket.gunicorn.workers.GeventWebSocketWorker
+ctfd_1   | [2019-03-10 19:43:17 +0000] [74] [INFO] Booting worker with pid: 74
+ctfd_1   |  * Loaded module, <module 'CTFd.plugins.challenges' from '/opt/CTFd/CTFd/plugins/challenges/__init__.py'>
 ```
 On se prépare un café le temps que tout s'installe.
 La commande $ sudo docker-compose up va occuper le terminal, vous ferez Ctrl-C pour terminer CTFd. Ouvrez un autre terminal pour charger la config.
@@ -145,6 +167,12 @@ Les coéquipers font **[Join unofficial team]**
 
 ## Lancement des Dockers et VMs des challenges
 
+ctf-shell, ctf-escalation et ctf-transfert ont besoin de l'image ctf-sshd
+```bash
+$ cd ~/mon_premier_ctf
+sudo docker build -t ctf-sshd ./ctf-sshd
+```
+
 Pour l'instant les dockers se lancent manuellement dans chaque répertoire.
 !! Seuls quelques répertoires sont bien configurés. !!
 - ctf-shell
@@ -152,14 +180,30 @@ Pour l'instant les dockers se lancent manuellement dans chaque répertoire.
 - ctf-transfert
 - ctf-sqli
 
-ctf-shell, ctf-escalation et ctf-transfert ont besoin de l'image ctf-sshd
+
+Pour l'instant chaque docher-compose est bloquant et lancé dans son shell propre.
+Lançer ctf-shell
 ```bash
-$ sudo docker build -t ctf-sshd ./ctf-sshd
-$ cd ctf-xxx
+$ cd ~/mon_premier_ctf
+$ cd ctf-shell
 $ sudo docker-compose up
 ```
 
-Par exemple pour ctf-sqli:
+Dans un autre shell, lancer ctf-escalation
+```bash
+$ cd ~/mon_premier_ctf
+$ cd ctf-escalation
+$ sudo docker-compose up
+```
+
+Dans un autre shell, lancer ctf-transfert
+```bash
+$ cd ~/mon_premier_ctf
+$ cd ctf-transfert
+$ sudo docker-compose up
+```
+
+Dans un autre shell, lancer le docker ctf-sqli:
 ```bash
 $ cd ctf-sqli/
 $ sudo docker-compose up
@@ -176,10 +220,6 @@ web_1    | 2019/03/09 07:55:58 [error] 6#6: *1 open() "/www_site/favicon.ico" fa
 web_1    | 172.17.0.1 - - [09/Mar/2019:07:56:05 +0000] "GET /beware_cat05.png HTTP/1.1" 200 58097 "http://localhost:8080/login.php" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0" "-"
 ```
 Cette command est bloquante, et permet de voir les logs des requêtes au serveur s'afficher.
-
-Dans le navigateur aller sur : http://localhost:8080/login.php
-
-
 
 
 
