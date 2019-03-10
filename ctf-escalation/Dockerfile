@@ -1,16 +1,16 @@
 FROM ctf-sshd:latest
 
 ## find sticky bit : bash 
-RUN useradd -m -d /home/theprofessor -s /bin/bash  theprofessor
-RUN echo 'theprofessor:darko' | chpasswd
-RUN useradd -m -d /home/tokio -s /bin/bash  tokio
-RUN echo 'tokio:esther' | chpasswd
+RUN useradd -m -d /home/theprofessor -s /bin/bash  theprofessor &&\
+    echo 'theprofessor:darko' | chpasswd &&\
+    useradd -m -d /home/tokio -s /bin/bash  tokio &&\
+    echo 'tokio:esther' | chpasswd &&\
 COPY --chown=tokio flag01.txt /home/tokio/flag01.txt
-RUN chmod 400 /home/tokio/flag01.txt
-RUN cp /bin/bash /home/tokio/bash
-RUN chown tokio /home/tokio/bash
-RUN chmod a+x /home/tokio/bash
-RUN chmod +s /home/tokio/bash
+RUN chmod 400 /home/tokio/flag01.txt &&\
+    cp /bin/bash /home/tokio/bash &&\
+    chown tokio /home/tokio/bash &&\
+    chmod a+x /home/tokio/bash &&\
+    chmod +s /home/tokio/bash
 
 ## sticky bit :less
 RUN apt-get update && apt-get install -y less
