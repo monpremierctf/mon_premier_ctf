@@ -42,4 +42,5 @@ sed -i "s/IPSERVER/$1/g" ./ctfd_config/tmp/*/*.json
 cd ./ctfd_config/tmp
 zip -r -D ../../myconfig.zip ./*
 cd -
+rm -Rf ctfd_config/tmp
 echo "myconfig.zip generated for ctfd"
