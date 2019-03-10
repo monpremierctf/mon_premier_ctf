@@ -171,7 +171,7 @@ mysql_1  | 2019-03-09 07:55:05 0 [Warning] TIMESTAMP with implicit DEFAULT value
 web_1    | 2019/03/09 07:55:58 [error] 6#6: *1 open() "/www_site/favicon.ico" failed (2: No such file or directory), client: 172.17.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost:8080"[...]
 web_1    | 172.17.0.1 - - [09/Mar/2019:07:56:05 +0000] "GET /beware_cat05.png HTTP/1.1" 200 58097 "http://localhost:8080/login.php" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0" "-"
 ```
-Cette command est bloquante, et permet de voir les logs des requètes au serveur s'afficher.
+Cette command est bloquante, et permet de voir les logs des requêtes au serveur s'afficher.
 
 Dans le navigateur aller sur : http://localhost:8080/login.php
 
