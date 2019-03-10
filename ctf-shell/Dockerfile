@@ -64,7 +64,7 @@ COPY --chown=han liste10.txt /home/han/liste10.txt
 RUN chmod 400 /home/han/liste10.txt
 
 ## unzip
-RUN useradd -m -d /home/c3PO -s /bin/bash  c3PO
+RUN useradd -m -d /home/c3po -s /bin/bash  c3po
 RUN echo 'c3po:corellia' | chpasswd
 COPY --chown=c3po flag11.zip /home/c3po/flag11.zip
 RUN chmod 400 /home/c3po/flag11.zip
