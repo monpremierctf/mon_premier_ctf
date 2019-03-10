@@ -151,8 +151,11 @@ Pour l'instant les dockers se lancent manuellement dans chaque répertoire.
 - ctf-escalation
 - ctf-transfert
 - ctf-sqli
+
+ctf-shell, ctf-escalation et ctf-transfert ont besoin de l'image ctf-sshd
 ```bash
-Faire $ cd ctf-xxx
+$ sudo docker build -t ctf-sshd ./ctf-sshd
+$ cd ctf-xxx
 $ sudo docker-compose up
 ```
 
