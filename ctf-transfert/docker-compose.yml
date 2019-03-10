@@ -1,0 +1,4 @@
+escalation:
+  build: . 
+  ports:
+    - "${PORT_SSH}:22"

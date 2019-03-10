@@ -4,7 +4,7 @@ FROM ctf-sshd:latest
 RUN useradd -m -d /home/theprofessor -s /bin/bash  theprofessor &&\
     echo 'theprofessor:darko' | chpasswd &&\
     useradd -m -d /home/tokio -s /bin/bash  tokio &&\
-    echo 'tokio:esther' | chpasswd &&\
+    echo 'tokio:esther' | chpasswd 
 COPY --chown=tokio flag01.txt /home/tokio/flag01.txt
 RUN chmod 400 /home/tokio/flag01.txt &&\
     cp /bin/bash /home/tokio/bash &&\
