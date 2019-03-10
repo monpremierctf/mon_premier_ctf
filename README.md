@@ -37,29 +37,6 @@ CTFd est fonctionnel mais vide. Il est possible de lancer un navigateur sur  htt
 
 </br>
 
-## Pousser la config de démo du ctf
-
-```bash
-$ cp ../ctfd_config/FRTW.zip .
-$ sudo docker exec ctfd_ctfd_1 python import.py FRTW.zip
-```
-Cette configuration continent des adresses IP statiques.
-
-Lancer un navigateur sur http://localhost:8000
-
-Clicker sur Login et se loguer en tant que 'admin' avec le mot de passe 'CTFPasswordZ'.
-
-L'admin peut se créer une équipe, mais ce n'est pas souhaitable.
-Cliquer sur Admin, puis Challenges. Il est possible d'éditer les challenges dans l'interface.
-
-Cliquer à gauche sur CTFd, à droite sur logout, puis register.
-Créer un user qui sera capitaine...
-Create unofficial team
-Le capitaine d'équipe créé l'équipe et partage le mot de passe avec ses coéquipiers.
-Les coéquipers font Join unofficial team
-
-
-</br>
 
 ## Générer le fichier de config du CTF
 
@@ -77,6 +54,8 @@ $ cat challenges_list.cfg
 ctf-shell
 ctf-escalation
 ctf-transfert
+ctf-net-pcap
+ctf-sqli
 ```
 
 Dans Chaque répertoire le fichier challenges.cfg détaille les challenges.
@@ -84,48 +63,16 @@ Dans Chaque répertoire le fichier challenges.cfg détaille les challenges.
 ex: [ctf-pcap//challenges.cfg](ctf-pcap/challenges.cfg)
 
 
-On utilise *go_gen_conf [template de conf] [IP du serveur à insérer dans les descriptions]* pour générer le fichier de config.
+On utilise *go_gen_conf  [IP du serveur à insérer dans les descriptions]* pour générer le fichier de config.
 ```bash
 $ cd ~/mon_premier_ctf
-$ ./go_gen_conf empty_conf.zip 12.0.0.12
+$ ./go_gen_conf  12.0.0.12
 Extracting default config
 Generating config
 Enter [ctf-shell]
 - Processing Challenge_1
 - Processing Challenge_2
-Enter [ctf-escalation]
-- Processing Challenge_1
-- Processing Challenge_2
-- Processing Challenge_3
-Enter [ctf-transfert]
-- Processing Challenge_1
-- Copy [ctf-transfert/flag01_enc.bin]  => ctfd_config/tmp/uploads/ctf-transfert/flag01_enc.bin
-- Processing Challenge_2
-- Copy [ctf-transfert/dechiffre_02]  => ctfd_config/tmp/uploads/ctf-transfert/dechiffre_02
-- Processing Challenge_3
-- Copy [ctf-transfert/dechiffre_03]  => ctfd_config/tmp/uploads/ctf-transfert/dechiffre_03
-Replacing IPSERVER by 12.0.0.12
-  adding: db/tags.json (stored 0%)
-  adding: db/awards.json (stored 0%)
-  adding: db/submissions.json (stored 0%)
-  adding: db/flags.json (deflated 76%)
-  adding: db/users.json (deflated 34%)
-  adding: db/config.json (deflated 70%)
-  adding: db/pages.json (deflated 56%)
-  adding: db/challenges.json (deflated 72%)
-  adding: db/teams.json (stored 0%)
-  adding: db/alembic_version.json (deflated 4%)
-  adding: db/hints.json (stored 0%)
-  adding: db/files.json (deflated 69%)
-  adding: db/tracking.json (deflated 55%)
-  adding: db/solves.json (stored 0%)
-  adding: db/dynamic_challenge.json (stored 0%)
-  adding: db/unlocks.json (stored 0%)
-  adding: db/notifications.json (stored 0%)
-  adding: uploads/ctf-transfert/dechiffre_02 (deflated 67%)
-  adding: uploads/ctf-transfert/flag01_enc.bin (deflated 28%)
-  adding: uploads/ctf-transfert/dechiffre_03 (deflated 67%)
-/home/yop/tttt/mon_premier_ctf
+[...]
 myconfig.zip generated for ctfd
 ```
 
@@ -149,6 +96,20 @@ $
 ```
 
 </br>
+
+### Pousser une config de démo du ctf
+
+Si la génération de la config n'a pas fonctionné. Il est possible d'utiliser une config de démo.
+
+```bash
+$ cp ../ctfd_config/myconfig.zip .
+$ sudo docker exec ctfd_ctfd_1 python import.py myconfig.zip
+```
+Cette configuration continent des adresses IP statiques.
+
+
+</br>
+
 
 ## Première utilisation Admin
 
@@ -185,6 +146,14 @@ Les coéquipers font **[Join unofficial team]**
 
 Pour l'instant les dockers se lancent manuellement dans chaque répertoire.
 !! Seuls quelques répertoires sont bien configurés. !!
+- ctf-shell
+- ctf-escalation
+- ctf-transfert
+- ctf-sqli
+```bash
+Faire $ cd ctf-xxx
+$ sudo docker-compose up
+```
 
 Par exemple pour ctf-sqli:
 ```bash
