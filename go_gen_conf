@@ -20,12 +20,18 @@ fi
 mkdir ctfd_config/tmp
 unzip -q -d ctfd_config/tmp ctfd_config/empty_conf.zip
 
+#
+# Generate CTFd admin password
+#
+
+
 
 #
 # Generate config from challenge directories
 #
 echo "Generating config"
 python ./gen_config.py
+
 
 #
 # Update IPSERVER in challenge descriptions

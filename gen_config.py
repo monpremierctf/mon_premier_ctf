@@ -10,6 +10,8 @@ import shutil
 import os
 import sys
 import textwrap
+from subprocess import Popen, PIPE
+
 
 challenges_dir_list = [
 
@@ -29,6 +31,20 @@ def read_challenges_dir_list():
     in_file.close()
     challenges_dir_list = challenges_dir_list[::-1]
     print(challenges_dir_list)
+
+def build_challenges():
+    print "Build [ctf-sshd]"
+    (Popen(["sudo", "docker", "build", "-t","ctf-sshd","./ctf-sshd"], stdout=sys.stdout, stderr=sys.stderr)).communicate()
+    read_challenges_dir_list()
+    for challenge_dir in challenges_dir_list:
+        print "Build ["+challenge_dir+"]"
+        (Popen(["sudo", "docker-compose", "build"], stdout=sys.stdout, stderr=sys.stderr, cwd=challenge_dir)).communicate()
+
+def start_challenges():
+    read_challenges_dir_list()
+    for challenge_dir in challenges_dir_list:
+        print "Start ["+challenge_dir+"]"
+        (Popen(["sudo", "docker-compose", "up", "-d"], stdout=sys.stdout, stderr=sys.stderr, cwd=challenge_dir)).communicate()
 
 
 challenges=[]
