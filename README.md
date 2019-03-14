@@ -22,6 +22,60 @@ Installer docker et docker-compose
 
 </br>
 
+## Démarrage rapide 
+
+
+Par défaut les challenges affichent une IP locale : 127.0.0.1
+Editer ./go_first_install_run pour remplacer par l'IP du serveur:
+IPSERVER=12.0.0.10
+
+```bash
+$ git clone https://github.com/monpremierctf/mon_premier_ctf.git
+$ cd mon_premier_ctf
+$ sudo ./go_first_install_run 
+```
+
+La configuration est générée, les dockers buildés et lancés.
+
+
+</br>
+
+
+## Première utilisation Admin
+
+Lancer un navigateur sur http://localhost:8000
+
+Clicker sur **[Login]** et se loguer en tant que *admin* avec le mot de passe *CTFPasswordZ*.
+
+L'admin peut se créer une équipe, mais ce n'est pas souhaitable. Il faut ignorer cette première page.
+
+Cliquer sur **[Admin]**, puis **[Challenges]**. Il est possible d'éditer les challenges dans l'interface.
+
+
+
+</br>
+
+## Première utilisation Participant
+
+Lancer un navigateur sur http://localhost:8000
+Si vous êtes loggué en Admin, Cliquer à gauche sur **[CTFd]**, à droite sur **[logout]**.
+
+Cliquer sur **[Register]**.
+
+Créer un user qui sera capitaine...
+
+Puis faire **[Create unofficial team]**
+Le capitaine d'équipe créé l'équipe et partage le mot de passe avec ses coéquipiers.
+
+Les coéquipers font **[Join unofficial team]**
+
+</br>
+
+
+===================================
+
+# Détail de ce qui se passe
+
 ## Récupérer le dépôt et démarrer CTFd
 
 
@@ -130,37 +184,6 @@ $ sudo docker exec ctfd_ctfd_1 python import.py myconfig.zip
 ```
 Cette configuration continent des adresses IP statiques.
 
-
-</br>
-
-
-## Première utilisation Admin
-
-Lancer un navigateur sur http://localhost:8000
-
-Clicker sur **[Login]** et se loguer en tant que *admin* avec le mot de passe *CTFPasswordZ*.
-
-L'admin peut se créer une équipe, mais ce n'est pas souhaitable. Il faut ignorer cette première page.
-
-Cliquer sur **[Admin]**, puis **[Challenges]**. Il est possible d'éditer les challenges dans l'interface.
-
-
-
-</br>
-
-## Première utilisation Participant
-
-Lancer un navigateur sur http://localhost:8000
-Si vous êtes loggué en Admin, Cliquer à gauche sur **[CTFd]**, à droite sur **[logout]**.
-
-Cliquer sur **[Register]**.
-
-Créer un user qui sera capitaine...
-
-Puis faire **[Create unofficial team]**
-Le capitaine d'équipe créé l'équipe et partage le mot de passe avec ses coéquipiers.
-
-Les coéquipers font **[Join unofficial team]**
 
 </br>
 
