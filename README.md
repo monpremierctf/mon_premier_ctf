@@ -32,6 +32,7 @@ IPSERVER=12.0.0.10
 ```bash
 $ git clone https://github.com/monpremierctf/mon_premier_ctf.git
 $ cd mon_premier_ctf
+(si nécessaire editer ./go_first_install_run)
 $ sudo ./go_first_install_run 
 ```
 
