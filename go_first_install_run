@@ -2,6 +2,8 @@
 
 
 IPSERVER=12.0.0.10
+
+
 #
 # Extract default config   
 #
@@ -28,25 +30,24 @@ python ./gen_config.py
 #
 # Update IPSERVER in challenge descriptions
 #
-echo "Replacing IPSERVER by $1"
-sed -i "s/IPSERVER/$1/g" ./ctfd_config/tmp/*/*.json 
+echo "Replacing IPSERVER by $IPSERVER"
+sed -i "s/IPSERVER/$IPSERVER/g" ./ctfd_config/tmp/*/*.json 
 
 
 #
 # Rebuild zip
 # 
-#mv $1 $1.sav
 # zip must not contain dir entries (-D option)
 cd ./ctfd_config/tmp
-zip -r -D ../../myconfig.zip ./*
+zip -r -D ../../myctf.zip ./*
 cd -
 rm -Rf ctfd_config/tmp
-echo "myconfig.zip generated for ctfd"
+echo "myctf.zip generated for ctfd"
 
 
 #
 # is Docker daemon running ?
-# service docker start
+service docker start
 
 #
 # is CTFD clean ?
@@ -60,14 +61,7 @@ echo "myconfig.zip generated for ctfd"
 cd CTFd
 docker-compose build
 docker-compose up -d
-# wait for containers are up ?
-
-
-#
-# Copy and import ctfd config
-#
-cp ../ctfd_config/myctf.zip .
-docker exec ctfd_ctfd_1 python import.py myctf.zip
+cd -
 
 
 #
@@ -80,6 +74,22 @@ python -c 'from gen_config import start_challenges; start_challenges()'
 #
 # Start vitualbox VMs for challenges
 #
+
+
+#
+# Copy and import ctfd config
+#
+cd CTFd
+cp ../myctf.zip .
+docker exec ctfd_ctfd_1 python import.py myctf.zip
+cd -
+
+
+
+#
+# Logs
+#
+# docker-compose logs
 
 
 
