@@ -1,5 +1,5 @@
 #
-#
+# Generates a config file ready to be imported in CTFd
 #
 
 import ConfigParser
@@ -19,6 +19,7 @@ challenges_dir_list = [
 
 def read_challenges_dir_list():
     global challenges_dir_list
+    print("Lecture de la liste de challenges : challenges_list.cfg")
     in_file = open("challenges_list.cfg", 'r')
     for line in in_file.readlines():
         line = textwrap.dedent(line)
@@ -27,10 +28,14 @@ def read_challenges_dir_list():
             continue
         if line.startswith("#"):
             continue
-        challenges_dir_list.append(line)
+        if (os.path.isdir(line):
+            challenges_dir_list.append(line)
+        else:
+            print("Erreur: N'est pas un répertoire ["+line+"]")
     in_file.close()
     challenges_dir_list = challenges_dir_list[::-1]
     print(challenges_dir_list)
+
 
 def build_challenges():
     print "Build [ctf-sshd]"
@@ -39,6 +44,7 @@ def build_challenges():
     for challenge_dir in challenges_dir_list:
         print "Build ["+challenge_dir+"]"
         (Popen(["docker-compose", "build"], stdout=sys.stdout, stderr=sys.stderr, cwd=challenge_dir)).communicate()
+
 
 def start_challenges():
     read_challenges_dir_list()

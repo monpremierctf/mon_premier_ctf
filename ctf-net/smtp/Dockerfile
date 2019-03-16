@@ -1,4 +1,4 @@
-FROM ctf-sshd:latest
+FROM ubuntu:16.04
 
 RUN apt-get update && apt-get install -y mailutils 
 RUN useradd -m -d /home/luke -s /bin/bash luke

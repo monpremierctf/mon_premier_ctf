@@ -1,0 +1,44 @@
+#
+#
+# Les variables d'environnement sont définies dans .env
+#
+
+arpspoof:
+  build: ./arpspoof 
+  environment:
+    CTFNET_IP_ALICE: ${CTFNET_IP_ALICE}
+  command: [
+      python3,
+      /root/send_udp_flag.py
+  ]
+  
+
+tcpserver:
+  build: ./tcpserver
+  ports:
+    - "${CTFNET_TCPSERVER_PORT}:${CTFNET_TCPSERVER_PORT}"
+  environment:
+    CTFNET_TCPSERVER_PORT: ${CTFNET_TCPSERVER_PORT}
+  command: [
+      python,
+      /root/tcpserver.py
+  ]
+  
+
+telnet:
+  build: ./telnet
+  ports:
+    - "${CTFNET_TELNET_PORT}:23"
+  environment:
+    CTFNET_TELNET_PORT: ${CTFNET_TELNET_PORT}
+  command: bash -c "/etc/init.d/xinetd start && sleep infinity"
+
+
+ftp:
+  build: ./ftp
+  ports:
+    - "${CTFNET_FTP_PORT}:21"
+  environment:
+    CTFNET_FTP_PORT: ${CTFNET_FTP_PORT}
+  command: bash -c "service vsftpd start  && sleep infinity"
+
