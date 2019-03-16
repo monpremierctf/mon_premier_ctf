@@ -19,7 +19,7 @@ RUN echo 'moscow:alvaro' | chpasswd
 COPY --chown=moscow flag02.txt /home/moscow/flag02.txt
 RUN chmod 400 /home/moscow/flag02.txt
 RUN cp /usr/bin/less /home/moscow/less
-RUN chown tokio /home/moscow/less
+RUN chown moscow /home/moscow/less
 RUN chmod a+x /home/moscow/less
 RUN chmod +s /home/moscow/less
 
