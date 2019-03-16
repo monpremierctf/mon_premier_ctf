@@ -18,7 +18,7 @@ php:
 
 mysql:
   build: ./mysql/
-  container_name: mysql
+  container_name: ctfsqli_mysql_1
   environment:
     - MYSQL_ROOT_PASSWORD=rootpassword
 

@@ -1,7 +1,7 @@
 <h1>Hello Cloudreach!</h1>
 <h4>Attempting MySQL connection from php...</h4>
 <?php
-$host = 'mysql';
+$host = 'ctfsqli_mysql_1';
 $user = 'root';
 $pass = 'rootpassword';
 $conn = new mysqli($host, $user, $pass);
