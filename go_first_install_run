@@ -59,7 +59,7 @@ echo "myctf.zip generated for ctfd"
 #
 [ -d "./CTFd" ] && echo "!!! CTFd exists."
 [ ! -d "./CTFd" ] && git clone https://github.com/monpremierctf/CTFd.git
-
+cp media/logo_frtw.jpg CTFd/CTFd/themes/core/static/img/logo.png
 
 
 #

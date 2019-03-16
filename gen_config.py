@@ -28,10 +28,10 @@ def read_challenges_dir_list():
             continue
         if line.startswith("#"):
             continue
-        if (os.path.isdir(line):
+        if (os.path.isdir(line)):
             challenges_dir_list.append(line)
         else:
-            print("Erreur: N'est pas un répertoire ["+line+"]")
+            print("Erreur: Not dir ["+line+"]")
     in_file.close()
     challenges_dir_list = challenges_dir_list[::-1]
     print(challenges_dir_list)
