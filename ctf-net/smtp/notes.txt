@@ -1,0 +1,17 @@
+220 myfirstctf.org ESMTP Postfix (Ubuntu)
+HELO m@mi6.uk
+250 myfirstctf.org
+MAIL FROM:<m@mi6.uk>
+250 2.1.0 Ok
+RCPT TO:<jean@myfirstctf.org>
+250 2.1.5 Ok
+DATA
+354 End data with <CR><LF>.<CR><LF>
+Mon très cher Jean Bon
+
+C'est toujours un plaisir de faire du shopping à Londres avec toi.
+Il me semble que tu as légèrement 'oublié' le petit message suivant: flag_m0n_n0m_c_3st_B0n_J3an_B0n
+.
+250 2.0.0 Ok: queued as 488364734A
+quit
+221 2.0.0 Bye

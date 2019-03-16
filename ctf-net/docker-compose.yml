@@ -42,3 +42,17 @@ ftp:
     CTFNET_FTP_PORT: ${CTFNET_FTP_PORT}
   command: bash -c "service vsftpd start  && sleep infinity"
 
+#
+# Dans main.cf mettre à jour le réseau
+#   mynetworks = 127.0.0.0/8 12.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 
+#
+smtp:
+  build: ./smtp
+  ports:
+    - "${CTFNET_POP3_PORT}:110"
+  environment:
+    CTFNET_SMTP_PORT: ${CTFNET_POP3_PORT}
+#  command: bash -c "service postfix start  && sleep infinity"
+  command: bash -c "service dovecot start && sleep infinity"
+
+ 
