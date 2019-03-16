@@ -21,6 +21,7 @@ Installer docker et docker-compose
 Votre compte utilisateur appartient au groupe docker. Dans le cas contraire vous devrez utiliser sudo.
 ```bash
 sudo gpasswd -a $USER docker
+Après cet ajout, il faut déconnecter/reconnecter l'utilisateur. Idéalement rebooter le serveur...
 ```
 
 </br>
