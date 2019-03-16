@@ -50,8 +50,15 @@ echo "myctf.zip generated for ctfd"
 # service docker start
 
 #
+# is docker clean ?
 # is CTFD clean ?
 # check if .data exist
+
+#
+# clone CTFd
+#
+[ -d "./CTFd" ] && echo "!!! CTFd exists."
+[ ! -d "./CTFd" ] && git clone https://github.com/monpremierctf/CTFd.git
 
 
 
