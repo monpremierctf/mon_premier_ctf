@@ -47,7 +47,7 @@ echo "myctf.zip generated for ctfd"
 
 #
 # is Docker daemon running ?
-service docker start
+# service docker start
 
 #
 # is CTFD clean ?
