@@ -37,13 +37,14 @@ RUN useradd -m -d /home/jarjar -s /bin/bash  jarjar
 RUN echo 'jarjar:shili' | chpasswd
 RUN useradd -m -d /var/mace -s /bin/bash  mace
 RUN echo 'mace:alderaan' | chpasswd
-COPY --chown=mace flag06.txt /var/mace/flag06.txt
+COPY --chown=jarjar flag06.txt /var/mace/flag06.txt
 RUN chmod 400 /var/mace/flag06.txt
 
 
 ## strings
+RUN apt-get update && apt-get install -y binutils
 RUN useradd -m -d /home/quigong -s /bin/bash  quigong
-RUN echo 'quigong:alderaan' | chpasswd
+RUN echo 'quigong:bespin' | chpasswd
 COPY --chown=quigong welcome_07 /home/quigong/welcome_07
 RUN chmod 500 /home/quigong/welcome_07
 
@@ -68,6 +69,7 @@ RUN useradd -m -d /home/c3po -s /bin/bash  c3po
 RUN echo 'c3po:corellia' | chpasswd
 COPY --chown=c3po flag11.zip /home/c3po/flag11.zip
 RUN chmod 400 /home/c3po/flag11.zip
+RUN apt-get update && apt-get install -y unzip
 
 ## untar
 RUN useradd -m -d /home/finn -s /bin/bash  finn

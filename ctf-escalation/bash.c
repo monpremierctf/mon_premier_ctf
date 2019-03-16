@@ -5,7 +5,7 @@
 
 int main()
 {
-   setuid( 0 );
-   system( "/bin/bash" );
+   setuid( 1001 );
+   system( "/bin/sh" );
    return 0;
 }
