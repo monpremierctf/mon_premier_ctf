@@ -40,7 +40,7 @@ sed -i "s/IPSERVER/$IPSERVER/g" ./ctfd_config/tmp/*/*.json
 # zip must not contain dir entries (-D option)
 cd ./ctfd_config/tmp
 zip -r -D ../../myctf.zip ./*
-cd -
+cd - > /dev/null
 rm -Rf ctfd_config/tmp
 echo "myctf.zip generated for ctfd"
 
@@ -68,7 +68,7 @@ echo "myctf.zip generated for ctfd"
 cd CTFd
 docker-compose build
 docker-compose up -d
-cd -
+cd - > /dev/null
 
 
 #
@@ -89,7 +89,7 @@ python -c 'from gen_config import start_challenges; start_challenges()'
 cd CTFd
 cp ../myctf.zip .
 docker exec ctfd_ctfd_1 python import.py myctf.zip
-cd -
+cd - > /dev/null
 
 
 
@@ -97,7 +97,7 @@ cd -
 # Logs
 #
 # docker-compose logs
-
+# docker stats
 
 
 
