@@ -10,8 +10,7 @@ Vous trouverez ici, une série de challenges destinés à permettre aux particip
 ## Prerequis
 
 Testé sur Ubuntu 18.04.01-desktop  avec un utilisateur ayant les droits sudo.
-Dans un VM il faut au moins 2,5G de mémoire.
-Avec 2G, on manque de mémoire pour lancer le dernier docker.
+Prévoir une VM avec 3G de mémoire.
 
 ```bash
 $ sudo apt-get update
@@ -19,6 +18,10 @@ $ sudo apt-get install docker-compose
 ```
 Installer docker et docker-compose
 
+Votre compte utilisateur appartient au groupe docker. Dans le cas contraire vous devrez utiliser sudo.
+```bash
+sudo gpasswd -a $USER docker
+```
 
 </br>
 
@@ -33,7 +36,7 @@ IPSERVER=12.0.0.10
 $ git clone https://github.com/monpremierctf/mon_premier_ctf.git
 $ cd mon_premier_ctf
 (si nécessaire editer ./go_first_install_run)
-$ sudo ./go_first_install_run 
+$ ./go_first_install_run 
 ```
 
 La configuration est générée, les dockers buildés et lancés.
