@@ -1,9 +1,0 @@
-#/bin/bash
-
-
-
-sudo docker stop ctf-shell
-sudo docker rm ctf-shell
-
-sudo docker stop ctf-escalation
-sudo docker rm ctf-escalation
