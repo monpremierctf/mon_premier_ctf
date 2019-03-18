@@ -1,9 +1,0 @@
-#/bin/bash
-
-
-#
-#
-#
-sudo docker run -d -P -p 22:2222 --name ctf-shell ctf-shell
-
-sudo docker run -d -P -p 22:2223 --name ctf-escalation ctf-escalation
