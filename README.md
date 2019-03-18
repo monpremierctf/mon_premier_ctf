@@ -27,7 +27,7 @@ Lancer le service docker si ce n'est pas déjà fait
 sudo gpasswd -a $USER docker
 Après cet ajout, il faut déconnecter/reconnecter l'utilisateur. Idéalement rebooter le serveur...
 ```
-L'installation, la configuration et le lancement des services se fait avec un compte utilsiateur sans utiliser de sudo, sous réserve que le compte fasse parti du groupe 'docker'. Dans le cas contraire vous devrez utiliser sudo.
+L'installation, la configuration et le lancement des services du CTF se fait avec un compte utilisateur sans utiliser de sudo, sous réserve que le compte fasse parti du groupe 'docker'. Dans le cas contraire vous devrez utiliser sudo.
 
 
 </br>
