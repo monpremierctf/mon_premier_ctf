@@ -56,7 +56,7 @@ La configuration est générée, les dockers buildés et lancés.
 
 Lancer un navigateur sur http://localhost:8000
 
-Clicker sur **[Login]** et se loguer en tant que *admin* avec le mot de passe *CTFPasswordZ*.
+Clicker sur **[Login]** et se loguer en tant que *admin* avec le mot de passe *CTFPasswordZ*. Pensez à changer le mot de passe...
 
 L'admin peut se créer une équipe, mais ce n'est pas souhaitable. Il faut ignorer cette première page.
 
