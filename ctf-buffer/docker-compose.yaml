@@ -1,0 +1,9 @@
+#
+#
+# La valeur de PORT_SSH est définie dans .env
+#
+
+buffer:
+  build: . 
+  ports:
+    - "${PORT_SSH}:22"
