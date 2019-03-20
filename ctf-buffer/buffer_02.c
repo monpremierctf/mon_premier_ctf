@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
     printf("%s %s\n", intro, name);
 
     // Mdr, tst est toujours égal à 0, t'auras jamais mon flag looser
-    if (tst>0) print_flag();
+    if (tst=='Z') print_flag();
 
     // Pfff, chuis creuvé, vais faire un Tetris
     return 0;
