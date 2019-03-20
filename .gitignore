@@ -2,4 +2,6 @@
 #
 
 *.pyc
+*.o
 myctf.zip
+myconfig.zip
