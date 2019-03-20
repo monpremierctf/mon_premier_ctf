@@ -3,5 +3,7 @@
 
 *.pyc
 *.o
+a.out
+say_hello*
 myctf.zip
 myconfig.zip
