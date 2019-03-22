@@ -8,4 +8,4 @@ transfert:
     - "${PORT_HTTP}:8080"
   volumes:
     - /var/run/docker.sock:/var/run/docker.sock
-  command: /go/bin/myapp 
+  command: sleep 6000 #/go/bin/myapp
