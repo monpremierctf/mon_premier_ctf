@@ -3,6 +3,14 @@
 
 IPSERVER=127.0.0.1
 
+#
+# Build challenge-box-provider
+#
+#git clone https://github.com/monpremierctf/challenge-box-provider.git
+#cd challenge-box-provider
+#docker build -t challenge-box-provider .
+#cd - > /dev/null
+
 
 #
 # Extract default config   
