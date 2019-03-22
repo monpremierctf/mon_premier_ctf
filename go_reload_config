@@ -1,0 +1,56 @@
+#!/bin/bash
+
+
+IPSERVER=127.0.0.1
+
+
+
+#
+# Extract default config   
+#
+echo "Extracting default config"
+if [ -d ctfd_config/tmp ]; then
+    rm -R ctfd_config/tmp
+fi
+mkdir ctfd_config/tmp
+unzip -q -d ctfd_config/tmp ctfd_config/empty_conf.zip
+
+rm ctfd_config/tmp/db/users.json
+rm ctfd_config/tmp/db/teams.json
+rm ctfd_config/tmp/db/submissions.json
+rm ctfd_config/tmp/db/solves.json
+
+
+#
+# Generate config from challenge directories
+#
+echo "Generating config"
+python ./gen_config.py
+
+
+#
+# Update IPSERVER in challenge descriptions
+#
+echo "Replacing IPSERVER by $IPSERVER"
+sed -i "s/IPSERVER/$IPSERVER/g" ./ctfd_config/tmp/*/*.json 
+
+
+#
+# Rebuild zip
+# 
+# zip must not contain dir entries (-D option)
+cd ./ctfd_config/tmp
+zip -r -D ../../myctf.zip ./*
+cd - > /dev/null
+rm -Rf ctfd_config/tmp
+echo "myctf.zip generated for ctfd"
+
+#
+# Copy and import ctfd config
+#
+cd CTFd
+cp ../myctf.zip .
+docker exec ctfd_ctfd_1 python import.py myctf.zip
+cd - > /dev/null
+
+

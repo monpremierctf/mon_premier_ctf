@@ -33,7 +33,7 @@ def read_challenges_dir_list():
         else:
             print("Erreur: Not dir ["+line+"]")
     in_file.close()
-    challenges_dir_list = challenges_dir_list[::-1]
+    #challenges_dir_list = challenges_dir_list[::-1]
     print(challenges_dir_list)
 
 
@@ -43,14 +43,29 @@ def build_challenges():
     read_challenges_dir_list()
     for challenge_dir in challenges_dir_list:
         print "Build ["+challenge_dir+"]"
-        (Popen(["docker-compose", "build"], stdout=sys.stdout, stderr=sys.stderr, cwd=challenge_dir)).communicate()
-
+        if (os.path.isfile(challenge_dir+'/docker-compose.yml')):
+            (Popen(["docker-compose", "build"], stdout=sys.stdout, stderr=sys.stderr, cwd=challenge_dir)).communicate()
+        else:
+            print "no docker-compose.yml file. Pass."
 
 def start_challenges():
     read_challenges_dir_list()
     for challenge_dir in challenges_dir_list:
         print "Start ["+challenge_dir+"]"
-        (Popen(["docker-compose", "up", "-d"], stdout=sys.stdout, stderr=sys.stderr, cwd=challenge_dir)).communicate()
+        if (os.path.isfile(challenge_dir+'/docker-compose.yml')):
+            (Popen(["docker-compose", "up", "-d"], stdout=sys.stdout, stderr=sys.stderr, cwd=challenge_dir)).communicate()
+        else:
+            print "no docker-compose.yml file. Pass."
+
+
+def stop_challenges():
+    read_challenges_dir_list()
+    for challenge_dir in challenges_dir_list:
+        print "Stop ["+challenge_dir+"]"
+        if (os.path.isfile(challenge_dir+'/docker-compose.yml')):
+            (Popen(["docker-compose", "down"], stdout=sys.stdout, stderr=sys.stderr, cwd=challenge_dir)).communicate()
+        else:
+            print "no docker-compose.yml file. Pass."
 
 
 challenges=[]

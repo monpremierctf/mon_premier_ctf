@@ -1,0 +1,1 @@
+python -c 'from gen_config import build_challenges; build_challenges()'
