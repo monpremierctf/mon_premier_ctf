@@ -40,6 +40,8 @@ def read_challenges_dir_list():
 def build_challenges():
     print "Build [ctf-sshd]"
     (Popen(["docker", "build", "-t","ctf-sshd","./ctf-sshd"], stdout=sys.stdout, stderr=sys.stderr)).communicate()
+    print "Build [ctf-transfert]"
+    (Popen(["docker", "build", "-t","ctf-transfert","./ctf-transfert"], stdout=sys.stdout, stderr=sys.stderr)).communicate()
     read_challenges_dir_list()
     for challenge_dir in challenges_dir_list:
         print "Build ["+challenge_dir+"]"
@@ -56,6 +58,10 @@ def start_challenges():
             (Popen(["docker-compose", "up", "-d"], stdout=sys.stdout, stderr=sys.stderr, cwd=challenge_dir)).communicate()
         else:
             print "no docker-compose.yml file. Pass."
+        if (os.path.isfile(challenge_dir+'/challenge.sh')):
+            (Popen(["./challenge.sh"], stdout=sys.stdout, stderr=sys.stderr, cwd=challenge_dir)).communicate()
+        else:
+            print "no challenge.sh file. Pass."
 
 
 def stop_challenges():

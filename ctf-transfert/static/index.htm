@@ -1,0 +1,32 @@
+<html>
+<head>
+   <title>jQuery Hello World</title>
+   <script src="http://code.jquery.com/jquery-3.3.1.min.js"
+           integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+           crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+   <script type="text/javascript">
+      $(document).ready(function(){
+         $("#msg").html("Votre serveur personnel est en cours d'activation...");
+         $.get("/create/",function(data) { $("#msg").html(data); });
+      });
+   </script>
+
+   <img src="logo_frtw.jpg" alt="Logo" width="400">
+
+   <h2>CTF - Transfert challenges</h2>
+   </br>
+   </br>
+   Mode VIP : active.</br></br>
+   </br>
+
+   <div id="msg">
+   </div>
+
+
+</body>
+</html>
+
