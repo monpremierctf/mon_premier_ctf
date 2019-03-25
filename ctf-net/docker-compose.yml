@@ -37,7 +37,9 @@ telnet:
 ftp:
   build: ./ftp
   ports:
+    - "${CTFNET_FTP_PORT20}:20"
     - "${CTFNET_FTP_PORT}:21"
+    - "64000-64321:64000-64321"
   environment:
     CTFNET_FTP_PORT: ${CTFNET_FTP_PORT}
   command: bash -c "service vsftpd start  && sleep infinity"
