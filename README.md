@@ -65,6 +65,8 @@ Clicker sur **[Login]** et se loguer en tant que *admin* avec le mot de passe *C
 L'admin peut se créer une équipe, mais ce n'est pas souhaitable. Il faut ignorer cette première page.
 
 Cliquer sur **[Admin]**, puis **[Challenges]**. Il est possible d'éditer les challenges dans l'interface.
+</br>
+Pour afficher le graphe de progression des équipes, cliquer en haut à gauche sur le logo 'CTFd' puis sur 'Scoreboard'.
 
 
 
