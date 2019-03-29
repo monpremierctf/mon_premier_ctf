@@ -9,7 +9,7 @@ Vous trouverez ici, une série de challenges destinés à permettre aux particip
 
 ## Prerequis
 
-Testé sur Ubuntu 18.04.01-desktop  avec un utilisateur ayant les droits sudo.
+Testé sur Ubuntu 18.04.01-desktop  avec un utilisateur ayant les droits sudo et appartenant au groupe docker.
 Prévoir une VM avec 3G de mémoire.
 
 ```bash
