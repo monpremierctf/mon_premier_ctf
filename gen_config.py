@@ -12,6 +12,10 @@ import sys
 import textwrap
 from subprocess import Popen, PIPE
 
+#
+# Read challenges list from file : challenges_list.cfg
+#
+IPSERVER="127.0.0.1"
 
 challenges_dir_list = [
 
@@ -19,6 +23,7 @@ challenges_dir_list = [
 
 def read_challenges_dir_list():
     global challenges_dir_list
+    global IPSERVER
     print("Lecture de la liste de challenges : challenges_list.cfg")
     in_file = open("challenges_list.cfg", 'r')
     for line in in_file.readlines():
@@ -28,6 +33,14 @@ def read_challenges_dir_list():
             continue
         if line.startswith("#"):
             continue
+        if line.startswith("["):
+            end = line.find(']')
+            ip = line[1:end]
+            ip = textwrap.dedent(ip)
+            ip = ip.rstrip()
+            IPSERVER=ip
+            print("Set IPSERVER="+ip)
+            continue
         if (os.path.isdir(line)):
             challenges_dir_list.append(line)
         else:
@@ -36,6 +49,11 @@ def read_challenges_dir_list():
     #challenges_dir_list = challenges_dir_list[::-1]
     print(challenges_dir_list)
 
+
+#
+# Build, start and stop dockers challenges
+# thanks to docker-compose.yml in each directory
+#
 
 def build_challenges():
     print "Build [ctf-sshd]"
@@ -73,6 +91,9 @@ def stop_challenges():
         else:
             print "no docker-compose.yml file. Pass."
 
+#
+# Populate global lists (challenges, flags, files) while reading file challenges.cfg
+# in each directory
 
 challenges=[]
 challenge_id=0
@@ -156,6 +177,7 @@ def parse_dir(challenge_dir):
         name = config.get(challenge, 'name')
         #name = name.encode('string-escape')
         desc = config.get(challenge, 'description')
+        desc = desc.replace("IPSERVER", IPSERVER)
         #print(desc)
         #desc_enc = desc.encode('string-escape') #unicode-escape
         #print(desc_enc)
