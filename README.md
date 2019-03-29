@@ -9,43 +9,44 @@ Vous trouverez ici, une série de challenges destinés à permettre aux particip
 
 ## Prerequis
 
-Testé sur Ubuntu 18.04.01-desktop  avec un utilisateur ayant les droits sudo et appartenant au groupe docker.
-Prévoir une VM avec 3G de mémoire.
-
+Prévoir une VM avec 3G de mémoire.</br>
+Testé sur Ubuntu 18.04.01-desktop  avec un utilisateur ayant les droits sudo et appartenant au groupe docker.</br></br>
+Les droits sudo ne servent que pour l'installation et le lancement de docker.</br>
+L'installation, la configuration et le lancement des services du CTF se fait avec un compte utilisateur sans utiliser de sudo, sous réserve que le compte fasse parti du groupe 'docker'.  </br>
+```bash
+sudo gpasswd -a $USER docker
+```
+Après cet ajout, il faut déconnecter/reconnecter l'utilisateur. Idéalement rebooter le serveur...</br>
+</br>
+Installer docker et docker-compose
 ```bash
 $ sudo apt-get update
 $ sudo apt-get install docker-compose
 ```
-Installer docker et docker-compose
 
+Lancer le service docker si ce n'est pas déjà fait
 ```bash
 $ sudo service docker start
 ```
-Lancer le service docker si ce n'est pas déjà fait
-
-```bash
-sudo gpasswd -a $USER docker
-Après cet ajout, il faut déconnecter/reconnecter l'utilisateur. Idéalement rebooter le serveur...
-```
-L'installation, la configuration et le lancement des services du CTF se fait avec un compte utilisateur sans utiliser de sudo, sous réserve que le compte fasse parti du groupe 'docker'. Dans le cas contraire vous devrez utiliser sudo.
-
 
 </br>
 
 ## Démarrage rapide 
 
 
-Par défaut les challenges affichent une IP locale : 127.0.0.1
-Editer ./go_first_install_run pour remplacer par l'IP du serveur:
-IPSERVER=12.0.0.10
-
+Cloner mon_premier_ctf sur github.
 ```bash
 $ git clone https://github.com/monpremierctf/mon_premier_ctf.git
 $ cd mon_premier_ctf
-(si nécessaire editer ./go_first_install_run)
-$ ./go_first_install_run 
 ```
 
+Par défaut les challenges affichent une IP locale : 127.0.0.1
+Editer ./go_first_install_run pour remplacer par l'IP du serveur:
+IPSERVER=12.0.0.10
+```
+$ vi ./go_first_install_run
+$ ./go_first_install_run 
+```
 La configuration est générée, les dockers buildés et lancés.
 
 
