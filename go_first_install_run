@@ -247,5 +247,14 @@ cd - > /dev/null
 # docker-compose logs
 # docker stats
 
-
+echo "*****************"
+echo ""
+echo "S'il n'y a pas eu de message d'erreur, vous pouvez à présent vous connecter à l'interface web:"
+echo "http://localhost:8000"
+echo "Compte admin : CTFPasswordZ"
+echo "Pensez à changer le mot de passe"
+echo ""
+echo "Commandes utiles:"
+echo "docker stats"
+echo "docker-compose logs"
 
