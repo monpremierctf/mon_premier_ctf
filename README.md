@@ -302,5 +302,23 @@ Les coéquipers font **[Join unofficial team]**
 
 </br>
 
+# Monitoring du serveur et des containers
+
+Stats sur les dockers
+````
+docker stats
+````
+
+Log de CTFd
+```
+cd CTFd
+docker-compose logs
+````
+
+Monitoring global en interface web sur http://localhost:8888
+````
+chmod a+x tools/monitor.sh
+tools/monitor.sh
+````
 
 Enjoy !
