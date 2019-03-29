@@ -133,7 +133,21 @@ else
     echo $(docker info 2>/dev/null | grep "Server Version")
 fi
 
-
+#
+# Dump Docker config files .env
+echo "Verification du système terminée"
+echo ""
+echo "===================="
+echo "Verification de la configuration"
+echo ""
+python -c 'from gen_config import dump_challenges_env; dump_challenges_env()'
+while true; do
+    read -p "La config est-elle ok ? (O/n) ? : " yn
+    case $yn in
+        [Nn]* ) echo "Ok, on arrête ici."; exit;;
+        * ) echo "Ok, on continue."; break;;
+    esac
+done
 
 #
 # Build challenge-box-provider
