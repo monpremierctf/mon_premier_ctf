@@ -44,11 +44,10 @@ $ git clone https://github.com/monpremierctf/mon_premier_ctf.git
 $ cd mon_premier_ctf
 ```
 
-Par défaut les challenges affichent une IP locale : 127.0.0.1
-Editer ./go_first_install_run pour remplacer par l'IP du serveur:
-IPSERVER=12.0.0.10
+Par défaut les challenges affichent une IP locale : 127.0.0.1</br>
+Editer ./challenges_list.cfg pour remplacer par l'IP du serveur: [12.0.0.10]
 ```
-$ vi ./go_first_install_run
+$ vi ./challenges_list.cfg
 $ ./go_first_install_run 
 ```
 La configuration est générée, les dockers buildés et lancés.
