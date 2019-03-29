@@ -50,6 +50,19 @@ def read_challenges_dir_list():
     print(challenges_dir_list)
 
 
+def dump_challenges_env():
+    print "Dump challenges .env"
+    read_challenges_dir_list()
+    for challenge_dir in challenges_dir_list:
+        print "\n["+challenge_dir+"/.env]"
+        if (os.path.isfile(challenge_dir+'/.env')):
+            cmd='cat '+challenge_dir+'/.env|grep "="'
+            os.system(cmd)
+            ##(Popen(["cat", ".env"], stdout=sys.stdout, stderr=sys.stderr, cwd=challenge_dir)).communicate()
+        else:
+            print "no .env file"
+
+
 #
 # Build, start and stop dockers challenges
 # thanks to docker-compose.yml in each directory
