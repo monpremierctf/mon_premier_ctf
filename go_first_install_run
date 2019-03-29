@@ -57,6 +57,7 @@ if [[ $(which docker-compose) && $(docker-compose --version) ]]; then
     echo "Pour installer docker-compose rapidement:"
     echo "sudo apt-get update"
     echo "sudo apt-get install docker-compose"
+    exit;
 fi
 
 
@@ -69,6 +70,7 @@ if [[ $(which docker) && $(docker --version) ]]; then
   else
     echo "Ko"
     echo "Pour installer docker proprement consultez la documentation de votre distribution."
+    exit;
 fi
 
 
@@ -83,6 +85,7 @@ if [[ $(which python) ]]; then
     echo "Pour installer python rapidement:"
     echo "sudo apt-get update"
     echo "sudo apt install python-minimal"
+    exit;
 fi
 
 
@@ -97,6 +100,7 @@ if [[ $(which zip) ]]; then
     echo "Pour installer zip rapidement:"
     echo "sudo apt-get update"
     echo "sudo apt install zip"
+    exit;
 fi
 
 #
@@ -125,6 +129,7 @@ if docker info 2>&1 | grep -qw "Cannot connect to the Docker daemon"; then
     echo "Ko"
     echo "Vous devriez pouvoir démarrer le service docker avec la commande:"
     echo "sudo service docker start"
+    exit;
 else
     echo "Ok"
     echo $(docker info 2>/dev/null | grep "Server Version")
