@@ -15,25 +15,28 @@ Prévoir une VM Ubuntu 18 vierge avec 3G de mémoire.</br>
 Testé sur Ubuntu 18.04.01-desktop avec un utilisateur ayant les droits sudo et appartenant au groupe docker.</br>
 Les challenges réseaux utilisent de nombreux ports 21, 25, 80, 8000, 8080, 9000,... Le mieux est de n'avoir aucun service d'activé.</br>
 Un accès internet est indispensable pour télécharger les images docker de référence.</br>
-</br>
-Les droits sudo ne servent que pour l'installation et le démarrage du service docker.</br>
-L'installation, la configuration et le lancement des services du CTF se fait avec un compte utilisateur sans utiliser de sudo, sous réserve que le compte fasse parti du groupe 'docker'.  </br>
-```bash
-sudo gpasswd -a $USER docker
-```
-Après cet ajout, il faut déconnecter/reconnecter l'utilisateur. Idéalement rebooter le serveur...</br>
+
 </br>
 Installer docker et docker-compose
 ```bash
 $ sudo apt-get update
 $ sudo apt-get install docker-compose
 ```
+Les droits sudo ne servent que pour l'installation et le démarrage du service docker.</br>
+L'installation, la configuration et le lancement des services du CTF se fait avec un compte utilisateur sans utiliser de sudo, sous réserve que le compte fasse parti du groupe 'docker'.  </br>
+```bash
+sudo gpasswd -a $USER docker
+```
+Après cet ajout, il faut déconnecter/reconnecter l'utilisateur. Idéalement rebooter le serveur...</br>
 
 Lancer le service docker si ce n'est pas déjà fait
 ```bash
 $ sudo service docker start
 ```
-
+Eventuellement isntaller git
+```bash
+$ sudo apt-get install git
+```
 </br>
 
 ## Démarrage rapide 
