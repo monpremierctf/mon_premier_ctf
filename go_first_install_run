@@ -113,6 +113,7 @@ if [ $(id -u) -ne 0 ]; then
         echo "Ko"
         echo "Si l'utilisateur n'est pas root, il doit appartenir au groupe Docker."
         echo "Utilisez la commande suivant pour ajouter l'utilisateur courant au groupe Docker"
+        echo "Ensuite deconnectez et reconnectez vous. Personnellement, je reboote le serveur..."
         echo "sudo gpasswd -a \$USER docker"
         exit;
     fi
