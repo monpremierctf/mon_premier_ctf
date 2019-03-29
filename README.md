@@ -13,7 +13,7 @@ Un jeu de slide à destination des participants est disponible en https://github
 
 Prévoir une VM Ubuntu 18 vierge avec 3G de mémoire.</br>
 Testé sur Ubuntu 18.04.01-desktop avec un utilisateur ayant les droits sudo et appartenant au groupe docker.</br>
-Les challenges utilisent de nombreux ports 22, 21, 25, 80, 8000, 8080, 9000,... Le mieux est de n'avoir aucun service d'activé.</br>
+Les challenges réseaux utilisent de nombreux ports 21, 25, 80, 8000, 8080, 9000,... Le mieux est de n'avoir aucun service d'activé.</br>
 Un accès internet est indispensable pour télécharger les images docker de référence.</br>
 </br>
 Les droits sudo ne servent que pour l'installation et le démarrage du service docker.</br>
