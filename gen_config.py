@@ -58,9 +58,22 @@ def dump_challenges_env():
         if (os.path.isfile(challenge_dir+'/.env')):
             cmd='cat '+challenge_dir+'/.env|grep "="'
             os.system(cmd)
-            ##(Popen(["cat", ".env"], stdout=sys.stdout, stderr=sys.stderr, cwd=challenge_dir)).communicate()
         else:
             print "no .env file"
+
+
+
+def challenges_set_config():
+    print "MaJ des fichiers de config des challenges"
+    read_challenges_dir_list()
+    for challenge_dir in challenges_dir_list:
+        print "\n["+challenge_dir+"/challenge_set_config.sh]"
+        if (os.path.isfile(challenge_dir+'/challenge_set_config.sh')):
+            (Popen(["bash", "-c", "./challenge_set_config.sh"], stdout=sys.stdout, stderr=sys.stderr, cwd=challenge_dir)).communicate()
+        else:
+            print "no challenge_set_config.sh file"
+
+
 
 
 #
