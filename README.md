@@ -6,7 +6,7 @@ Si vous désirez organiser un Capture The flag à destination de grands débutan
 Vous trouverez ici, une série de challenges destinés à permettre aux participants de commencer à se constituer la trousse à outil minimale pour participer à un CTF.
 
 </br>
-Un jeu de slide à destination des participants est disponible : (doc/Introduction_au_CTF.pdf)[doc/Introduction_au_CTF.pdf]
+Un jeu de slide à destination des participants est disponible en [doc/Introduction_au_CTF.pdf](doc/Introduction_au_CTF.pdf)
 
 ## Prerequis
 
