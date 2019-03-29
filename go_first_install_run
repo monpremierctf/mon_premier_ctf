@@ -1,13 +1,13 @@
 #!/bin/bash
 #
-# Header generated thanks to
-# http://patorjk.com/software/taag/#p=display&f=Small&t=Mon%20Premier%20CTF
 #
 
-IPSERVER=127.0.0.1
 
 
+IPSERVER=11.0.0.20
 
+
+# http://patorjk.com/software/taag/#p=display&f=Small&t=Mon%20Premier%20CTF
 echo "
   __  __            ___               _            ___ _____ ___ 
  |  \/  |___ _ _   | _ \_ _ ___ _ __ (_)___ _ _   / __|_   _| __|
@@ -135,7 +135,6 @@ fi
 
 
 
-
 #
 # Build challenge-box-provider
 #
@@ -166,13 +165,6 @@ unzip -q -d ctfd_config/tmp ctfd_config/empty_conf.zip
 #
 echo "Generating config"
 python ./gen_config.py
-
-
-#
-# Update IPSERVER in challenge descriptions
-#
-echo "Replacing IPSERVER by $IPSERVER"
-sed -i "s/IPSERVER/$IPSERVER/g" ./ctfd_config/tmp/*/*.json 
 
 
 #
