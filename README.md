@@ -11,7 +11,7 @@ Vous trouverez ici, une série de challenges destinés à permettre aux particip
 
 Prévoir une VM avec 3G de mémoire.</br>
 Testé sur Ubuntu 18.04.01-desktop  avec un utilisateur ayant les droits sudo et appartenant au groupe docker.</br></br>
-Les droits sudo ne servent que pour l'installation et le lancement de docker.</br>
+Les droits sudo ne servent que pour l'installation et le démarrage du service docker.</br>
 L'installation, la configuration et le lancement des services du CTF se fait avec un compte utilisateur sans utiliser de sudo, sous réserve que le compte fasse parti du groupe 'docker'.  </br>
 ```bash
 sudo gpasswd -a $USER docker
