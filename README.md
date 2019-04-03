@@ -251,7 +251,17 @@ updating: uploads/ctf-net/flag03.gz.pcapng (deflated 71%)
 updating: uploads/ctf-net/flag01.gz.pcapng (deflated 69%)
 myctf.zip generated for ctfd
 ```
+Si vous avez une erreur de type
+```
+ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?
+```
+faites
+````
+sudo reboot
+````
+et reconnectez vous.
 
+</br>
 Enfin le script clone le git de CTFd, les dockers sont buildés et lancés, puis le fichier de config détaillant les challenges est chargé par CTFd.
 
 ```
