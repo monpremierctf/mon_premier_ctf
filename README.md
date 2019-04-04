@@ -17,13 +17,16 @@ Les challenges réseaux utilisent de nombreux ports 21, 25, 80, 8000, 8080, 9000
 Un accès internet est indispensable pour télécharger les images docker de référence.</br>
 
 </br>
+
 Installer docker et docker-compose
 ```bash
 $ sudo apt-get update
 $ sudo apt-get install docker-compose
 ```
+
 Les droits sudo ne servent que pour l'installation et le démarrage du service docker.</br>
 L'installation, la configuration et le lancement des services du CTF se fait avec un compte utilisateur sans utiliser de sudo, sous réserve que le compte fasse parti du groupe 'docker'.  </br>
+
 ```bash
 sudo gpasswd -a $USER docker
 ```
@@ -33,7 +36,8 @@ Lancer le service docker si ce n'est pas déjà fait
 ```bash
 $ sudo service docker start
 ```
-Eventuellement isntaller git
+
+Eventuellement installer git
 ```bash
 $ sudo apt-get install git
 ```
