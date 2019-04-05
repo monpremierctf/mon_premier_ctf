@@ -1,0 +1,187 @@
+#!/bin/bash
+#
+# Install and configure openvpn on Ubuntu 18 server
+#
+# Dont forget to open ports: UDP 1194
+#
+
+#
+# IP config
+#
+PUBLIC_IP=35.180.234.168
+INTERNAL_NET="10.0.0.0 255.255.255.0"
+OVPN_PORT=1194
+
+# install openvpn latest & easy-rsa v2
+echo "** Update apt"
+sudo apt-get update
+echo "** Install openvpn"
+sudo apt-get install openvpn -y
+echo "** Get easy-rsa v2"
+wget https://github.com/OpenVPN/easy-rsa-old/archive/2.3.3.tar.gz
+tar xzf 2.3.3.tar.gz
+rm 2.3.3.tar.gz
+
+# work in easy-rsa dir
+PATH_REF=`pwd`
+cd ./easy-rsa-old-2.3.3/easy-rsa/2.0
+
+echo "** Set easy-rsa config file"
+# set easy-rsa parameters
+cat > vars <<- "EOF"
+# easy-rsa parameter settings
+
+# NOTE: If you installed from an RPM,
+# don't edit this file in place in
+# /usr/share/openvpn/easy-rsa --
+# instead, you should copy the whole
+# easy-rsa directory to another location
+# (such as /etc/openvpn) so that your
+# edits will not be wiped out by a future
+# OpenVPN package upgrade.
+
+# This variable should point to
+# the top level of the easy-rsa
+# tree.
+export EASY_RSA="`pwd`"
+
+#
+# This variable should point to
+# the requested executables
+#
+export OPENSSL="openssl"
+export PKCS11TOOL="pkcs11-tool"
+export GREP="grep"
+
+
+# This variable should point to
+# the openssl.cnf file included
+# with easy-rsa.
+export KEY_CONFIG=`$EASY_RSA/whichopensslcnf $EASY_RSA`
+
+# Edit this variable to point to
+# your soon-to-be-created key
+# directory.
+#
+# WARNING: clean-all will do
+# a rm -rf on this directory
+# so make sure you define
+# it correctly!
+export KEY_DIR="$EASY_RSA/keys"
+
+# Issue rm -rf warning
+echo NOTE: If you run ./clean-all, I will be doing a rm -rf on $KEY_DIR
+
+# PKCS11 fixes
+export PKCS11_MODULE_PATH="dummy"
+export PKCS11_PIN="dummy"
+
+# Increase this if you
+# are paranoid.  This will slow
+# down TLS negotiation performance
+# as well as the one-time DH parms
+# generation process.
+export DH_KEY_SIZE=2048
+
+# Private key size
+export KEY_SIZE=2048
+
+# In how many days should the root CA key expire?
+export CA_EXPIRE=3650
+
+# In how many days should certificates expire?
+export KEY_EXPIRE=3650
+
+# These are the default values for fields
+# which will be placed in the certificate.
+# Don't leave any of these fields blank.
+export KEY_COUNTRY="FR"
+export KEY_PROVINCE="SO"
+export KEY_CITY="Toulouse"
+export KEY_ORG="ZenZenVibe"
+export KEY_EMAIL="zenzenvibe@gmail.com"
+export KEY_EMAIL=zenzenvibe@gmail.com
+export KEY_CN="ZenZenVibe"
+export KEY_NAME="ZenZenVibe"
+export KEY_OU="ZenZenVibe"
+export PKCS11_MODULE_PATH=changeme
+export PKCS11_PIN=1234
+EOF
+ls
+cp  openssl-1.0.0.cnf openssl.cnf
+source ./vars
+
+# remove all existing keys
+echo "** Remove all existing keys"
+./clean-all
+
+
+# build server keys
+touch keys/index.txt.attr
+echo "** Generate CA"
+./pkitool  --initca 
+echo "** Generate Server keys"
+./pkitool --server ovpngw
+./build-dh
+
+# cp config to /etc/openvpn
+echo "** Copy server keys to /etc/openvpn/keys"
+sudo mkdir /etc/openvpn/keys
+sudo cp keys/dh2048.pem keys/ca.crt keys/ovpngw.crt keys/ovpngw.key   /etc/openvpn/keys/
+sudo chmod 600 /etc/openvpn/keys/ovpngw.key
+
+# openvpn server config file
+echo "** Create openvpn server config file"
+cat > ovpngw.conf << EOF
+mode server
+proto udp
+
+dev tun
+topology subnet
+
+ca keys/ca.crt
+cert keys/ovpngw.crt
+key keys/ovpngw.key
+dh keys/dh2048.pem
+
+server $INTERNAL_NET
+keepalive 10 120
+
+comp-lzo
+persist-key
+persist-tun
+verb 3
+EOF
+
+sudo mv ovpngw.conf /etc/openvpn/ovpngw.conf
+
+echo "** Create openvpn clients config file"
+cat > client.conf << EOF
+client
+dev tun
+proto udp
+
+remote $PUBLIC_IP $OVPN_PORT
+nobind
+
+persist-key
+persist-tun
+
+comp-lzo
+verb 3
+EOF
+
+sudo mv client.conf /etc/openvpn/client.conf
+
+echo "** Activate IP forwarding"
+sudo bash -c 'echo 1 > /proc/sys/net/ipv4/ip_forward'
+
+echo "** Create client config file : ctf_user_01"
+$PATH_REF/go_create_openvpn_client_conf ctf_user_01
+sudo cp ctf_user_01.ovpn /etc/openvpn/
+
+
+cd - 
+
+echo "Ready to start server : sudo openvpn --config /etc/openvpn/ovpngw.conf"
+
