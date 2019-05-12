@@ -180,6 +180,7 @@ if __name__ == '__main__':
     directory = os.path.dirname(out_dir)
     if not os.path.exists(directory):
         os.makedirs(directory)
+    
 
     with io.open(out_dir+'challenges.json', 'w', encoding='utf8') as outfile:
         outfile.write(unicode('{"count": '+str(challenge_id)+', "results": '))

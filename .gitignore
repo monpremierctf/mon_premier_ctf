@@ -8,3 +8,5 @@ say_hello*
 myctf.zip
 myconfig.zip
 *.db
+web_server/www_site/db/*
+web_server/www_site/uploads/*
