@@ -12,6 +12,10 @@ import sys
 import textwrap
 from subprocess import Popen, PIPE
 
+#
+# Read challenges list from file : challenges_list.cfg
+#
+IPSERVER="127.0.0.1"
 
 challenges_dir_list = [
 
@@ -19,6 +23,7 @@ challenges_dir_list = [
 
 def read_challenges_dir_list():
     global challenges_dir_list
+    global IPSERVER
     print("Lecture de la liste de challenges : challenges_list.cfg")
     in_file = open("challenges_list.cfg", 'r')
     for line in in_file.readlines():
@@ -28,6 +33,14 @@ def read_challenges_dir_list():
             continue
         if line.startswith("#"):
             continue
+        if line.startswith("["):
+            end = line.find(']')
+            ip = line[1:end]
+            ip = textwrap.dedent(ip)
+            ip = ip.rstrip()
+            IPSERVER=ip
+            print("Set IPSERVER="+ip)
+            continue
         if (os.path.isdir(line)):
             challenges_dir_list.append(line)
         else:
@@ -36,6 +49,37 @@ def read_challenges_dir_list():
     #challenges_dir_list = challenges_dir_list[::-1]
     print(challenges_dir_list)
 
+
+def dump_challenges_env():
+    print "Dump challenges .env"
+    read_challenges_dir_list()
+    for challenge_dir in challenges_dir_list:
+        print "\n["+challenge_dir+"/.env]"
+        if (os.path.isfile(challenge_dir+'/.env')):
+            cmd='cat '+challenge_dir+'/.env|grep "="'
+            os.system(cmd)
+        else:
+            print "no .env file"
+
+
+
+def challenges_set_config():
+    print "MaJ des fichiers de config des challenges"
+    read_challenges_dir_list()
+    for challenge_dir in challenges_dir_list:
+        print "\n["+challenge_dir+"/challenge_set_config.sh]"
+        if (os.path.isfile(challenge_dir+'/challenge_set_config.sh')):
+            (Popen(["bash", "-c", "./challenge_set_config.sh"], stdout=sys.stdout, stderr=sys.stderr, cwd=challenge_dir)).communicate()
+        else:
+            print "no challenge_set_config.sh file"
+
+
+
+
+#
+# Build, start and stop dockers challenges
+# thanks to docker-compose.yml in each directory
+#
 
 def build_challenges():
     print "Build [ctf-sshd]"
@@ -73,6 +117,9 @@ def stop_challenges():
         else:
             print "no docker-compose.yml file. Pass."
 
+#
+# Populate global lists (challenges, flags, files) while reading file challenges.cfg
+# in each directory
 
 challenges=[]
 challenge_id=0
@@ -156,6 +203,7 @@ def parse_dir(challenge_dir):
         name = config.get(challenge, 'name')
         #name = name.encode('string-escape')
         desc = config.get(challenge, 'description')
+        desc = desc.replace("IPSERVER", IPSERVER)
         #print(desc)
         #desc_enc = desc.encode('string-escape') #unicode-escape
         #print(desc_enc)

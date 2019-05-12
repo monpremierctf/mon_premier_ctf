@@ -1,0 +1,30 @@
+#!/bin/bash
+#
+#
+
+if [ -z "$1" ]
+  then
+    echo "Usage: $1 <client name>"
+fi
+
+
+source ./vars 
+
+USER=ctf_user_01
+USER_OVPN=$USER.ovpn
+
+
+export KEY_CN=$USER
+./pkitool $USER
+
+cat /etc/openvpn/client.conf > $USER_OVPN
+echo "<ca>"         >> $USER_OVPN
+cat keys/ca.crt     >> $USER_OVPN
+echo "</ca>"        >> $USER_OVPN
+echo "<cert>"       >> $USER_OVPN
+cat keys/$USER.crt  >> $USER_OVPN
+echo "</cert>"      >> $USER_OVPN
+echo "<key>"        >> $USER_OVPN
+cat keys/$USER.key  >> $USER_OVPN
+echo "</key>"       >> $USER_OVPN
+
