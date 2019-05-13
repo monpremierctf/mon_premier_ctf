@@ -10,7 +10,7 @@ Fichier temporaires qui trainent...
 
 Nos outils de base pour partir à la chasse aux Flags cachés sur le système sont:
 - ls -al pour trouver les fichiers en .xxx
-- /home, /etc/passwd, /var/tmp, pour les ficheirs temporaires
+- /home, /etc/passwd, /var/tmp, pour les fichiers temporaires
 - find pour lister les fichiers en lectures et les sticky bits
 - les sticky bits sur less, nmap, 
 - ps pour identifier les process qui tournent et exploiter des races conditions

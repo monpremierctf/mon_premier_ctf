@@ -1,4 +1,3 @@
 FROM php:7-fpm
 
-
-RUN composer require erusev/parsedown
+RUN docker-php-ext-install mysqli

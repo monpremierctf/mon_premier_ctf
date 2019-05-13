@@ -1,3 +1,6 @@
+<?php
+    session_start ();
+?>
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -8,6 +11,9 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="style.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
   <script>
        function ctf_validate(id, flag_field)
         {
@@ -36,13 +42,44 @@
     $Parsedown = new Parsedown();
     # echo $Parsedown->text('Hello _Parsedown_!'); 
     # prints: <p>Hello <em>Parsedown</em>!</p>
+
+    if (isset($_SESSION['login'] )) {
+        echo '
+    <div class="container-fluid">
+    <div class="row float-right">
+        <div class="col-md-auto float-right">'.$_SESSION['login'].'</div>
+        <button type="submit" class="col-md-auto btn btn-default col float-right btn-warning">Logout</button>
+    </form>
+    </div>
+    </div>   '; 
+    } else {
+        echo '
+        <div class="container-fluid">
+    <div class="row float-right">
+        <div class="col-md-auto float-right">anonymous</div>
+        <button type="submit" class="col-md-auto btn btn-default col float-right btn-warning">Login</button>
+    </form>
+    </div>
+    </div>  ';
+    }
 ?>
 
 <div class="jumbotron text-center">
-  <h1>Y0L0 CTF</h1>
-  <p>Mon premier CTF !</p> 
+
+
+    <h1>Y0L0 CTF</h1>
+    <p>Mon premier CTF !</p> 
 </div>
-  
+
+
+
+
+
+
+
+
+
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-auto">

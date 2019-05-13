@@ -7,6 +7,7 @@ version: '2'
 services:
   web:
     image: nginx:latest
+    container_name: nginx_webserver
     ports:
       - "8888:80"
     networks:
@@ -16,15 +17,27 @@ services:
       - ./site.conf:/etc/nginx/conf.d/default.conf
     links:
       - php
+      - mysql_webserver
 
 
   php:
-    image: php:7-fpm
-    #build: php/.
+    #image: php:7-fpm
+    build: php/.
+    container_name: php_webserver
     volumes:
       - ./www_site:/www_site
     networks:
       - webLAN
+    links:
+      - mysql_webserver
+
+  mysql_webserver:
+    build: ./mysql/
+    container_name: mysql_webserver
+    environment:
+      - MYSQL_ROOT_PASSWORD=AZ56FG78HJZE34
+    networks:
+        - webLAN
 
 networks:
   webLAN:
