@@ -1,0 +1,11 @@
+#!/bin/bash
+
+wget https://dl.google.com/go/go1.12.5.linux-amd64.tar.gz
+sudo tar -xvf go1.12.5.linux-amd64.tar.gz 
+sudo mv go /usr/local
+export GOROOT=/usr/local/go
+mkdir ~/go_workspace
+export GOPATH=~/go_workspace
+export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+
+
