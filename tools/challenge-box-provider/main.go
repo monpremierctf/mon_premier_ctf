@@ -80,6 +80,8 @@ func createNewChallengeBox(box string, duration, port int, uid string) (containe
 		"--label", fmt.Sprintf("ctf-start-time=%s", time.Now().String()),
 		"--label", fmt.Sprintf("ctf-duration=%s", string(strconv.Itoa(duration))),
 		"--network", fmt.Sprintf("Net_%s", uid),
+		"--hostname", fmt.Sprintf("%s", box),
+		"--name", fmt.Sprintf("%s_%s", box, uid),
 		"--publish", fmt.Sprintf("%d", port),
 		fmt.Sprintf("%s", box),
 	).Output()
@@ -219,6 +221,13 @@ func createChallengeBox(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		} else {
 			log.Println("boxID is: " + string(boxID))
+		}
+
+		sshPort, err := getHostSSHPort(boxID)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		} else {
+			fmt.Fprintf(w, "A new challenge box has been created : available via SSH for %d seconds on port %s", challengeBoxDockerLifespan, sshPort)
 		}
 
 	} else {
