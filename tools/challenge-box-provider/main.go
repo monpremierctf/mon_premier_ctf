@@ -1,13 +1,11 @@
 package main
 
 import (
-	"bytes"
 	"context"
 	"flag"
 	"fmt"
 	"log"
 	"net/http"
-	"os/exec"
 	"strconv"
 	"strings"
 	"time"
@@ -41,6 +39,8 @@ var (
 	challenges   [2]challenge
 )
 
+const CONST_USER_NET_DURATION = 3600
+
 func init() {
 	// Set program flags
 	flag.StringVar(&challengeBoxDockerImage, "image", "ubuntu", "Docker image")
@@ -49,13 +49,16 @@ func init() {
 	flag.StringVar(&httpServerListener, "listen", "0.0.0.0:8080", "Address:Port the http server will bind to")
 
 	// check docker requirement
-	_, err := exec.LookPath("docker")
-	if err != nil {
-		log.Fatalf("Error Docker not found : %s", err)
-	}
+	/*
+		_, err := exec.LookPath("docker")
+		if err != nil {
+			log.Fatalf("Error Docker not found : %s", err)
+		}
+	*/
 
 	// Instantiate a BBolt Database with a bucket dedicated for the configuration
-	db, err = bolt.Open("./state.db", 0600, nil)
+
+	db, err := bolt.Open("./state.db", 0600, nil)
 	if err != nil {
 		log.Fatalf("Error creating Bbolt DB : %s", err)
 	}
@@ -68,6 +71,7 @@ func init() {
 	})
 	db.Close()
 
+	// Docker client
 	dockerClient, err = client.NewClientWithOpts(client.WithVersion("1.38"))
 	if err != nil {
 		panic(err)
@@ -75,6 +79,80 @@ func init() {
 
 }
 
+//
+//
+// Docker API utils
+//
+
+func listImages(cli *client.Client) {
+
+	//List all images available locally
+	images, err := cli.ImageList(context.Background(), types.ImageListOptions{})
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("LIST IMAGES\n-----------------------")
+	fmt.Println("Image ID | Repo Tags | Size")
+	for _, image := range images {
+		fmt.Printf("%s | %s | %d\n", image.ID, image.RepoTags, image.Size)
+	}
+
+}
+
+func listSwarmNodes(cli *client.Client) {
+	swarmNodes, err := cli.NodeList(context.Background(), types.NodeListOptions{})
+	if err != nil {
+		panic(err)
+	}
+
+	//List all nodes - works only in Swarm Mode
+	fmt.Print("\n\n\n")
+	fmt.Println("LIST SWARM NODES\n-----------------------")
+	fmt.Println("Name | Role | Leader | Status")
+	for _, swarmNode := range swarmNodes {
+		fmt.Printf("%s | %s | isLeader = %t | %s\n", swarmNode.Description.Hostname, swarmNode.Spec.Role, swarmNode.ManagerStatus.Leader, swarmNode.Status.State)
+	}
+
+}
+
+func listContainers(cli *client.Client) {
+	//Retrieve a list of containers
+	containers, err := cli.ContainerList(context.Background(), types.ContainerListOptions{})
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Print("\n\n\n")
+	fmt.Println("LIST CONTAINERS\n-----------------------")
+	fmt.Println("Container Names | Image | Mounts")
+	//Iterate through all containers and display each container's properties
+	for _, container := range containers {
+		fmt.Printf("%s | %s | %s\n", container.Names, container.Image, container.Mounts)
+	}
+
+}
+
+//
+func getNetworkId(uid string) (networkID string) {
+
+	networkID = ""
+	networks, err := dockerClient.NetworkList(ctx, types.NetworkListOptions{})
+	if err != nil {
+		log.Printf("ERROR: getNetworkId() %s", err.Error())
+	}
+	netId := "Net_" + uid
+	for _, network := range networks {
+		//fmt.Printf("[%s]-[%s]\n", network.Name, network.ID)
+		if network.Name == netId {
+			networkID = network.ID
+		}
+	}
+	return
+}
+
+//
+// Create New Challenge Container
 //
 func createNewChallengeBox(box string, duration, port int, uid string) (containerID string, err error) {
 	ctx := context.Background()
@@ -146,35 +224,73 @@ func createNewChallengeBox(box string, duration, port int, uid string) (containe
 	return
 }
 
-func createNewUserNet(uid string) (containerID []byte, err error) {
-	containerIDDirty, err := exec.Command(
-		"docker", "network", "create",
-		"--label", fmt.Sprintf("ctf-uid=CTF_UID_%s", uid),
-		fmt.Sprintf("Net_%s", uid),
-	).Output()
-	containerID = bytes.TrimSpace(containerIDDirty)
+func createNewUserNet(uid string, duration int) (containerID string, err error) {
+	labels := map[string]string{
+		"ctf-uid":        fmt.Sprintf("CTF_UID_%s", uid),
+		"ctf-start-time": time.Now().String(),
+		"ctf-duration":   string(strconv.Itoa(duration))}
+
+	resp, err := dockerClient.NetworkCreate(ctx, fmt.Sprintf("Net_%s", uid), types.NetworkCreate{Labels: labels})
+	if err != nil {
+		panic(err)
+	}
+	containerID = resp.ID
+	fmt.Println(containerID)
+	/*
+		containerIDDirty, err := exec.Command(
+			"docker", "network", "create",
+			"--label", fmt.Sprintf("ctf-uid=CTF_UID_%s", uid),
+			fmt.Sprintf("Net_%s", uid),
+		).Output()
+		containerID = bytes.TrimSpace(containerIDDirty)
+	*/
 	return
 }
 
 func oldcreateNewChallengeBox(box string, duration, port int) (containerID []byte, err error) {
-	containerIDDirty, err := exec.Command(
-		"docker", "container", "run",
-		"--detach", "--rm",
-		"--publish", fmt.Sprintf("%d", port),
-		fmt.Sprintf("%s", box),
-		"sleep", fmt.Sprintf("%d", duration)).Output()
-	containerID = bytes.TrimSpace(containerIDDirty)
+	/*
+		containerIDDirty, err := exec.Command(
+			"docker", "container", "run",
+			"--detach", "--rm",
+			"--publish", fmt.Sprintf("%d", port),
+			fmt.Sprintf("%s", box),
+			"sleep", fmt.Sprintf("%d", duration)).Output()
+		containerID = bytes.TrimSpace(containerIDDirty)
+	*/
 	return
 }
 
-func getHostSSHPort(containerID string) (port []byte, err error) {
-	port, err = exec.Command(
-		"docker", "inspect",
-		"-f", "{{range $p, $conf := .NetworkSettings.Ports}} {{(index $conf 0).HostPort}} {{end}}",
-		fmt.Sprintf("%s", containerID)).Output()
+func getHostSSHPort(containerID string) (port string, err error) {
+
+	port = "0"
+	containers, err := dockerClient.ContainerList(context.Background(), types.ContainerListOptions{})
 	if err != nil {
-		port = bytes.TrimSpace(port)
+		panic(err)
 	}
+
+	//fmt.Println("===")
+	for _, container := range containers {
+		if container.ID == containerID {
+			if len(container.Ports) >= 1 {
+				//fmt.Println(container.Ports[0].PublicPort)
+				port = fmt.Sprintf("%d", container.Ports[0].PublicPort)
+			}
+			/*
+				if container.NetworkSettings != nil {
+					fmt.Println(container.NetworkSettings.Networks)
+				}*/
+		}
+
+	}
+	/*
+		fmt.Println("===")
+		port, err = exec.Command(
+			"docker", "inspect",
+			"-f", "{{range $p, $conf := .NetworkSettings.Ports}} {{(index $conf 0).HostPort}} {{end}}",
+			fmt.Sprintf("%s", containerID)).Output()
+		if err != nil {
+			port = bytes.TrimSpace(port)
+		}*/
 	return
 }
 
@@ -228,7 +344,7 @@ func provideChallengeBox(w http.ResponseWriter, r *http.Request) {
 }
 
 func listChallengeBox(w http.ResponseWriter, r *http.Request) {
-	json := "["
+	json := "[\n"
 	containers, err := dockerClient.ContainerList(ctx, types.ContainerListOptions{})
 	if err != nil {
 		json += "]"
@@ -242,8 +358,13 @@ func listChallengeBox(w http.ResponseWriter, r *http.Request) {
 	for _, cont := range containers {
 		uid, prs := cont.Labels["ctf-uid"]
 		if prs {
+			if len(json) > 3 {
+				json += ",\n"
+			}
 			json += "{"
-			json += "'ID'='" + cont.ID + "'"
+			json += "\"Name\":\"" + cont.Names[0] + "\","
+			json += "\"Id\":\"" + cont.ID + "\","
+			json += "\"Uid\":\"" + uid + "\","
 			fmt.Println(cont.Names)
 			fmt.Printf("Is from %s\n", uid)
 
@@ -251,12 +372,14 @@ func listChallengeBox(w http.ResponseWriter, r *http.Request) {
 			sshPort, err := getHostSSHPort(cont.ID)
 			if err != nil {
 				fmt.Printf("no port\n")
+				json += "\"port\":\"0\""
 			} else {
 				port := strings.TrimSpace(string(sshPort))
 				p, _ := strconv.Atoi(port)
 				fmt.Printf("port (%d)\n", p)
+				json += "\"port\":\"" + sshPort + "\""
 			}
-			json += "},\n"
+			json += "}"
 		}
 	}
 	json += "]"
@@ -341,7 +464,7 @@ func createUserNet(w http.ResponseWriter, r *http.Request) {
 	log.Println("Url Param 'uid' is: " + string(uid))
 
 	// create docker
-	boxID, err := createNewUserNet(uid)
+	boxID, err := createNewUserNet(uid, CONST_USER_NET_DURATION)
 
 	if err != nil {
 		log.Println("error: " + err.Error())
@@ -484,6 +607,7 @@ func main() {
 	http.HandleFunc("/createUserTerm/", createUserTerm)
 	http.HandleFunc("/createChallengeBox/", createChallengeBox)
 
+	fmt.Printf("Net id =%s ==", getNetworkId("22"))
 	log.Fatal(http.ListenAndServe(httpServerListener, nil))
 
 }

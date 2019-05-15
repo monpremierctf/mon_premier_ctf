@@ -62,6 +62,65 @@
     </div>
     </div>  ';
     }
+    function file_get_contents_curl($url) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //Set curl to return the data instead of printing it to the browser.
+        curl_setopt($ch, CURLOPT_URL, $url);
+        $data = curl_exec($ch);
+        curl_close($ch);
+        return $data;
+    }
+
+    echo "===================";
+    $curl_handle=curl_init();
+    curl_setopt($curl_handle, CURLOPT_URL,'http://host.docker.internal:8080/listChallengeBox/');
+    curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 2);
+    curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($curl_handle, CURLOPT_USERAGENT, 'Your application name');
+    //curl_setopt ($curl_handle, CURLOPT_PORT , 8080);
+    $json1 = curl_exec($curl_handle);
+    curl_close($curl_handle);
+    echo $json1;
+
+    //$json = file_get_contents('http://localhost:8080/listChallengeBox');
+    echo $json;
+    $ret = json_decode($json);
+    print $ret;
+
+    $bob = file_get_contents_curl('http://localhost:8080/listChallengeBox');
+    echo $bob;
+    echo "===================";
+
+
+    
+        $yo = json_decode('{"a":1,"b":2,"c":3,"d":4,"e":5}', true);
+        $yo = json_decode('[{"a":1,"b":2,"c":3,"d":4,"e":5}]', true);
+        $yo = json_decode('[{"a":1,"b":2,"c":3,"d":4,"e":5}, {"a":1,"b":2,"c":3,"d":4,"e":5}]', true);
+        $yo = json_decode("{'a':1,'b':2}", true);
+        $yo = json_decode('[
+            {"a":1,"b":2,"c":3,"d":4,"e":5,}, 
+            {"a":1,"b":2,"c":3,"d":4,"e":5,}
+            ]', true);
+        $yo = json_decode('[
+            {"Name":"/ctf-transfert_24","Id":"08b032246d024cf7924557f1eac6053ac97d8b169e5e2d312ab67a4f87819157","Uid":"CTF_UID_24","port":"32785"},
+            {"Name":"/xtermjs3130_xtermjs_24","Id":"bf968f9e6b837e80e60c13cf61304da74873bd0246f13ce45ebc75400ddb8938","Uid":"CTF_UID_24","port":"32782"},
+            {"Name":"/ctf-transfert_23","Id":"6bf6375f2fe92302b4b8dc15df9c4a5df2b035e59de97c2f9d8c59ce8d17c16f","Uid":"CTF_UID_23","port":"32781"},
+            {"Name":"/xtermjs3130_xtermjs_23","Id":"555d6b2ea31abd4a802aa46511d855b87121262820e4319d5f7d4e9f6eb21b54","Uid":"CTF_UID_23","port":"32780"},
+            {"Name":"/ctf-transfert_22","Id":"bedcb08e31098cd05f029404838f4ada3aaf047818f7b54cda5e47d51ae44217","Uid":"CTF_UID_22","port":"32779"},
+            {"Name":"/xtermjs3130_xtermjs_22","Id":"7a1821caa7019f487b4bacd27fd6e3815028b64e15ad14cbf6a96e2496f87810","Uid":"CTF_UID_22","port":"32778"}]',true);
+        
+        var_dump($yo);
+        echo "xxx================xx";
+
+        print_r($yo[0]['Name']);
+        print_r($yo[1]['Name']);
+        echo "xxx================xx";
+
+        foreach ($yo as $k=>$v){
+            echo $v; // etc.
+        }
+    echo "xxx================xx";
 ?>
 
 <div class="jumbotron text-center">
