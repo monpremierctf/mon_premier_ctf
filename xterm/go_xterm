@@ -1,0 +1,9 @@
+#!/bin/bash
+
+
+unzip xterm.js-3.13.0.zip
+cp docker-compose.yml  xterm.js-3.13.0/
+cp Dockerfile xterm.js-3.13.0/
+cp index.html xterm.js-3.13.0/demo
+cp client.ts  xterm.js-3.13.0/demo
+

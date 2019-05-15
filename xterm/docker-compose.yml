@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  xtermjs:
+    build: .
+    ports:
+      - 3000
+
+
+    
