@@ -388,27 +388,28 @@ func listChallengeBox(w http.ResponseWriter, r *http.Request) {
 }
 
 func createChallengeBox(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Create box")
 
 	// Get uid
 	uids, ok := r.URL.Query()["uid"]
 	if !ok || len(uids[0]) < 1 {
-		log.Println("Url Param 'uid' is missing")
+		log.Println("createChallengeBox 'uid' is missing")
+		fmt.Fprintf(w, "ko")
 		return
 	}
 	uid := uids[0]
-	log.Println("Url Param 'uid' is: " + string(uid))
+	log.Println("createChallengeBox 'uid' is: " + string(uid))
 
 	// Is uid allowed ?
 
 	// get Cid
 	cids, ok := r.URL.Query()["cid"]
 	if !ok || len(cids[0]) < 1 {
-		log.Println("Url Param 'cid' is missing")
+		log.Println("createChallengeBox'cid' is missing")
+		fmt.Fprintf(w, "ko")
 		return
 	}
 	cid := cids[0]
-	log.Println("Url Param 'cid' is: " + string(cid))
+	log.Println("createChallengeBox 'cid' is: " + string(cid))
 
 	// find entry
 	var cindex int = -1
@@ -434,25 +435,25 @@ func createChallengeBox(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			log.Println("error: " + err.Error())
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			fmt.Fprintf(w, "ko")
 		} else {
 			log.Println("boxID is: " + string(boxID))
 		}
 
 		sshPort, err := getHostSSHPort(string(boxID))
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			fmt.Fprintf(w, "Create box")
 		} else {
-			fmt.Fprintf(w, "A new challenge box has been created : available via SSH for %d seconds on port %s", challengeBoxDockerLifespan, sshPort)
+			fmt.Fprintf(w, "{\"Name\":\"%s\", \"Port\":\"%s\"}", challenges[cindex].image, sshPort)
 		}
 
 	} else {
 		log.Println("cid not found : " + string(cid))
+		fmt.Fprintf(w, "ko")
 	}
 }
 
 func createUserNet(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Create UserNet")
 
 	// Get uid
 	uids, ok := r.URL.Query()["uid"]
@@ -461,20 +462,22 @@ func createUserNet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	uid := uids[0]
-	log.Println("Url Param 'uid' is: " + string(uid))
+	log.Println("createUserNet: " + string(uid))
 
 	// create docker
 	boxID, err := createNewUserNet(uid, CONST_USER_NET_DURATION)
 
 	if err != nil {
 		log.Println("error: " + err.Error())
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		fmt.Fprintf(w, "ko")
 	} else {
 		log.Println("boxID is: " + string(boxID))
+		fmt.Fprintf(w, "ok")
 	}
 
 }
 
+/*
 func createUserTerm(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Create box")
 
@@ -531,7 +534,7 @@ func createUserTerm(w http.ResponseWriter, r *http.Request) {
 		log.Println("cid not found : " + string(cid))
 	}
 }
-
+*/
 func cleanDB() {
 
 	containers, err := dockerClient.ContainerList(ctx, types.ContainerListOptions{})
@@ -600,11 +603,11 @@ func main() {
 	}()
 
 	//http.Handle("/", http.FileServer(http.Dir("./src")))
-	http.HandleFunc("/provide/", provideChallengeBox)
+	//http.HandleFunc("/provide/", provideChallengeBox)
 	http.HandleFunc("/listChallengeBox/", listChallengeBox)
 
 	http.HandleFunc("/createUserNet/", createUserNet)
-	http.HandleFunc("/createUserTerm/", createUserTerm)
+	//http.HandleFunc("/createUserTerm/", createUserTerm)
 	http.HandleFunc("/createChallengeBox/", createChallengeBox)
 
 	fmt.Printf("Net id =%s ==", getNetworkId("22"))
