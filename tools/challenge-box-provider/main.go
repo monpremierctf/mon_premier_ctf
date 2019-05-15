@@ -15,7 +15,11 @@ import (
 	//"io/ioutil"
 
 	"github.com/docker/docker/api/types"
+	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
+
+	// Fix: mv ~/go_workspace//src/github.com/docker/docker/vendor/github.com/docker/go-connections/{nat,nat.old}
+
 	bolt "go.etcd.io/bbolt"
 )
 
@@ -72,20 +76,73 @@ func init() {
 }
 
 //
-func createNewChallengeBox(box string, duration, port int, uid string) (containerID []byte, err error) {
-	containerIDDirty, err := exec.Command(
-		"docker", "container", "run",
-		"--detach", "--rm",
-		"--label", fmt.Sprintf("ctf-uid=CTF_UID_%s", uid),
-		"--label", fmt.Sprintf("ctf-start-time=%s", time.Now().String()),
-		"--label", fmt.Sprintf("ctf-duration=%s", string(strconv.Itoa(duration))),
-		"--network", fmt.Sprintf("Net_%s", uid),
-		"--hostname", fmt.Sprintf("%s", box),
-		"--name", fmt.Sprintf("%s_%s", box, uid),
-		"--publish", fmt.Sprintf("%d", port),
-		fmt.Sprintf("%s", box),
-	).Output()
-	containerID = bytes.TrimSpace(containerIDDirty)
+func createNewChallengeBox(box string, duration, port int, uid string) (containerID string, err error) {
+	ctx := context.Background()
+
+	// Labels
+	labels := map[string]string{
+		"ctf-uid":        fmt.Sprintf("CTF_UID_%s", uid),
+		"ctf-start-time": time.Now().String(),
+		"ctf-duration":   string(strconv.Itoa(duration))}
+
+	// Port binding
+	/*
+		hostBinding := nat.PortBinding{
+			HostIP:   "0.0.0.0",
+			HostPort: "8999",
+		}
+		containerPort, err := nat.NewPort("tcp", string(port))
+		if err != nil {
+			panic("Unable to get the port")
+		}
+		portBinding := nat.PortMap{containerPort: []nat.PortBinding{hostBinding}}
+	*/
+	// Create
+	resp, err := dockerClient.ContainerCreate(ctx,
+		&container.Config{
+			Image:    box,
+			Labels:   labels,
+			Hostname: box,
+		},
+		&container.HostConfig{
+			AutoRemove:      true,
+			PublishAllPorts: true,
+			//PortBindings: portBinding,
+		},
+		nil,
+		/*
+			&container.NetworkingConfig{
+				EndpointsConfig ep,
+			},*/
+		fmt.Sprintf("%s_%s", box, uid))
+	if err != nil {
+		panic(err)
+	}
+
+	if err := dockerClient.NetworkConnect(ctx, "a986c74b90dc", resp.ID, nil); err != nil {
+		panic(err)
+	}
+	if err := dockerClient.ContainerStart(ctx, resp.ID, types.ContainerStartOptions{}); err != nil {
+		panic(err)
+	}
+
+	fmt.Println(resp.ID)
+	containerID = resp.ID
+	/*
+		containerIDDirty, err := exec.Command(
+			"docker", "container", "run",
+			"--detach", "--rm",
+			"--label", fmt.Sprintf("ctf-uid=CTF_UID_%s", uid),
+			"--label", fmt.Sprintf("ctf-start-time=%s", time.Now().String()),
+			"--label", fmt.Sprintf("ctf-duration=%s", string(strconv.Itoa(duration))),
+			"--network", fmt.Sprintf("Net_%s", uid),
+			"--hostname", fmt.Sprintf("%s", box),
+			"--name", fmt.Sprintf("%s_%s", box, uid),
+			"--publish", fmt.Sprintf("%d", port),
+			fmt.Sprintf("%s", box),
+		).Output()
+		//containerID = bytes.TrimSpace(containerIDDirty)
+	*/
 	return
 }
 
@@ -110,11 +167,14 @@ func oldcreateNewChallengeBox(box string, duration, port int) (containerID []byt
 	return
 }
 
-func getHostSSHPort(containerID []byte) (port []byte, err error) {
+func getHostSSHPort(containerID string) (port []byte, err error) {
 	port, err = exec.Command(
 		"docker", "inspect",
 		"-f", "{{range $p, $conf := .NetworkSettings.Ports}} {{(index $conf 0).HostPort}} {{end}}",
 		fmt.Sprintf("%s", containerID)).Output()
+	if err != nil {
+		port = bytes.TrimSpace(port)
+	}
 	return
 }
 
@@ -144,7 +204,7 @@ func provideChallengeBox(w http.ResponseWriter, r *http.Request) {
 				return err
 			})
 
-			sshPort, err := getHostSSHPort(boxID)
+			sshPort, err := getHostSSHPort(string(boxID))
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 			}
@@ -153,7 +213,7 @@ func provideChallengeBox(w http.ResponseWriter, r *http.Request) {
 
 		} else {
 			log.Printf("Source IP %s has already a challenge box : %s", srcIP, containerID)
-			sshPort, err := getHostSSHPort(containerID)
+			sshPort, err := getHostSSHPort(string(containerID))
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 			}
@@ -168,7 +228,40 @@ func provideChallengeBox(w http.ResponseWriter, r *http.Request) {
 }
 
 func listChallengeBox(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "List created boxes")
+	json := "["
+	containers, err := dockerClient.ContainerList(ctx, types.ContainerListOptions{})
+	if err != nil {
+		json += "]"
+		fmt.Fprintf(w, json)
+		fmt.Println(json)
+		return
+	}
+
+	count := len(containers)
+	log.Printf("-- listChallengeBox : %d containers", count)
+	for _, cont := range containers {
+		uid, prs := cont.Labels["ctf-uid"]
+		if prs {
+			json += "{"
+			json += "'ID'='" + cont.ID + "'"
+			fmt.Println(cont.Names)
+			fmt.Printf("Is from %s\n", uid)
+
+			//fmt.Println(cont.Labels)
+			sshPort, err := getHostSSHPort(cont.ID)
+			if err != nil {
+				fmt.Printf("no port\n")
+			} else {
+				port := strings.TrimSpace(string(sshPort))
+				p, _ := strconv.Atoi(port)
+				fmt.Printf("port (%d)\n", p)
+			}
+			json += "},\n"
+		}
+	}
+	json += "]"
+	fmt.Fprintf(w, json)
+	fmt.Println(json)
 }
 
 func createChallengeBox(w http.ResponseWriter, r *http.Request) {
@@ -223,7 +316,7 @@ func createChallengeBox(w http.ResponseWriter, r *http.Request) {
 			log.Println("boxID is: " + string(boxID))
 		}
 
-		sshPort, err := getHostSSHPort(boxID)
+		sshPort, err := getHostSSHPort(string(boxID))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		} else {
@@ -317,17 +410,33 @@ func createUserTerm(w http.ResponseWriter, r *http.Request) {
 }
 
 func cleanDB() {
-	/*
-		containers, err := dockerClient.ContainerList(ctx, types.ContainerListOptions{})
-		//containerSet := set.NewSetFromSlice(containers)
-		if err != nil {
-			panic(err)
-		}
-		for _, cont := range containers {
-			fmt.Printf("%v\n", cont)
 
+	containers, err := dockerClient.ContainerList(ctx, types.ContainerListOptions{})
+	//containerSet := set.NewSetFromSlice(containers)
+	if err != nil {
+		panic(err)
+	}
+	count := len(containers)
+	log.Printf("-- Watch : %d containers", count)
+	for _, cont := range containers {
+		fmt.Printf("ID [%s]\n", cont.ID)
+		fmt.Println(cont.Names)
+		uid, prs := cont.Labels["ctf-uid"]
+		if prs {
+			fmt.Printf("Is from %s\n", uid)
+
+			//fmt.Println(cont.Labels)
+			sshPort, err := getHostSSHPort(cont.ID)
+			if err != nil {
+				fmt.Printf("no port\n")
+			} else {
+				port := strings.TrimSpace(string(sshPort))
+				p, _ := strconv.Atoi(port)
+				fmt.Printf("port (%d)\n", p)
+			}
 		}
-	*/
+	}
+
 }
 
 func oldcleanDB() {
@@ -362,9 +471,8 @@ func main() {
 	go func() {
 		for {
 			// Wait for 10s.
-			time.Sleep(10 * time.Second)
-			log.Printf("DB cleaning started")
 			cleanDB()
+			time.Sleep(10 * time.Second)
 		}
 	}()
 
