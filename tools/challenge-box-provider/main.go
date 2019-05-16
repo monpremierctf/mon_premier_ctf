@@ -343,6 +343,28 @@ func provideChallengeBox(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func getChallengeBox(box string, uid string) (containerID string) {
+	containerID = ""
+	containers, err := dockerClient.ContainerList(ctx, types.ContainerListOptions{})
+	if err != nil {
+		return
+	}
+
+	findName := fmt.Sprintf("/%s_%s", box, uid)
+	for _, cont := range containers {
+		_, prs := cont.Labels["ctf-uid"]
+		if prs {
+			//fmt.Printf("[%s][%s]", cont.Names[0], findName)
+			//fmt.Println()
+			if cont.Names[0] == findName {
+				containerID = cont.ID
+				return
+			}
+		}
+	}
+	return
+}
+
 func listChallengeBox(w http.ResponseWriter, r *http.Request) {
 	json := "[\n"
 	containers, err := dockerClient.ContainerList(ctx, types.ContainerListOptions{})
@@ -419,38 +441,54 @@ func createChallengeBox(w http.ResponseWriter, r *http.Request) {
 			cindex = index
 		}
 	}
+	if cindex == -1 {
 
-	// create docker
-	if cindex > -1 {
-		log.Println("Starting new docker box")
-		log.Println("id   : " + string(challenges[cindex].id))
-		log.Println("image: " + string(challenges[cindex].image))
-		log.Println("port : " + string(strconv.Itoa(challenges[cindex].port)))
-		boxID, err := createNewChallengeBox(
-			challenges[cindex].image,
-			challengeBoxDockerLifespan,
-			challenges[cindex].port,
-			uid,
-		)
+		log.Println("cid not found : " + string(cid))
+		fmt.Fprintf(w, "ko")
+		return
+	}
 
-		if err != nil {
-			log.Println("error: " + err.Error())
-			fmt.Fprintf(w, "ko")
-		} else {
-			log.Println("boxID is: " + string(boxID))
-		}
+	// Existe ?
+	boxID := getChallengeBox(
+		challenges[cindex].image,
+		uid,
+	)
 
+	if boxID != "" {
 		sshPort, err := getHostSSHPort(string(boxID))
 		if err != nil {
-			fmt.Fprintf(w, "Create box")
+			fmt.Fprintf(w, "Found box")
 		} else {
 			fmt.Fprintf(w, "{\"Name\":\"%s\", \"Port\":\"%s\"}", challenges[cindex].image, sshPort)
 		}
-
-	} else {
-		log.Println("cid not found : " + string(cid))
-		fmt.Fprintf(w, "ko")
+		return
 	}
+	// create docker
+	log.Println("Starting new docker box")
+	log.Println("id   : " + string(challenges[cindex].id))
+	log.Println("image: " + string(challenges[cindex].image))
+	log.Println("port : " + string(strconv.Itoa(challenges[cindex].port)))
+	boxID, err := createNewChallengeBox(
+		challenges[cindex].image,
+		challengeBoxDockerLifespan,
+		challenges[cindex].port,
+		uid,
+	)
+
+	if err != nil {
+		log.Println("error: " + err.Error())
+		fmt.Fprintf(w, "ko")
+	} else {
+		log.Println("boxID is: " + string(boxID))
+	}
+
+	sshPort, err := getHostSSHPort(string(boxID))
+	if err != nil {
+		fmt.Fprintf(w, "Create box")
+	} else {
+		fmt.Fprintf(w, "{\"Name\":\"%s\", \"Port\":\"%s\"}", challenges[cindex].image, sshPort)
+	}
+
 }
 
 func createUserNet(w http.ResponseWriter, r *http.Request) {
@@ -597,10 +635,14 @@ func main() {
 	go func() {
 		for {
 			// Wait for 10s.
-			cleanDB()
+			//cleanDB()
 			time.Sleep(10 * time.Second)
 		}
 	}()
+
+	//fmt.Println("==\n")
+	//fmt.Println(getChallengeBox("ctf-transfert", "23"))
+	//fmt.Println("==\n")
 
 	//http.Handle("/", http.FileServer(http.Dir("./src")))
 	//http.HandleFunc("/provide/", provideChallengeBox)
@@ -610,7 +652,7 @@ func main() {
 	//http.HandleFunc("/createUserTerm/", createUserTerm)
 	http.HandleFunc("/createChallengeBox/", createChallengeBox)
 
-	fmt.Printf("Net id =%s ==", getNetworkId("22"))
+	//fmt.Printf("Net id =%s ==", getNetworkId("22"))
 	log.Fatal(http.ListenAndServe(httpServerListener, nil))
 
 }

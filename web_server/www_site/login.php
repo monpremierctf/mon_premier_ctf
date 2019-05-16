@@ -20,9 +20,10 @@
         $count  = $result->num_rows;
         if($count>0) {
             // dans ce cas, tout est ok, on peut démarrer notre session
-           
+            $row = $result->fetch_array();
             // on enregistre les paramètres de notre visiteur comme variables de session ($login et $pwd) (notez bien que l'on utilise pas le $ pour enregistrer ces variables)
-            $_SESSION['login'] = $_POST['login'];
+            $_SESSION['login'] = $login;
+            $_SESSION['uid'] = $row['UID'];
 
             // on redirige notre visiteur vers une page de notre section membre
             header ('location: index.php');

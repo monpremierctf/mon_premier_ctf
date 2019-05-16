@@ -29,18 +29,19 @@
         }
         else {
             
-            // on enregistre les paramètres de notre visiteur comme variables de session ($login et $pwd) (notez bien que l'on utilise pas le $ pour enregistrer ces variables)
-            $_SESSION['login'] = $_POST['login'];
-
             
             // On sauve tout ça
-            $uid = uniqid ("CTF_UID_");
+            $uid = uniqid ("");
             $request = "INSERT into users (login, passwd, mail, pseudo, UID) VALUES ('$login', '$passwd', '$mail','$pseudo', '$uid')";
             $result = $mysqli->query($request);
             $count  = $result->affected_rows;
             if($result) {
                 // on redirige notre visiteur vers une page de notre section membre
                 header ('location: index.php');
+                            // on enregistre les paramètres de notre visiteur comme variables de session ($login et $pwd) (notez bien que l'on utilise pas le $ pour enregistrer ces variables)
+                $_SESSION['login'] = $login;
+                $_SESSION['uid'] = $uid;
+
             } else {
                 echo $request;
                 printf("Insert failed: %s\n", $mysqli->error);

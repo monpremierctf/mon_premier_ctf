@@ -78,14 +78,17 @@ function html_dump_cat($cat) {
     if ($c['category']==$cat) {
       print '<div class="container">';
         
+        // titre
         print '<div class="row chall-titre bg-secondary text-white">';
         print ($c['name']);
         print "</div>";
+        // Description
         print '<div class="container chall-desc">';
         print $Parsedown->text($c['description']);
         print "</div>";
+        // Flag
         print '<div class="row chall-desc bg-light">';
-            print '
+        print '
             <div class="col-md-auto text-left"><label for="usr">Flag:</label></div>
             <div class="col text-left"><input type="text" class="form-control" id="flag_'.$c['id'].'" name="code"></div>
             <div class="col-2 text-right"><button type="Submit" class="btn btn-primary" onclick="ctf_validate('.$c['id'].', \'#flag_'.$c['id'].'\')">Submit</button></div>';
