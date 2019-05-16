@@ -459,7 +459,7 @@ func createChallengeBox(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Fprintf(w, "Found box")
 		} else {
-			fmt.Fprintf(w, "{\"Name\":\"%s\", \"Port\":\"%s\"}", challenges[cindex].image, sshPort)
+			fmt.Fprintf(w, "{\"Name\":\"%s\", \"Port\":\"%s\"}", challenges[cindex].image+"_"+uid, sshPort)
 		}
 		return
 	}
@@ -486,7 +486,7 @@ func createChallengeBox(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Fprintf(w, "Create box")
 	} else {
-		fmt.Fprintf(w, "{\"Name\":\"%s\", \"Port\":\"%s\"}", challenges[cindex].image, sshPort)
+		fmt.Fprintf(w, "{\"Name\":\"%s\", \"Port\":\"%s\"}", challenges[cindex].image+"_"+uid, sshPort)
 	}
 
 }

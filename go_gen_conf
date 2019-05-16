@@ -33,12 +33,6 @@ echo "Generating config"
 python ./gen_config.py
 
 
-#
-# Update IPSERVER in challenge descriptions
-#
-echo "Replacing IPSERVER by $1"
-sed -i "s/IPSERVER/$1/g" ./ctfd_config/tmp/*/*.json 
-
 
 #
 # Copy json files to web server
@@ -46,6 +40,13 @@ sed -i "s/IPSERVER/$1/g" ./ctfd_config/tmp/*/*.json
 echo "Copying files to web server"
 cp -R ./ctfd_config/tmp/* web_server/www_site
 chmod -R a+r web_server/www_site
+
+
+#
+# Update IPSERVER in challenge descriptions
+#
+echo "Replacing IPSERVER by $1"
+sed -i "s/IPSERVER/$1/g" ./ctfd_config/tmp/*/*.json 
 
 
 #

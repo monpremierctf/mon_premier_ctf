@@ -60,16 +60,14 @@
   <p>Mon premier CTF !</p> 
 </div>
   
-<div class="container-fluid">
-    <div class="row">
-        
-        <div class="col">
-        <div class="container">
-
-
-
+<div class="row">
+    <div class="col-sm-1">
+      
+    </div>
     <div class="col-sm-4 text-center">
-	  <form action="login.php"  method="post">
+      <h3>Participant</h3>
+      <p><img src="player_02_200.png" alt="Participant"></p>
+      <form action="login.php"  method="post">
 		<div class="form-group text-left">
 		  <label for="usr">Login</label>
 		  <input type="text" class="form-control" id="login" name="login">
@@ -81,12 +79,19 @@
 		<button type="submit" class="btn btn-primary">Login</button>
 	  </form>
     </div>
-
-
-        </div>
-        </div>
+    <div class="col-sm-4 text-center">
+      <h3>Anonymous</h3>        
+      <p><img src="admin_02_200.png" alt="Anonymous"></p>
+      <form action="register.php"  method="post">
+		<div class="form-group text-center">
+		  Pas encore de compte ?
+		</div>
+		<button type="submit" class="btn btn-primary">Register</button>
+	  </form>
     </div>
+  </div>
 </div>
+  
 
 
   

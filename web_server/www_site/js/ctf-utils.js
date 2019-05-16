@@ -16,3 +16,5 @@ function ctf_validate(id, flag_field)
     });
     ;
 } 
+
+

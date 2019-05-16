@@ -13,7 +13,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
+  <script src="js/ctf-utils.js"></script>
 </head>
 <body>
 
@@ -53,7 +53,7 @@
 
    <?php
     
-        if (isset($_SESSION['login'] )) {
+     if (isset($_SESSION['login'] )) {
         //echo $_SESSION['uid'];
         $json1 = file_get_contents_curl('http://challenge-box-provider:8080/createChallengeBox/?uid='.$_SESSION['uid'].'&cid=1');
         //echo $json1;

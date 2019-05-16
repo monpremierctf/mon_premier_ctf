@@ -17,56 +17,31 @@
 </head>
 <body>
 
-
-<div class="jumbotron text-center">
-
-
-    <h1>Y0L0 CTF</h1>
-    <p>Mon premier CTF !</p> 
-</div>
-
-
-
-
-
-
-
-
+<!--- Page Header  -->
+<?php
+    include "Parsedown.php";
+    $Parsedown = new Parsedown();
+    include 'header.php'; 
+?>
 
 
 <div class="container-fluid">
     <div class="row">
+        <!--- Page TOC  -->
         <div class="col-md-auto">
-            <?php
-            include ("ctf_challenges.php");
-
-            print '<a href="index.php">';
-                print "<pre>";
-                print "Intro";
-                print "</pre>";
-                print '</a> ';
-            foreach(getCategories() as $cat){
-                print '<a href="index.php?p='.$cat.'">';
-                print "<pre>";
-                print ($cat);
-                print "</pre>";
-                print '</a> ';
-            }
-            print '<a  ><pre> </pre></a> ';
-            print '<a href="http://localhost:3000" target="_blank"><pre>[Mon terminal]</pre></a> ';
-  
-            ?>
+            <?php include 'toc.php' ?>
         </div>
 
+        <!--- Page Content  -->
         <div class="col">
         <div class="container">
+
 
        
 
 <?php
-    include "Parsedown.php";
-    $Parsedown = new Parsedown();
-
+    
+    
     function file_get_contents_curl($url) {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -78,20 +53,25 @@
         curl_close($ch);
         return $data;
     }
+    if (isset($_SESSION['login'] )) {
+        
 
-    //echo "=======1============</br>";
-    $json1 = file_get_contents_curl('http://challenge-box-provider:8080/listChallengeBox/');
-    //echo $json1;
-    $yo = json_decode($json1, true);
-    //var_dump($yo);
-    foreach($yo as $item) {
+            $json1 = file_get_contents_curl('http://challenge-box-provider:8080/listChallengeBox/');
+            //echo $json1;
+            $yo = json_decode($json1, true);
+            //var_dump($yo);
+            foreach($yo as $item) {
+                echo($item['Name']);
+                echo ":";
+                echo($item['port']);
+                echo "</br>";
+            }
 
-        echo($item['Name']);
-        echo($item['Port']);
-        echo "</br>";
-
+    } else {
+        echo "Merci de vous connecter.";
     }
-    //echo "xxx================xx";
+
+
 
  
 ?>

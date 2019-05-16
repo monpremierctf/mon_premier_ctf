@@ -84,7 +84,10 @@ function html_dump_cat($cat) {
         print "</div>";
         // Description
         print '<div class="container chall-desc">';
-        print $Parsedown->text($c['description']);
+        $desc = $c['description'];
+        $server="ctf-shell_".$_SESSION['uid'];
+        $desc = str_replace("IPSERVER", $server, $desc);
+        print $Parsedown->text($desc);
         print "</div>";
         // Flag
         print '<div class="row chall-desc bg-light">';
