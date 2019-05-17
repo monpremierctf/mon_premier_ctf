@@ -9,7 +9,7 @@ function ctf_validate(id, flag_field)
             $(flag_field).html(data);
         } else {
             alert("Flag non validé...");
-            $(flag_field).css({ 'color': 'red', 'background-color': 'red' });
+            $(flag_field).css({ 'color': 'red' });
         }
     })
 .fail(function() {

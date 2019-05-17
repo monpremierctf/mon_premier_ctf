@@ -123,6 +123,7 @@ function html_dump_cat($cat) {
         // Server
         if (isset($c['docker'])){
           if (($c['docker'])!="") {
+            echo $c['docker'];
             ctf_div_server_status($c['docker']);
           }
         }
@@ -146,29 +147,29 @@ function ctf_div_server_status($id) {
 echo '     
 <p>Pour rentrer sur le serveur il faut ouvrir votre terminal dans un nouvel onglet, démarrer votre serveur dédié et vous connecter dessus avec ssh.</p>
 </br>
-<p id="ServerStatus">Server status : stopped</p>
+<p id="ServerStatus'.$id.'">Server status : stopped</p>
 </br>
-<p><button type="button" class="btn btn-default btn-warning" id="StartServer" value="StartServer">Start Server</button>
-<button type="button" class="btn btn-default btn-warning" id="StopServer" value="StopServer">Stop Server</button></p>
+<p><button type="button" class="btn btn-default btn-warning" id="StartServer'.$id.'" value="StartServer">Start Server</button>
+<button type="button" class="btn btn-default btn-warning" id="StopServer'.$id.'" value="StopServer">Stop Server</button></p>
 
 <script>
 $(document).ready(function() {
-    $("#StartServer").click(function(){
+    $("#StartServer'.$id.'").click(function(){
         $.get("containers_cmd.php?create='.$id.'",function(data) { 
             if (data=="ko") {
-                $("#ServerStatus").html("Server status: Problem... Cant start");
+                $("#ServerStatus'.$id.'").html("Server status: Problem... Cant start");
             } else  {
                var resp = JSON.parse(data);
-               //$("#ServerStatus").html(resp.Name); 
-               $("#ServerStatus").html("Server status: Running as "+resp.Name);
+               //$("#ServerStatus'.$id.'").html(resp.Name); 
+               $("#ServerStatus'.$id.'").html("Server status: Running as "+resp.Name);
             }
         });
 
     }); 
 });
 $(document).ready(function() {
-    $("#StopServer").click(function(){
-        $.get("/stop/",function(data) { $("#ServerStatus").html(data); });
+    $("#StopServer'.$id.'").click(function(){
+        $.get("/stop/",function(data) { $("#ServerStatus'.$id.'").html(data); });
     }); 
 });
 

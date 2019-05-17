@@ -36,7 +36,7 @@ var (
 	db           *bolt.DB
 	dockerClient *client.Client
 	ctx          = context.Background()
-	challenges   [6]challenge
+	challenges   [10]challenge
 )
 
 const CONST_USER_NET_DURATION = 3600
@@ -684,7 +684,7 @@ func statusChallengeBox(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	chall := [6]challenge{
+	chall := [10]challenge{
 		// xterm
 		challenge{"1", "ctf-tool-xterm", 3000},
 		// challenges
@@ -693,6 +693,11 @@ func main() {
 		challenge{"4", "ctf-escalation", 80},
 		challenge{"5", "ctf-buffer", 22},
 		challenge{"6", "ctf-exploit", 22},
+
+		challenge{"ctf-tcpserver", "ctf-tcpserver", 22},
+		challenge{"ctf-telnet", "ctf-telnet", 22},
+		challenge{"ctf-ftp", "ctf-ftp", 22},
+		challenge{"ctf-smtp", "ctf-smtp", 22},
 	}
 	challenges = chall
 	fmt.Println(challenges)

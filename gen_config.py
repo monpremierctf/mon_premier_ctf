@@ -128,7 +128,7 @@ flag_id=0
 files=[]
 file_id=0
 
-def add_challenge(name, desc, value, category):
+def add_challenge(name, desc, value, category, docker):
     global challenge_id
     challenge_id+=1
     challenges.append({
@@ -140,7 +140,8 @@ def add_challenge(name, desc, value, category):
             "category": str(category), 
             "type": "standard", 
             "state": "visible", 
-            "requirements": "null"
+            "requirements": "null",
+            "docker": str(docker)
         })
 
 def add_flag(flag):
@@ -212,9 +213,10 @@ def parse_dir(challenge_dir):
         #category = category.encode('string-escape')
         filename = getParam(config, challenge, 'file')
         flag = getParam(config, challenge, 'flag')
+        docker = getParam(config, challenge, 'docker')
         #print(name)
         #print (description)
-        add_challenge(name, desc, value, category)
+        add_challenge(name, desc, value, category,docker)
         add_flag(flag)
         add_file(challenge_dir, filename) 
 
