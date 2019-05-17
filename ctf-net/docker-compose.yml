@@ -2,59 +2,67 @@
 #
 # Les variables d'environnement sont définies dans .env
 #
+version: "3"
 
-arpspoof:
-  build: ./arpspoof 
-  environment:
-    CTFNET_IP_ALICE: ${CTFNET_IP_ALICE}
-  command: [
-      python3,
-      /root/send_udp_flag.py
-  ]
+services:
+
+  arpspoof:
+    build: ./arpspoof 
+    image: ctf-arpspoof 
+    environment:
+      CTFNET_IP_ALICE: ${CTFNET_IP_ALICE}
+    command: [
+        python3,
+        /root/send_udp_flag.py
+    ]
+    
+
+  tcpserver:
+    build: ./tcpserver
+    image: ctf-tcpserver
+    ports:
+      - "${CTFNET_TCPSERVER_PORT}:${CTFNET_TCPSERVER_PORT}"
+    environment:
+      CTFNET_TCPSERVER_PORT: ${CTFNET_TCPSERVER_PORT}
+    command: [
+        python,
+        /root/tcpserver.py
+    ]
+    
+
+  telnet:
+    build: ./telnet
+    image: ctf-telnet
+    ports:
+      - "${CTFNET_TELNET_PORT}:23"
+    environment:
+      CTFNET_TELNET_PORT: ${CTFNET_TELNET_PORT}
+    command: bash -c "/etc/init.d/xinetd start && sleep infinity"
+
+
+  ftp:
+    build: ./ftp
+    image: ctf-ftp
+    ports:
+      - "${CTFNET_FTP_PORT20}:20"
+      - "${CTFNET_FTP_PORT}:21"
+      - "64000-64321:64000-64321"
+    environment:
+      CTFNET_FTP_PORT: ${CTFNET_FTP_PORT}
+    command: bash -c "service vsftpd start  && sleep infinity"
+
+  #
+  # Dans main.cf mettre à jour le réseau
+  #   mynetworks = 127.0.0.0/8 12.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 
+  #
+  smtp:
+    build: ./smtp
+    image: ctf-smtp
+    ports:
+      - "${CTFNET_POP3_PORT}:110"
+    environment:
+      CTFNET_SMTP_PORT: ${CTFNET_POP3_PORT}
+  #  command: bash -c "service postfix start  && sleep infinity"
+    command: bash -c "service dovecot start && sleep infinity"
+
   
-
-tcpserver:
-  build: ./tcpserver
-  ports:
-    - "${CTFNET_TCPSERVER_PORT}:${CTFNET_TCPSERVER_PORT}"
-  environment:
-    CTFNET_TCPSERVER_PORT: ${CTFNET_TCPSERVER_PORT}
-  command: [
-      python,
-      /root/tcpserver.py
-  ]
-  
-
-telnet:
-  build: ./telnet
-  ports:
-    - "${CTFNET_TELNET_PORT}:23"
-  environment:
-    CTFNET_TELNET_PORT: ${CTFNET_TELNET_PORT}
-  command: bash -c "/etc/init.d/xinetd start && sleep infinity"
-
-
-ftp:
-  build: ./ftp
-  ports:
-    - "${CTFNET_FTP_PORT20}:20"
-    - "${CTFNET_FTP_PORT}:21"
-    - "64000-64321:64000-64321"
-  environment:
-    CTFNET_FTP_PORT: ${CTFNET_FTP_PORT}
-  command: bash -c "service vsftpd start  && sleep infinity"
-
-#
-# Dans main.cf mettre à jour le réseau
-#   mynetworks = 127.0.0.0/8 12.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 
-#
-smtp:
-  build: ./smtp
-  ports:
-    - "${CTFNET_POP3_PORT}:110"
-  environment:
-    CTFNET_SMTP_PORT: ${CTFNET_POP3_PORT}
-#  command: bash -c "service postfix start  && sleep infinity"
-  command: bash -c "service dovecot start && sleep infinity"
-
- 

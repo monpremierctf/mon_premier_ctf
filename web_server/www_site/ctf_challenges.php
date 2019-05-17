@@ -122,7 +122,9 @@ function html_dump_cat($cat) {
         }
         // Server
         if (isset($c['docker'])){
-          //ctf_div_server_status($c['id']);
+          if (($c['docker'])!="") {
+            ctf_div_server_status($c['docker']);
+          }
         }
 
         // Flag
