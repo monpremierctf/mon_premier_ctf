@@ -36,7 +36,7 @@ var (
 	db           *bolt.DB
 	dockerClient *client.Client
 	ctx          = context.Background()
-	challenges   [2]challenge
+	challenges   [6]challenge
 )
 
 const CONST_USER_NET_DURATION = 3600
@@ -621,12 +621,74 @@ func oldcleanDB() {
 
 }
 
+func statusChallengeBox(w http.ResponseWriter, r *http.Request) {
+
+	// Get uid
+	uids, ok := r.URL.Query()["uid"]
+	if !ok || len(uids[0]) < 1 {
+		log.Println("statusChallengeBox 'uid' is missing")
+		fmt.Fprintf(w, "ko")
+		return
+	}
+	uid := uids[0]
+	log.Println("statusChallengeBox 'uid' is: " + string(uid))
+
+	// Is uid allowed ?
+
+	// get Cid
+	cids, ok := r.URL.Query()["cid"]
+	if !ok || len(cids[0]) < 1 {
+		log.Println("statusChallengeBox'cid' is missing")
+		fmt.Fprintf(w, "ko")
+		return
+	}
+	cid := cids[0]
+	log.Println("statusChallengeBox 'cid' is: " + string(cid))
+
+	// find entry
+	var cindex int = -1
+	for index, chall := range challenges {
+		log.Println("Search: " + string(chall.id))
+		if chall.id == cid {
+			cindex = index
+		}
+	}
+	if cindex == -1 {
+
+		log.Println("cid not found : " + string(cid))
+		fmt.Fprintf(w, "ko")
+		return
+	}
+
+	// Existe ?
+	boxID := getChallengeBox(
+		challenges[cindex].image,
+		uid,
+	)
+
+	if boxID != "" {
+		sshPort, err := getHostSSHPort(string(boxID))
+		if err != nil {
+			fmt.Fprintf(w, "Ko")
+
+		} else {
+			fmt.Fprintf(w, "{\"Name\":\"%s\", \"Port\":\"%s\"}", challenges[cindex].image+"_"+uid, sshPort)
+		}
+		return
+	}
+	fmt.Fprintf(w, "Ko")
+}
+
 func main() {
-	chall := [2]challenge{
+	chall := [6]challenge{
 		// xterm
 		challenge{"1", "xtermjs3130_xtermjs", 3000},
 		// challenges
-		challenge{"2", "ctf-transfert", 22},
+		challenge{"2", "ctf-shell", 22},
+		challenge{"3", "ctf-priv", 22},
+		challenge{"4", "ctf-sqli", 80},
+		challenge{"5", "ctf-buffer", 22},
+		challenge{"6", "ctf-exploit", 22},
 	}
 	challenges = chall
 	fmt.Println(challenges)
@@ -651,7 +713,7 @@ func main() {
 	http.HandleFunc("/createUserNet/", createUserNet)
 	//http.HandleFunc("/createUserTerm/", createUserTerm)
 	http.HandleFunc("/createChallengeBox/", createChallengeBox)
-
+	http.HandleFunc("/statusChallengeBox/", statusChallengeBox)
 	//fmt.Printf("Net id =%s ==", getNetworkId("22"))
 	log.Fatal(http.ListenAndServe(httpServerListener, nil))
 

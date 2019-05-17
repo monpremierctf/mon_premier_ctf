@@ -29,13 +29,18 @@ function isFlagValid($id, $flag){
   global $flags;
   foreach ($flags['results'] as $f) {
     if ($f['challenge_id']==$id) {
-      //print 'Found id '.$f['content']." ".$flag."\n";
-      if (strcasecmp($f['content'],$flag)==0) {
+      //print "Found id";
+      $a = trim($f['content']);
+      $b = trim($flag);
+      //var_dump ($a);
+      //var_dump ($b);
+      if (strcasecmp($a,$b)==0) {
         return true;
       }
+      
     } 
   }  
-  print 'bof';  
+  
   return false;
 }
 
@@ -70,8 +75,23 @@ function debug() {
   print getChallengeCount();
 }
 
+
+function getChallengeFileLocation($challengeId) {
+  global $files;
+
+  foreach ($files['results'] as $f) {
+    //echo $f['challenge_id']."==".$challengeId."\n";
+    if ($f['challenge_id']==$challengeId) {
+      //echo "ok";
+      return $f['location'];
+    }    
+  }
+  return "";
+}
+
 function html_dump_cat($cat) {
   global $challenges;
+  global $files;
   global $Parsedown;
 
   foreach ($challenges['results'] as $c) {
@@ -89,6 +109,22 @@ function html_dump_cat($cat) {
         $desc = str_replace("IPSERVER", $server, $desc);
         print $Parsedown->text($desc);
         print "</div>";
+        // Files
+        foreach ($files['results'] as $f) {
+          if ($f['challenge_id']===$c['id']) {
+            print '<div class="row chall-desc bg-light">';
+            print '
+            <a href="downloadfile.php?id='.$f['challenge_id'].'" download>
+            <button  class="btn btn-primary">Download '.basename($f['location']).'</button>
+            </a>';
+            print "</div>";
+          }
+        }
+        // Server
+        if (isset($c['docker'])){
+          //ctf_div_server_status($c['id']);
+        }
+
         // Flag
         print '<div class="row chall-desc bg-light">';
         print '
@@ -100,5 +136,42 @@ function html_dump_cat($cat) {
       print "</div>";
     }
   }     
+}
+
+
+function ctf_div_server_status($id) {
+
+echo '     
+<p>Pour rentrer sur le serveur il faut ouvrir votre terminal dans un nouvel onglet, démarrer votre serveur dédié et vous connecter dessus avec ssh.</p>
+</br>
+<p id="ServerStatus">Server status : stopped</p>
+</br>
+<p><button type="button" class="btn btn-default btn-warning" id="StartServer" value="StartServer">Start Server</button>
+<button type="button" class="btn btn-default btn-warning" id="StopServer" value="StopServer">Stop Server</button></p>
+
+<script>
+$(document).ready(function() {
+    $("#StartServer").click(function(){
+        $.get("containers_cmd.php?create='.$id.'",function(data) { 
+            if (data=="ko") {
+                $("#ServerStatus").html("Server status: Problem... Cant start");
+            } else  {
+               var resp = JSON.parse(data);
+               //$("#ServerStatus").html(resp.Name); 
+               $("#ServerStatus").html("Server status: Running as "+resp.Name);
+            }
+        });
+
+    }); 
+});
+$(document).ready(function() {
+    $("#StopServer").click(function(){
+        $.get("/stop/",function(data) { $("#ServerStatus").html(data); });
+    }); 
+});
+
+</script>
+';
+
 }
 ?>

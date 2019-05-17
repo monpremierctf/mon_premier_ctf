@@ -48,45 +48,14 @@
                 $string = file_get_contents("head_shell.md");
                 print $Parsedown->text($string);
                
-
-
-echo '     
-    <p>Pour rentrer sur le serveur il faut ouvrir votre terminal dans un nouvel onglet, démarrer votre serveur dédié et vous connecter dessus avec ssh.</p>
-    </br>
-    <p id="ServerStatus">Server status : stopped</p>
-    </br>
-    <p><button type="button" class="btn btn-default btn-warning" id="StartServer" value="StartServer">Start Server</button>
-    <button type="button" class="btn btn-default btn-warning" id="StopServer" value="StopServer">Stop Server</button></p>
-   
-    <script>
-    $(document).ready(function() {
-        $("#StartServer").click(function(){
-            $.get("containers_cmd.php?create=2",function(data) { 
-                if (data=="ko") {
-                    $("#ServerStatus").html("Server status: Problem... Cant start");
-                } else  {
-                   var resp = JSON.parse(data);
-                   //$("#ServerStatus").html(resp.Name); 
-                   $("#ServerStatus").html("Server status: Running as "+resp.Name);
-                }
-            });
-
-        }); 
-    });
-    $(document).ready(function() {
-        $("#StopServer").click(function(){
-            $.get("/create/",function(data) { $("#ServerStatus").html(data); });
-        }); 
-    });
-
-    </script>
-';
+                ctf_div_server_status(2);
 
                 html_dump_cat($p);
             }
             elseif ($p==="Privilege Escalation") {
                 $string = file_get_contents("head_pesc.md");
                 print $Parsedown->text($string);
+                ctf_div_server_status(3);
                 html_dump_cat($p);
             }
             elseif ($p==="Network protocol") {
@@ -102,6 +71,7 @@ echo '
             elseif ($p==="Buffer overflows") {
                 $string = file_get_contents("head_overflows.md");
                 print $Parsedown->text($string);
+                ctf_div_server_status(5);
                 html_dump_cat($p);
             }
             elseif ($p==="Decode") {
@@ -112,6 +82,7 @@ echo '
             elseif ($p==="File Upload") {
                 $string = file_get_contents("head_upload.md");
                 print $Parsedown->text($string);
+                ctf_div_server_status(6);
                 html_dump_cat($p);
             } else {
                 $string = file_get_contents("head_index.md");
