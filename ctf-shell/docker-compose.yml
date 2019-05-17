@@ -3,8 +3,11 @@
 # La valeur de PORT-SSH est définie dans .env
 #
 
-shell:
-  build: . 
-  image: ctf-shell
-  ports:
-    - "${PORT_SSH}:22"
+version: "3"
+
+services:
+  shell:
+    build: . 
+    image: ctf-shell
+    ports:
+      - "${PORT_SSH}:22"

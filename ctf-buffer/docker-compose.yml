@@ -2,9 +2,12 @@
 #
 # La valeur de PORT_SSH est définie dans .env
 #
+version: "3"
 
-buffer:
-  build: . 
-  image: ctf-buffer
-  ports:
-    - "${PORT_SSH}:22"
+services:
+
+  buffer:
+    build: . 
+    image: ctf-buffer
+    ports:
+      - "${PORT_SSH}:22"
