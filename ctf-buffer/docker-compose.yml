@@ -5,5 +5,6 @@
 
 buffer:
   build: . 
+  container_name: ctf-buffer
   ports:
     - "${PORT_SSH}:22"

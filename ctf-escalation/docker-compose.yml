@@ -1,5 +1,6 @@
 escalation:
   build: . 
+  container_name: ctf-excalation
   ports:
     - "${PORT_SSH}:22"
 

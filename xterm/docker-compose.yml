@@ -3,6 +3,7 @@ version: "3"
 services:
   xtermjs:
     build: .
+    container_name: ctf-tool-xterm
     ports:
       - 3000
 

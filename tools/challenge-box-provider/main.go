@@ -686,10 +686,10 @@ func statusChallengeBox(w http.ResponseWriter, r *http.Request) {
 func main() {
 	chall := [6]challenge{
 		// xterm
-		challenge{"1", "xtermjs3130_xtermjs", 3000},
+		challenge{"1", "ctf-tool-xterm", 3000},
 		// challenges
 		challenge{"2", "ctf-shell", 22},
-		challenge{"3", "ctf-priv", 22},
+		challenge{"3", "ctf-sqli", 22},
 		challenge{"4", "ctf-escalation", 80},
 		challenge{"5", "ctf-buffer", 22},
 		challenge{"6", "ctf-exploit", 22},
