@@ -174,15 +174,13 @@ echo "Generation des fichers de config pour CTFd"
 python ./gen_config.py
 
 
+
 #
-# Rebuild zip
-# 
-# zip must not contain dir entries (-D option)
-cd ./ctfd_config/tmp
-zip -r -D ../../myctf.zip ./*
-cd - > /dev/null
-rm -Rf ctfd_config/tmp
-echo "myctf.zip generated for ctfd"
+# Copy json files to web server
+#
+echo "Copying files to web server"
+cp -R ./ctfd_config/tmp/* web_server/www_site
+chmod -R a+r web_server/www_site
 
 
 #
@@ -197,6 +195,17 @@ echo "myctf.zip generated for ctfd"
 python -c 'from gen_config import build_challenges; build_challenges()'
 
 #python -c 'from gen_config import start_challenges; start_challenges()'
+
+
+#
+# Build xterm
+#
+cd xterm
+./go_xterm
+cd - > /dev/null
+cd xterm/xterm.js-3.13.0/
+docker-compose build
+cd - > /dev/null
 
 
 #
@@ -223,7 +232,7 @@ cd - > /dev/null
 echo "*****************"
 echo ""
 echo "S'il n'y a pas eu de message d'erreur, vous pouvez à présent vous connecter à l'interface web:"
-echo "http://localhost:8000"
+echo "http://localhost:8888"
 echo "Compte admin : CTFPasswordZ"
 echo "Pensez à changer le mot de passe"
 echo ""

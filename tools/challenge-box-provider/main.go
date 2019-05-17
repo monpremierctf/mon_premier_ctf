@@ -197,7 +197,11 @@ func createNewChallengeBox(box string, duration, port int, uid string) (containe
 		panic(err)
 	}
 
-	if err := dockerClient.NetworkConnect(ctx, "a986c74b90dc", resp.ID, nil); err != nil {
+	nid :=getNetworkId(uid)
+	if (nid==""){
+		nid, _ = createNewUserNet(uid , 3600)
+	}
+	if err := dockerClient.NetworkConnect(ctx, nid, resp.ID, nil); err != nil {
 		panic(err)
 	}
 	if err := dockerClient.ContainerStart(ctx, resp.ID, types.ContainerStartOptions{}); err != nil {
