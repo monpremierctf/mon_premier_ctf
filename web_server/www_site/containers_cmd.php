@@ -16,13 +16,13 @@
 
     if (isset($_SESSION['login'] )) {
         if (isset($_GET['create'])){
-            $url = 'http://challenge-box-provider:8080/createChallengeBox/?uid='.$_SESSION['uid'].'&cid=2';
+            $url = 'http://challenge-box-provider:8080/createChallengeBox/?uid='.$_SESSION['uid'].'&cid='.$_GET['create'];
             //echo "==".$url."";
             $json1 = file_get_contents_curl($url);
             echo $json1;
         }
         if (isset($_GET['status'])){
-            $url = 'http://challenge-box-provider:8080/statusChallengeBox/?uid='.$_SESSION['uid'].'&cid=2';
+            $url = 'http://challenge-box-provider:8080/statusChallengeBox/?uid='.$_SESSION['uid'].'&cid='.$_GET['status'];
             //echo "==".$url."";
             $json1 = file_get_contents_curl($url);
             echo $json1;
