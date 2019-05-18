@@ -37,7 +37,7 @@ var (
 	db           *bolt.DB
 	dockerClient *client.Client
 	ctx          = context.Background()
-	challenges   [10]challenge
+	challenges   [11]challenge
 )
 
 const CONST_USER_NET_DURATION = 3600
@@ -729,7 +729,7 @@ func cleanDB() {
 }
 
 func main() {
-	chall := [10]challenge{
+	chall := [11]challenge{
 		// xterm
 		challenge{"1", "ctf-tool-xterm", 3000, 3 * 3600}, // 3h
 		// challenges
@@ -737,7 +737,8 @@ func main() {
 		challenge{"3", "ctf-sqli", 22, 10 * 60},
 		challenge{"4", "ctf-escalation", 80, 10 * 60},
 		challenge{"5", "ctf-buffer", 22, 10 * 60},
-		challenge{"6", "ctf-exploit", 22, 10 * 60},
+		challenge{"6", "ctf-upload", 22, 10 * 60},
+		challenge{"7", "ctf-exploit", 22, 10 * 60},
 
 		challenge{"ctf-tcpserver", "ctf-tcpserver", 22, 10 * 60},
 		challenge{"ctf-telnet", "ctf-telnet", 22, 10 * 60},

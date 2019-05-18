@@ -47,15 +47,13 @@
             if ($p==="Ghost in the Shell") {
                 $string = file_get_contents("head_shell.md");
                 print $Parsedown->text($string);
-               
                 ctf_div_server_status(2);
-
                 html_dump_cat($p);
             }
             elseif ($p==="Privilege Escalation") {
                 $string = file_get_contents("head_pesc.md");
                 print $Parsedown->text($string);
-                ctf_div_server_status(3);
+                ctf_div_server_status(4);
                 html_dump_cat($p);
             }
             elseif ($p==="Network protocol") {
