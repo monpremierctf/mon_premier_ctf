@@ -63,19 +63,42 @@
             exit();
         }
 
-		$query = "SELECT UID,CHALLID, fdate, isvalid, flag FROM flags;";
-		if ($result = $mysqli->query($query)) {
+		$user_query = "SELECT UID FROM users;";
+		if ($result = $mysqli->query($user_query)) {
 			/* fetch object array */
 			while ($row = $result->fetch_assoc()) {
 				//UID,CHALLID, fdate, isvalid, flag
 				//var_dump($row);
-				printf ("%s (%s) (%s)</br>", $row['UID'], $row['flag'], $row['isvalid']);
+				$uid = $row['UID'];
+				//printf ("[%s] </br>", $uid);
+				if ($uid!="") {
+					$count=0;
+					$query = "SELECT UID,CHALLID, fdate, isvalid, flag FROM flags WHERE UID='$uid';";
+					if ($fresult = $mysqli->query($query)) {
+						/* fetch object array */
+						while ($frow = $fresult->fetch_assoc()) {
+							//UID,CHALLID, fdate, isvalid, flag
+							//var_dump($row);
+							//printf ("%s (%s) (%s) (%s)</br>", $frow['UID'], $frow['flag'], $frow['isvalid'], $frow['fdate']);
+							if ($frow['isvalid']) { $count++;}
+							$dd = $frow['fdate'];
+							$format = '%Y-%m-%d %H:%M:%S'; // 
+							//$dd = '2019-05-18 15:32:15';
+							//$d = strptime($dd , $format);
+							$d = date_parse($dd);
+							//$jsdate = "$d[tm_mon]/$d[tm_mday]/$d[tm_year] $d[tm_hour]:$d[tm_min]";
+							$jsdate = "$d[month]/$d[day]/$d[year] $d[hour]:$d[minute]";
+							//print_r($d);
+							echo " { x: '$jsdate', y: $count},";
+						}
+						$fresult->close();
+					}
+				}
 			}
 		
 			/* free result set */
 			$result->close();
 		}
-        
 
 		/* close connection */
 		$mysqli->close();
@@ -96,13 +119,10 @@
 			type: 'line',
 			data: {
 				labels: [ // Date Objects
-					newDate(0),
-					newDate(1),
-					newDate(2),
-					newDate(3),
-					newDate(4),
-					newDate(5),
-					newDate(6)
+					//newDate(0),
+					//newDate(1),
+					new Date('2019-05-18T10:20:30Z'),
+					new Date('2019-05-18T20:20:30Z')
 				],
 				datasets: [{
 					label: 'My First dataset',
@@ -150,6 +170,17 @@
 						x: newDateString(15),
 						y: randomScalingFactor()
 					}],
+				}
+			
+				, {
+					label: 'Dataset with point data',
+					backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
+					borderColor: window.chartColors.green,
+					fill: false,
+					data: [
+
+						{ x: '5/18/2019 15:32', y: 1}, { x: '5/18/2019 15:32', y: 2}, { x: '5/18/2019 15:37', y: 3}, { x: '5/18/2019 15:50', y: 4}, { x: '5/18/2019 15:50', y: 5}, { x: '5/18/2019 15:51', y: 6}, { x: '5/18/2019 15:53', y: 7}, { x: '5/18/2019 15:53', y: 8}, { x: '5/18/2019 15:54', y: 9}, { x: '5/18/2019 15:56', y: 9}, { x: '5/18/2019 16:3', y: 1}, { x: '5/18/2019 16:4', y: 2}, 
+				],
 				}]
 			},
 			options: {
