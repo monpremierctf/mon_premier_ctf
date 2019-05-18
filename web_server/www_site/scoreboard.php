@@ -74,11 +74,14 @@ function dumpFlagDataSet(){
 				$uid = $row['UID'];
 				//printf ("[%s] </br>", $uid);
 				if ($uid!="") {
-
+					//rgb(255, 99, 132)
+					$r = rand(0, 255);
+					$g = rand(0, 255);
+					$b = rand(0, 255);
 echo "{
 	label: 'Dataset with point data',
-	backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
-	borderColor: window.chartColors.green,
+	backgroundColor: color('rgb($r, $g, $b)').alpha(0.5).rgbString(),
+	borderColor: 'rgb($r, $g, $b)',
 	fill: false,
 	data: [";					
 					$count=0;
@@ -134,8 +137,8 @@ echo "{
 				labels: [ // Date Objects
 					//newDate(0),
 					//newDate(1),
-					new Date('2019-05-18T10:20:30Z'),
-					new Date('2019-05-18T20:20:30Z')
+					//new Date('2019-05-18T10:20:30Z'),
+					//new Date('2019-05-18T20:20:30Z')
 				],
 				
 				datasets: [
@@ -203,7 +206,7 @@ echo "{
 			},
 			options: {
 				title: {
-					text: 'Chart.js Time Scale'
+					text: 'Scoreboard'
 				},
 				scales: {
 					xAxes: [{
@@ -221,7 +224,7 @@ echo "{
 					yAxes: [{
 						scaleLabel: {
 							display: true,
-							labelString: 'value'
+							labelString: 'Flags'
 						}
 					}]
 				},
