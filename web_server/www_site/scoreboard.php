@@ -55,6 +55,8 @@
 	    </div>
 
 <?php
+
+function dumpFlagDataSet(){
         //$conn = mysqli_connect("mysql_webserver","root","AZ56FG78HJZE34","dbctf");
 		//$ mysql -u root -p'AZ56FG78HJZE34' -h 127.0.0.1 -P 3306 -D dbctf
         $mysqli = new mysqli("mysql_webserver", "root", "AZ56FG78HJZE34", "dbctf");
@@ -72,6 +74,13 @@
 				$uid = $row['UID'];
 				//printf ("[%s] </br>", $uid);
 				if ($uid!="") {
+
+echo "{
+	label: 'Dataset with point data',
+	backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
+	borderColor: window.chartColors.green,
+	fill: false,
+	data: [";					
 					$count=0;
 					$query = "SELECT UID,CHALLID, fdate, isvalid, flag FROM flags WHERE UID='$uid';";
 					if ($fresult = $mysqli->query($query)) {
@@ -93,6 +102,9 @@
 						}
 						$fresult->close();
 					}
+
+					echo "],
+				},";
 				}
 			}
 		
@@ -102,6 +114,7 @@
 
 		/* close connection */
 		$mysqli->close();
+	}
 ?>
         <script>
 		var timeFormat = 'MM/DD/YYYY HH:mm';
@@ -124,7 +137,9 @@
 					new Date('2019-05-18T10:20:30Z'),
 					new Date('2019-05-18T20:20:30Z')
 				],
-				datasets: [{
+				
+				datasets: [
+					/*{
 					label: 'My First dataset',
 					backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
 					borderColor: window.chartColors.red,
@@ -172,16 +187,19 @@
 					}],
 				}
 			
-				, {
+				,
+				*/
+				/* {
 					label: 'Dataset with point data',
 					backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
 					borderColor: window.chartColors.green,
 					fill: false,
-					data: [
-
-						{ x: '5/18/2019 15:32', y: 1}, { x: '5/18/2019 15:32', y: 2}, { x: '5/18/2019 15:37', y: 3}, { x: '5/18/2019 15:50', y: 4}, { x: '5/18/2019 15:50', y: 5}, { x: '5/18/2019 15:51', y: 6}, { x: '5/18/2019 15:53', y: 7}, { x: '5/18/2019 15:53', y: 8}, { x: '5/18/2019 15:54', y: 9}, { x: '5/18/2019 15:56', y: 9}, { x: '5/18/2019 16:3', y: 1}, { x: '5/18/2019 16:4', y: 2}, 
+					data: [*/
+<?php dumpFlagDataSet(); ?>
+			/*			
 				],
-				}]
+				}
+			*/]
 			},
 			options: {
 				title: {
