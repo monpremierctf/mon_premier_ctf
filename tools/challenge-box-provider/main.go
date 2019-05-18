@@ -22,9 +22,10 @@ import (
 )
 
 type challenge struct {
-	id    string
-	image string
-	port  int
+	id       string
+	image    string
+	port     int
+	duration int
 }
 
 var (
@@ -159,8 +160,9 @@ func createNewChallengeBox(box string, duration, port int, uid string) (containe
 
 	// Labels
 	labels := map[string]string{
-		"ctf-uid":        fmt.Sprintf("CTF_UID_%s", uid),
-		"ctf-start-time": time.Now().String(),
+		"ctf-uid": fmt.Sprintf("CTF_UID_%s", uid),
+		//"ctf-start-time": time.Now().String(),
+		"ctf-start-time": time.Now().Format("2006-01-02 15:04:05"),
 		"ctf-duration":   string(strconv.Itoa(duration))}
 
 	// Port binding
@@ -197,9 +199,9 @@ func createNewChallengeBox(box string, duration, port int, uid string) (containe
 		panic(err)
 	}
 
-	nid :=getNetworkId(uid)
-	if (nid==""){
-		nid, _ = createNewUserNet(uid , 3600)
+	nid := getNetworkId(uid)
+	if nid == "" {
+		nid, _ = createNewUserNet(uid, 3600)
 	}
 	if err := dockerClient.NetworkConnect(ctx, nid, resp.ID, nil); err != nil {
 		panic(err)
@@ -347,6 +349,15 @@ func provideChallengeBox(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func terminateContainer(containerID string) error {
+	fmt.Printf("Terminate [%s]\n", containerID)
+	err := dockerClient.ContainerStop(ctx, containerID, nil)
+	if err != nil {
+		panic(err)
+	}
+	return err
+}
+
 func getChallengeBox(box string, uid string) (containerID string) {
 	containerID = ""
 	containers, err := dockerClient.ContainerList(ctx, types.ContainerListOptions{})
@@ -474,7 +485,7 @@ func createChallengeBox(w http.ResponseWriter, r *http.Request) {
 	log.Println("port : " + string(strconv.Itoa(challenges[cindex].port)))
 	boxID, err := createNewChallengeBox(
 		challenges[cindex].image,
-		challengeBoxDockerLifespan,
+		challenges[cindex].duration,
 		challenges[cindex].port,
 		uid,
 	)
@@ -577,7 +588,7 @@ func createUserTerm(w http.ResponseWriter, r *http.Request) {
 	}
 }
 */
-func cleanDB() {
+func cleanDBSav() {
 
 	containers, err := dockerClient.ContainerList(ctx, types.ContainerListOptions{})
 	//containerSet := set.NewSetFromSlice(containers)
@@ -683,21 +694,55 @@ func statusChallengeBox(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Ko")
 }
 
+func cleanDB() {
+
+	containers, err := dockerClient.ContainerList(ctx, types.ContainerListOptions{})
+	//containerSet := set.NewSetFromSlice(containers)
+	if err != nil {
+		panic(err)
+	}
+	count := len(containers)
+	log.Printf("-- Watch : %d containers", count)
+	for _, cont := range containers {
+		fmt.Printf("ID [%s] [%s]\n", cont.ID, cont.Names[0])
+		format := "2006-01-02 15:04:05"
+		ctf_start_time, prs := cont.Labels["ctf-start-time"]
+		ctf_duration, prs := cont.Labels["ctf-duration"]
+		sec, _ := strconv.Atoi(ctf_duration)
+		if prs {
+			start_time, _ := time.Parse(format, ctf_start_time)
+			//2019-05-17 12:10:58.312295116 +0000 UTC m=+60.300201465]
+			end_time := start_time.Add(time.Second * time.Duration(sec))
+			//fmt.Printf("Start [%s][%s] Duration [%s] End[%s] Now[%s]\n",
+			//	ctf_start_time, start_time.Format(format),
+			//	ctf_duration, end_time, time.Now().String())
+			if end_time.Before(time.Now()) {
+				//fmt.Println("Terminate")
+				terminateContainer(cont.ID)
+			}
+			//fmt.Println(cont.Labels)
+
+		}
+	}
+	//2019-05-18 09:23:21
+
+}
+
 func main() {
 	chall := [10]challenge{
 		// xterm
-		challenge{"1", "ctf-tool-xterm", 3000},
+		challenge{"1", "ctf-tool-xterm", 3000, 3 * 3600}, // 3h
 		// challenges
-		challenge{"2", "ctf-shell", 22},
-		challenge{"3", "ctf-sqli", 22},
-		challenge{"4", "ctf-escalation", 80},
-		challenge{"5", "ctf-buffer", 22},
-		challenge{"6", "ctf-exploit", 22},
+		challenge{"2", "ctf-shell", 22, 10 * 60}, // 10 min
+		challenge{"3", "ctf-sqli", 22, 10 * 60},
+		challenge{"4", "ctf-escalation", 80, 10 * 60},
+		challenge{"5", "ctf-buffer", 22, 10 * 60},
+		challenge{"6", "ctf-exploit", 22, 10 * 60},
 
-		challenge{"ctf-tcpserver", "ctf-tcpserver", 22},
-		challenge{"ctf-telnet", "ctf-telnet", 22},
-		challenge{"ctf-ftp", "ctf-ftp", 22},
-		challenge{"ctf-smtp", "ctf-smtp", 22},
+		challenge{"ctf-tcpserver", "ctf-tcpserver", 22, 10 * 60},
+		challenge{"ctf-telnet", "ctf-telnet", 22, 10 * 60},
+		challenge{"ctf-ftp", "ctf-ftp", 22, 10 * 60},
+		challenge{"ctf-smtp", "ctf-smtp", 22, 10 * 60},
 	}
 	challenges = chall
 	fmt.Println(challenges)
@@ -706,7 +751,7 @@ func main() {
 	go func() {
 		for {
 			// Wait for 10s.
-			//cleanDB()
+			cleanDB()
 			time.Sleep(10 * time.Second)
 		}
 	}()
