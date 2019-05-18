@@ -69,7 +69,7 @@
 			while ($row = $result->fetch_assoc()) {
 				//UID,CHALLID, fdate, isvalid, flag
 				//var_dump($row);
-				printf ("%s (%s)\n", $row['UID'], $row['flag']);
+				printf ("%s (%s) (%s)</br>", $row['UID'], $row['flag'], $row['isvalid']);
 			}
 		
 			/* free result set */
@@ -79,7 +79,7 @@
 
 		/* close connection */
 		$mysqli->close();
-		?>
+?>
         <script>
 		var timeFormat = 'MM/DD/YYYY HH:mm';
 

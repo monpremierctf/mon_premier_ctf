@@ -132,7 +132,8 @@ function html_dump_cat($cat) {
         print '<div class="row chall-desc bg-light">';
         print '
             <div class="col-md-auto text-left"><label for="usr">Flag:</label></div>
-            <div class="col text-left"><input type="text" class="form-control" id="flag_'.$c['id'].'" name="code"></div>
+            <div class="col text-left"><input type="text" class="form-control" id="flag_'.$c['id'].'" name="code" onLoad="ctf_onload('.$c['id'].', \'#flag_'.$c['id'].'\')"></div>
+            <script>$("#flag_'.$c['id'].'").ready(function(){ ctf_onload('.$c['id'].', \'#flag_'.$c['id'].'\') })</script>
             <div class="col-2 text-right"><button type="Submit" class="btn btn-primary" onclick="ctf_validate('.$c['id'].', \'#flag_'.$c['id'].'\')">Submit</button></div>';
         print "</div>";
         print '<div class="row chall-spacer">  </div>';
@@ -166,6 +167,7 @@ $(document).ready(function() {
         });
 
     }); 
+
 });
 $(document).ready(function() {
     $("#StopServer'.$id.'").click(function(){
