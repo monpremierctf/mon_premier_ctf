@@ -34,6 +34,9 @@ services:
   mysql_webserver:
     build: ./mysql/
     container_name: mysql_webserver
+    # for debug
+    #ports:
+    #  - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=AZ56FG78HJZE34
     networks:
