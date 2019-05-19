@@ -3,7 +3,7 @@ version: "3"
 services:
   escalation:
     build: . 
-    image: ctf-excalation
+    image: ctf-escalation
     ports:
       - "${PORT_SSH}:22"
 
