@@ -112,7 +112,9 @@ function html_dump_cat($cat) {
         if ($cat==="Buffer overflows") {$server="ctf-buffer"."_".$_SESSION['uid'];}
         if ($cat==="File Upload") {$server="ctf-transfert"."_".$_SESSION['uid'];}
         if (isset($c['docker'])){
+          if (($c['docker'])!="") {
             $server=$c['docker']."_".$_SESSION['uid'];
+          }
         }
         
         $desc = str_replace("IPSERVER", $server, $desc);
