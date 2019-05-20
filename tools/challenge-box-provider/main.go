@@ -731,19 +731,19 @@ func cleanDB() {
 func main() {
 	chall := [11]challenge{
 		// xterm
-		challenge{"1", "ctf-tool-xterm", 3000, 3 * 3600}, // 3h
+		challenge{"1", "ctf-tool-xterm", 3000, 30 * 3600}, // 3h
 		// challenges
-		challenge{"2", "ctf-shell", 22, 10 * 60}, // 10 min
-		challenge{"3", "ctf-sqli", 22, 10 * 60},
-		challenge{"4", "ctf-escalation", 80, 10 * 60},
-		challenge{"5", "ctf-buffer", 22, 10 * 60},
-		challenge{"6", "ctf-transfert", 22, 10 * 60},
-		challenge{"7", "ctf-exploit", 22, 10 * 60},
+		challenge{"2", "ctf-shell", 22, 10 * 60 * 60}, // 10 min
+		challenge{"3", "ctf-sqli", 22, 10 * 60 * 60},
+		challenge{"4", "ctf-escalation", 80, 10 * 60 * 60},
+		challenge{"5", "ctf-buffer", 22, 10 * 60 * 60},
+		challenge{"6", "ctf-transfert", 22, 10 * 60 * 60},
+		challenge{"7", "ctf-exploit", 22, 10 * 60 * 60},
 
-		challenge{"ctf-tcpserver", "ctf-tcpserver", 22, 10 * 60},
-		challenge{"ctf-telnet", "ctf-telnet", 22, 10 * 60},
-		challenge{"ctf-ftp", "ctf-ftp", 22, 10 * 60},
-		challenge{"ctf-smtp", "ctf-smtp", 22, 10 * 60},
+		challenge{"ctf-tcpserver", "ctf-tcpserver", 22, 10 * 60 * 60},
+		challenge{"ctf-telnet", "ctf-telnet", 22, 10 * 60 * 60},
+		challenge{"ctf-ftp", "ctf-ftp", 22, 10 * 60 * 60},
+		challenge{"ctf-smtp", "ctf-smtp", 22, 10 * 60 * 60},
 	}
 	challenges = chall
 	fmt.Println(challenges)
