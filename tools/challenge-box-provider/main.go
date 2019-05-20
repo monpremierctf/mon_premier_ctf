@@ -737,7 +737,7 @@ func main() {
 		challenge{"3", "ctf-sqli", 22, 10 * 60},
 		challenge{"4", "ctf-escalation", 80, 10 * 60},
 		challenge{"5", "ctf-buffer", 22, 10 * 60},
-		challenge{"6", "ctf-upload", 22, 10 * 60},
+		challenge{"6", "ctf-transfert", 22, 10 * 60},
 		challenge{"7", "ctf-exploit", 22, 10 * 60},
 
 		challenge{"ctf-tcpserver", "ctf-tcpserver", 22, 10 * 60},
