@@ -11,7 +11,7 @@ services:
     ports:
       - "8080:8080"
     networks:
-        - webserver_webLAN
+        - web_server_webLAN
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - .:/var/challenge-box-provider
@@ -20,5 +20,5 @@ services:
 
 
 networks:
-  webserver_webLAN:
+  web_server_webLAN:
     external: true
