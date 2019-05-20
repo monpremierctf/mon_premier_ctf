@@ -105,7 +105,11 @@ function html_dump_cat($cat) {
         // Description
         print '<div class="container chall-desc">';
         $desc = $c['description'];
-        $server="ctf-shell_".$_SESSION['uid'];
+        $server="";
+        if (isset($c['docker'])){
+            $server=$c['docker']."_".$_SESSION['uid'];
+        }
+        
         $desc = str_replace("IPSERVER", $server, $desc);
         print $Parsedown->text($desc);
         print "</div>";
