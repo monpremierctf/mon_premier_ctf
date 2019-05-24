@@ -7,6 +7,7 @@ version: '2'
 services:
   challenge-box-provider:
     image: ubuntu:latest
+    #build: ./ 
     container_name: challenge-box-provider
     ports:
       - "8080:8080"
