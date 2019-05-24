@@ -10,4 +10,6 @@ myconfig.zip
 *.db
 web_server/www_site/db/*
 web_server/www_site/uploads/*
-xterm/xterm.js-3.13.0/*
+tools/xterm/xterm.js-3.13.0/*
+ctfd_config/tmp/*
+web_server/certs/*

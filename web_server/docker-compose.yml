@@ -5,6 +5,21 @@ version: '2'
 
 
 services:
+  traefik:
+    image: traefik:latest
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8000:8000"
+    networks:
+      - webLAN
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik/traefik.toml:/traefik.toml
+      - ./certs/:/certs/
+    container_name: traefik
+
   web:
     image: nginx:latest
     container_name: nginx_webserver
@@ -18,6 +33,17 @@ services:
     links:
       - php
       - mysql_webserver
+    labels:
+      - "traefik.backend=webserver"
+      - "traefik.docker.network=web_server_webLAN"
+      - "traefik.frontend.rule=PathPrefix: /"
+      - "traefik.frontend.entryPoints=http,https"
+      - "traefik.frontend.headers.SSLRedirect=true"
+      - "traefik.enable=true"
+      - "traefik.port=80"
+      - "traefik.default.protocol=http"
+
+
 
 
   php:
@@ -28,8 +54,11 @@ services:
       - ./www_site:/www_site
     networks:
       - webLAN
+      - sqlLAN
     links:
       - mysql_webserver
+    labels:
+      - "traefik.enable=false"
 
   mysql_webserver:
     build: ./mysql/
@@ -40,8 +69,12 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=AZ56FG78HJZE34
     networks:
-        - webLAN
-
+        - sqlLAN
+    labels:
+      - "traefik.enable=false"
+      
 networks:
   webLAN:
+    driver: bridge
+  sqlLAN:
     driver: bridge

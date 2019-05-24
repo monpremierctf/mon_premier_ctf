@@ -90,7 +90,7 @@
         </div>
         <div class="form-group text-left  row ">
 		  <label for="usr" class="col">Password (*)</label>
-		  <input type="text" class="col-8 form-control" id="password" name="password">
+		  <input type="password" class="col-8 form-control" id="password" name="password">
         </div>
         <div class="form-group text-left  row ">
 		  <label for="usr" class="col">Mail</label>

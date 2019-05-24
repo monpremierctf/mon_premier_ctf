@@ -1,0 +1,22 @@
+version: '2'
+
+services:
+  traefik:
+    image: traefik:latest
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8000:8000"
+    networks:
+      - web_server_webLAN
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.toml:/traefik.toml
+      - ./certs/:/certs/
+    container_name: traefik
+    
+
+networks:
+  web_server_webLAN:
+    external: true
