@@ -221,6 +221,14 @@ python -c 'from gen_config import build_challenges; build_challenges()'
 
 
 #
+# Generate self-signed certificates
+#
+cd web_server
+./go_gen_certs
+cd - > /dev/null
+
+
+#
 # Start web_server
 #
 cd web_server

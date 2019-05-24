@@ -8,21 +8,36 @@ services:
   traefik:
     image: traefik:latest
     restart: always
+    container_name: traefik
     ports:
       - "80:80"
       - "443:443"
       - "8000:8000"
+    #expose:
+      # traefik dashboard port
+     # - 8000
     networks:
       - webLAN
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik/traefik.toml:/traefik.toml
       - ./certs/:/certs/
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Path:/yoloboard"
+      # get md5 from htpasswd or http://www.htaccesstools.com/htpasswd-generator/
+      # and then double all $ to $$ to avoid docker-compose
+      # yoloboard: md5(yoloboard)
+      # echo $(htpasswd -nbB <USER> "<PASS>") | sed -e s/\\$/\\$\\$/g
+      # sudo apt install apache2-utils
+      # echo $(htpasswd -nbB yoloboard "yoloboard") | sed -e s/\\$/\\$\\$/g
+      - "traefik.frontend.auth.basic=yoloboard:$$2y$$05$$kkeDkLd.htjb7sMk7eTynuqJeyl8EaQGVH8J0d9INuRD4fIrNk/Ba"
+      - "traefik.port: 8000"
     container_name: traefik
 
   web:
     image: nginx:latest
-    container_name: nginx_webserver
+    container_name: webserver_nginx
     ports:
       - "8888:80"
     networks:
@@ -49,7 +64,7 @@ services:
   php:
     #image: php:7-fpm
     build: php/.
-    container_name: php_webserver
+    container_name: webserver_php
     volumes:
       - ./www_site:/www_site
     networks:
@@ -62,7 +77,7 @@ services:
 
   mysql_webserver:
     build: ./mysql/
-    container_name: mysql_webserver
+    container_name: webserver_mysql
     # for debug
     #ports:
     #  - "3306:3306"
