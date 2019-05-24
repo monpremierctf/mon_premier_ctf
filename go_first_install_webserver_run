@@ -11,6 +11,10 @@ echo "
  | |\/| / _ \ ' \  |  _/ '_/ -_) '  \| / -_) '_| | (__  | | | _| 
  |_|  |_\___/_||_| |_| |_| \___|_|_|_|_\___|_|    \___| |_| |_| 
 "
+#############################################################################
+#
+# System checks
+#
 echo "= Verification du système..."
 
 #
@@ -136,15 +140,10 @@ else
     echo $(docker info 2>/dev/null | grep "Server Version")
 fi
 
-IPSERVER=12.0.0.10
-
+#############################################################################
 #
-# Build challenge-box-provider
+# Setup
 #
-#git clone https://github.com/monpremierctf/challenge-box-provider.git
-#cd challenge-box-provider
-#docker build -t challenge-box-provider .
-#cd - > /dev/null
 
 
 #
@@ -160,6 +159,7 @@ unzip -q -d ctfd_config/tmp ctfd_config/empty_conf.zip
 #
 # Generate CTFd admin password
 #
+
 
 #
 # Update config in each challenge directory
@@ -183,29 +183,41 @@ cp -R ./ctfd_config/tmp/* web_server/www_site
 chmod -R a+r web_server/www_site
 
 
-#
-# is Docker daemon running ?
-# service docker start
-
-
 
 #
-# Prepare Dockers for challenges
+# Build challenge-box-provider
 #
-python -c 'from gen_config import build_challenges; build_challenges()'
-
-#python -c 'from gen_config import start_challenges; start_challenges()'
+#cd challenge-box-provider
+#docker build -t challenge-box-provider .
+#cd - > /dev/null
 
 
 #
-# Build xterm
+# Build ctf-sshd
 #
-cd xterm
+echo "Building ctf-sshd image"
+cd tools/ctf-sshd
+docker build -t ctf-sshd .
+cd - > /dev/null
+
+
+#
+# Build xtermjs
+#
+echo "Building ctf-tools-xtermjs image"
+cd tools/xterm
 ./go_xterm
 cd - > /dev/null
-cd xterm/xterm.js-3.13.0/
+cd tools/xterm/xterm.js-3.13.0/
 docker-compose build
 cd - > /dev/null
+
+
+#
+# Build dockers images for challenges
+#
+python -c 'from gen_config import build_challenges; build_challenges()'
+#python -c 'from gen_config import start_challenges; start_challenges()'
 
 
 #
@@ -222,6 +234,15 @@ cd - > /dev/null
 cd tools/challenge-box-provider
 docker-compose up -d
 cd - > /dev/null
+
+
+# Start static challenges
+#
+cd ctf-sqli
+docker-compose up -d
+cd - > /dev/null
+
+
 
 #
 # Logs
