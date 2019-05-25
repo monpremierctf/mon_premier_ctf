@@ -31,9 +31,9 @@ if ($_GET['idmsg']) { $idmsg = $_GET['idmsg'];}
 
 //
 // connect to mysql
-$host = 'mysql';
-$user = 'root';
-$pass = 'rootpassword';
+$host = 'ctfsqli_mysql'; //'mysql';
+$user = 'readuser';
+$pass = 'passwordforreaduser';
 $dbname = 'dbmccoy';
 
 $conn = new mysqli($host, $user, $pass,$dbname);

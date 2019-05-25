@@ -1,3 +1,6 @@
+$ mysql -u root -prootpassword --host 127.0.0.1 -P 3306 --database dbmccoy
+
+
 docker-compose up
 docker-compose up -d
 docker-compose stop web && docker-compose rm -vf web && docker-compose up -d && docker-compose logs -f
