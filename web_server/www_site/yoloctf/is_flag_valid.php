@@ -2,7 +2,7 @@
     function is_flag_validated($uid, $cid)
     {
         $ret=0;
-        $mysqli = new mysqli("mysql_webserver", "root", "AZ56FG78HJZE34", "dbctf");
+        $mysqli = new mysqli("webserver_mysql", "root", "AZ56FG78HJZE34", "dbctf");
         if (mysqli_connect_errno()) {
             printf("Connect failed: %s\n", mysqli_connect_error());
             exit();
@@ -20,7 +20,7 @@
 
     function save_flag_submission($uid, $cid, $flag, $isvalid)
     {
-        $mysqli = new mysqli("mysql_webserver", "root", "AZ56FG78HJZE34", "dbctf");
+        $mysqli = new mysqli("webserver_mysql", "root", "AZ56FG78HJZE34", "dbctf");
         if (mysqli_connect_errno()) {
             printf("Connect failed: %s\n", mysqli_connect_error());
             exit();

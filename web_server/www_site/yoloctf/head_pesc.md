@@ -2,6 +2,7 @@
 
 
 </br>
-Quand vous avez reussi à un pénétrer sur un serveur, vous êtes souvent passé par un process qui ne dispose pas des droits d'a
+Vous venez de reussir à un pénétrer sur un serveur, en exploitant une faille d'un process qui ne dispose pas des droits d'administrateur. Vous avez obtenu un shell sous l'identité de ce process.
+Maintenant vous allez utiliser quelques méthodes classique pour changer de compte.
 
-#### Pour qui ?
+
