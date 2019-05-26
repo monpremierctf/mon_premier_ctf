@@ -160,7 +160,7 @@ function ctf_div_server_status($id) {
 //echo 'HTTP_CLIENT_IP='.$_SERVER['HTTP_CLIENT_IP'].'</br>';
 //echo 'HTTP_X_FORWARDED_FOR='.$_SERVER['HTTP_X_FORWARDED_FOR'].'</br>';  // Ok IP src, placé par traefik
 //echo 'REMOTE_ADDR='.$_SERVER['REMOTE_ADDR'].'</br>';
-//echo '     
+echo '     
 <p>Pour rentrer sur le serveur il faut ouvrir votre terminal dans un nouvel onglet, démarrer votre serveur dédié et vous connecter dessus avec ssh.</p>
 </br>
 <p id="ServerStatus'.$id.'">Server status : stopped</p>
