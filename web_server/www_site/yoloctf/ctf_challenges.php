@@ -114,10 +114,14 @@ function html_dump_cat($cat) {
         if (isset($c['docker'])){
           if (($c['docker'])!="") {
             $server=$c['docker']."_".$_SESSION['uid'];
+            $desc = str_replace("IPSERVER", $server, $desc);
           }
-        }
+        }        
         
-        $desc = str_replace("IPSERVER", $server, $desc);
+
+        if (isset($_SERVER['HTTP_HOST'])) {
+          $desc = str_replace("{IP_SERVER}", $_SERVER['HTTP_HOST'], $desc);
+        }
         print $Parsedown->text($desc);
         print "</div>";
         // Files
@@ -160,6 +164,7 @@ function ctf_div_server_status($id) {
 //echo 'HTTP_CLIENT_IP='.$_SERVER['HTTP_CLIENT_IP'].'</br>';
 //echo 'HTTP_X_FORWARDED_FOR='.$_SERVER['HTTP_X_FORWARDED_FOR'].'</br>';  // Ok IP src, placé par traefik
 //echo 'REMOTE_ADDR='.$_SERVER['REMOTE_ADDR'].'</br>';
+echo 'HTTP_HOST='.$_SERVER['HTTP_HOST'].'</br>';
 echo '     
 <p>Pour rentrer sur le serveur il faut ouvrir votre terminal dans un nouvel onglet, démarrer votre serveur dédié et vous connecter dessus avec ssh.</p>
 </br>
