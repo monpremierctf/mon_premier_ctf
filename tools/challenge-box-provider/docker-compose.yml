@@ -10,7 +10,7 @@ services:
     #build: ./ 
     container_name: challenge-box-provider
     ports:
-      - "8080:8080"
+      - "9080:8080"
     networks:
         - webserver_webLAN
     labels:
