@@ -165,6 +165,7 @@ func createNewChallengeBox(box string, duration, port int, uid string) (containe
 		"ctf-duration":          string(strconv.Itoa(duration)),
 		"traefik.enable":        "true",                                      //traefik.enable=true
 		"traefik.frontend.rule": fmt.Sprintf("PathPrefix:/%s_%s/", box, uid), //traefik.frontend.rule=Path:/yoloboard
+		"traefik.port":          fmt.Sprintf("%d", port),
 	}
 	// Port binding
 	/*
