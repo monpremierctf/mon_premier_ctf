@@ -1,0 +1,16 @@
+#!/bin/bash
+# https://gvisor.dev/docs/user_guide/docker/
+
+set -e 
+wget https://storage.googleapis.com/gvisor/releases/nightly/latest/runsc
+wget https://storage.googleapis.com/gvisor/releases/nightly/latest/runsc.sha512
+sha512sum -c runsc.sha512
+chmod a+x runsc
+sudo mv runsc /usr/bin
+
+sudo cp daemon.json /etc/docker/daemon.json
+sudo chown root:root /etc/docker/daemon.json
+sudo chmod 600 /etc/docker/daemon.json
+
+#sudo systemctl restart docker
+sudo service docker restart
