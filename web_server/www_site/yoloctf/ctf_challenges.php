@@ -173,7 +173,14 @@ $(document).ready(function() {
             } else  {
                var resp = JSON.parse(data);
                //$("#ServerStatus'.$id.'").html(resp.Name); 
-               $("#ServerStatus'.$id.'").html("Server status: Running as "+resp.Name);
+               var txt = "Server status: Running as "+resp.Name;
+               if (resp.Port  !== undefined ) { 
+                 if (resp.Port  !=0) {
+                   txt = txt + "</br>Exposed port="+resp.Port; 
+                   txt = txt + "</br>Accès possible en : ssh user@"+window.location.host+" -p "+resp.Port;
+                 }
+               }
+               $("#ServerStatus'.$id.'").html(txt);
             }
         });
 
