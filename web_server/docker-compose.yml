@@ -52,7 +52,8 @@ services:
     labels:
       - "traefik.backend=webserver"
       - "traefik.docker.network=webserver_webLAN"
-      - "traefik.frontend.rule=PathPrefix:/yoloctf/;ReplacePathRegex: ^/yoloctf/(.*) /$$1"      
+      #- "traefik.frontend.rule=PathPrefix:/yoloctf/;ReplacePathRegex: ^/yoloctf/(.*) /$$1"  
+      - "traefik.frontend.rule=PathPrefix:/yoloctf/"      
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.frontend.headers.SSLRedirect=true"
       - "traefik.enable=true"

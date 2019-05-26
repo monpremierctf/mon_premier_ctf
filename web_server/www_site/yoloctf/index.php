@@ -14,12 +14,12 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 -->
-  <link rel="stylesheet" href="/js/bootstrap.min.css">
-  <link rel="stylesheet" href="style.css">
-  <script src="js/jquery.min.js"></script>
-  <script src="js/popper.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/ctf-utils.js"></script>
+  <link rel="stylesheet" href="/yoloctf/js/bootstrap.min.css">
+  <link rel="stylesheet" href="/yoloctf/style.css">
+  <script src="/yoloctf/js/jquery.min.js"></script>
+  <script src="/yoloctf/js/popper.min.js"></script>
+  <script src="/yoloctf/js/bootstrap.min.js"></script>
+  <script src="/yoloctf/js/ctf-utils.js"></script>
 </head>
 <body>
 

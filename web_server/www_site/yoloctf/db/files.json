@@ -1,0 +1,58 @@
+{"count": 8, "results": [
+    {
+        "challenge_id": 16,
+        "id": 1,
+        "location": "ctf-net/flag01.gz.pcapng",
+        "page_id": null,
+        "type": "challenge"
+    },
+    {
+        "challenge_id": 17,
+        "id": 2,
+        "location": "ctf-net/flag02.gz.pcapng",
+        "page_id": null,
+        "type": "challenge"
+    },
+    {
+        "challenge_id": 18,
+        "id": 3,
+        "location": "ctf-net/flag03.gz.pcapng",
+        "page_id": null,
+        "type": "challenge"
+    },
+    {
+        "challenge_id": 19,
+        "id": 4,
+        "location": "ctf-net/flag04.gz.pcapng",
+        "page_id": null,
+        "type": "challenge"
+    },
+    {
+        "challenge_id": 20,
+        "id": 5,
+        "location": "ctf-net/flag05.gz.pcapng",
+        "page_id": null,
+        "type": "challenge"
+    },
+    {
+        "challenge_id": 36,
+        "id": 6,
+        "location": "ctf-transfert/flag01_enc.bin",
+        "page_id": null,
+        "type": "challenge"
+    },
+    {
+        "challenge_id": 37,
+        "id": 7,
+        "location": "ctf-transfert/dechiffre_02",
+        "page_id": null,
+        "type": "challenge"
+    },
+    {
+        "challenge_id": 38,
+        "id": 8,
+        "location": "ctf-transfert/dechiffre_03",
+        "page_id": null,
+        "type": "challenge"
+    }
+], "meta": {}}
