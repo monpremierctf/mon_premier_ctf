@@ -49,7 +49,14 @@
         <!--- Page Content  -->
         <div class="col">
         <div class="container">
-
+        <script>
+            function goPort(p){
+                window.location.port=p;
+                window.location.filepath="/";
+                window.location.protocol="http";
+                window.location.href="http://"+window.location.hostname+":"+p;
+            }
+        </script>
 
    <?php
     
@@ -59,7 +66,8 @@
         //echo $json1;
         $yo = json_decode($json1, true);
         //var_dump($yo);
-        echo '<a href="http://localhost:'.$yo['Port'].'" target="_blank"><pre>[Mon terminal]</pre></a>';
+        //echo '<a href="http://localhost:'.$yo['Port'].'" target="_blank"><pre>[Mon terminal]</pre></a>';
+        echo '<a href="#" onclick="goPort('.$yo['Port'].'); " ><pre>[Mon terminal]</pre></a>';
             echo($yo['Name']);
             echo($yo['Port']);
             echo "</br>";
