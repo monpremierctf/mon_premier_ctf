@@ -156,7 +156,11 @@ function html_dump_cat($cat) {
 
 function ctf_div_server_status($id) {
 
-echo '     
+//echo '</br>';
+//echo 'HTTP_CLIENT_IP='.$_SERVER['HTTP_CLIENT_IP'].'</br>';
+//echo 'HTTP_X_FORWARDED_FOR='.$_SERVER['HTTP_X_FORWARDED_FOR'].'</br>';  // Ok IP src, placé par traefik
+//echo 'REMOTE_ADDR='.$_SERVER['REMOTE_ADDR'].'</br>';
+//echo '     
 <p>Pour rentrer sur le serveur il faut ouvrir votre terminal dans un nouvel onglet, démarrer votre serveur dédié et vous connecter dessus avec ssh.</p>
 </br>
 <p id="ServerStatus'.$id.'">Server status : stopped</p>
@@ -176,7 +180,8 @@ $(document).ready(function() {
                var txt = "Server status: Running as "+resp.Name;
                if (resp.Port  !== undefined ) { 
                  if (resp.Port  !=0) {
-                   txt = txt + "</br>Exposed port="+resp.Port; 
+                   txt = txt + "</br>Host="+window.location.host; 
+                   txt = txt + "</br>Port="+resp.Port; 
                    //txt = txt + "</br>Accès possible en : ssh user@"+window.location.host+" -p "+resp.Port;
                  }
                }
