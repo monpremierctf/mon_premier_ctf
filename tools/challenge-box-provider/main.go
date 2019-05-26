@@ -135,20 +135,25 @@ func listContainers(cli *client.Client) {
 }
 
 //
-func getNetworkId(uid string) (networkID string) {
+func getNetworkId(netId string) (networkID string) {
 
 	networkID = ""
 	networks, err := dockerClient.NetworkList(ctx, types.NetworkListOptions{})
 	if err != nil {
 		log.Printf("ERROR: getNetworkId() %s", err.Error())
 	}
-	netId := "Net_" + uid
 	for _, network := range networks {
 		//fmt.Printf("[%s]-[%s]\n", network.Name, network.ID)
 		if network.Name == netId {
 			networkID = network.ID
 		}
 	}
+	return
+}
+
+func getNetworkIdFromUID(uid string) (networkID string) {
+	netName := "Net_" + uid
+	networkID = getNetworkId(netName)
 	return
 }
 
@@ -201,13 +206,22 @@ func createNewChallengeBox(box string, duration, port int, uid string) (containe
 		panic(err)
 	}
 
-	nid := getNetworkId(uid)
+	// If xterm, add webLAN
+	nid := getNetworkId("webserver_webLAN")
+	if err := dockerClient.NetworkConnect(ctx, nid, resp.ID, nil); err != nil {
+		panic(err)
+	}
+
+	// Add user network
+	nid = getNetworkIdFromUID(uid)
 	if nid == "" {
 		nid, _ = createNewUserNet(uid, 3600)
 	}
 	if err := dockerClient.NetworkConnect(ctx, nid, resp.ID, nil); err != nil {
 		panic(err)
 	}
+
+	// Start container
 	if err := dockerClient.ContainerStart(ctx, resp.ID, types.ContainerStartOptions{}); err != nil {
 		panic(err)
 	}

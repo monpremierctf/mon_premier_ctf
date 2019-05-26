@@ -24,7 +24,7 @@ services:
       - ./certs/:/certs/
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:/yoloboard/;ReplacePathRegex: ^/yoloboard/(.*) /$$1"
+      - "traefik.frontend.rule=PathPrefix:/dashboard/" #";ReplacePathRegex: ^/yoloboard/(.*) /$$1"
       # get md5 from htpasswd or http://www.htaccesstools.com/htpasswd-generator/
       # and then double all $ to $$ to avoid docker-compose
       # yoloboard: md5(yoloboard)
