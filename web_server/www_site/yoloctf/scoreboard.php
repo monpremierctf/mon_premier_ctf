@@ -1,4 +1,9 @@
 <?php
+    ini_set('session.cookie_httponly', 1);
+    ini_set('session.cookie_secure', 1);
+    header_remove("X-Powered-By");
+    header("X-XSS-Protection: 1");
+    header('X-Frame-Options: SAMEORIGIN'); 
     session_start ();
 ?>
 
