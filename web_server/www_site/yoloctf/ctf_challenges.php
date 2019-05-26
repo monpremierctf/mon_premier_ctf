@@ -177,7 +177,7 @@ $(document).ready(function() {
                if (resp.Port  !== undefined ) { 
                  if (resp.Port  !=0) {
                    txt = txt + "</br>Exposed port="+resp.Port; 
-                   txt = txt + "</br>Accès possible en : ssh user@"+window.location.host+" -p "+resp.Port;
+                   //txt = txt + "</br>Accès possible en : ssh user@"+window.location.host+" -p "+resp.Port;
                  }
                }
                $("#ServerStatus'.$id.'").html(txt);
