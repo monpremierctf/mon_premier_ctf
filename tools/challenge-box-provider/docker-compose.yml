@@ -12,7 +12,9 @@ services:
     ports:
       - "8080:8080"
     networks:
-        - web_server_webLAN
+        - webserver_webLAN
+    labels:
+      - "traefik.enable=false"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - .:/var/challenge-box-provider
@@ -21,5 +23,5 @@ services:
 
 
 networks:
-  web_server_webLAN:
+  webserver_webLAN:
     external: true

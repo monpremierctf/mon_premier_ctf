@@ -24,14 +24,15 @@ services:
       - ./certs/:/certs/
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Path:/yoloboard"
+      - "traefik.frontend.rule=PathPrefix:/yoloboard/;ReplacePathRegex: ^/yoloboard/(.*) /$$1"
       # get md5 from htpasswd or http://www.htaccesstools.com/htpasswd-generator/
       # and then double all $ to $$ to avoid docker-compose
       # yoloboard: md5(yoloboard)
       # echo $(htpasswd -nbB <USER> "<PASS>") | sed -e s/\\$/\\$\\$/g
       # sudo apt install apache2-utils
       # echo $(htpasswd -nbB yoloboard "yoloboard") | sed -e s/\\$/\\$\\$/g
-      - "traefik.frontend.auth.basic=yoloboard:$$2y$$05$$kkeDkLd.htjb7sMk7eTynuqJeyl8EaQGVH8J0d9INuRD4fIrNk/Ba"
+      #  Please use traefik.frontend.auth.basic.users."
+      #- "traefik.frontend.auth.basic=yoloboard:$$2y$$05$$kkeDkLd.htjb7sMk7eTynuqJeyl8EaQGVH8J0d9INuRD4fIrNk/Ba"
       - "traefik.port: 8000"
     container_name: traefik
 
@@ -50,8 +51,8 @@ services:
       - webserver_mysql
     labels:
       - "traefik.backend=webserver"
-      - "traefik.docker.network=web_server_webLAN"
-      - "traefik.frontend.rule=PathPrefix: /index"
+      - "traefik.docker.network=webserver_webLAN"
+      - "traefik.frontend.rule=PathPrefix:/yoloctf/;ReplacePathRegex: ^/yoloctf/(.*) /$$1"      
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.frontend.headers.SSLRedirect=true"
       - "traefik.enable=true"

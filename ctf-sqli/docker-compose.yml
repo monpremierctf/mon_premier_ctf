@@ -15,7 +15,7 @@ services:
       - ./site.conf:/etc/nginx/conf.d/default.conf
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:/sqli_"
+      - "traefik.frontend.rule=PathPrefix:/sqli/;ReplacePathRegex: ^/sqli/(.*) /$$1"
       - "traefik.port=80"
       - "traefik.docker.network=webserver_webLAN"
     links:

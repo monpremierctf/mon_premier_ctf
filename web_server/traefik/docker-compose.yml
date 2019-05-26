@@ -9,7 +9,7 @@ services:
       - "443:443"
       - "8000:8000"
     networks:
-      - web_server_webLAN
+      - webserver_webLAN
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.toml:/traefik.toml
@@ -18,5 +18,5 @@ services:
     
 
 networks:
-  web_server_webLAN:
+  webserver_webLAN:
     external: true
