@@ -8,16 +8,16 @@ defaultEntryPoints = ["https","http"]
 [entryPoints]
   [entryPoints.http]
   address = ":80"
-#    [entryPoints.http.redirect]
-#    entryPoint = "https"
+    [entryPoints.http.redirect]
+    entryPoint = "https"
 
-#  [entryPoints.https]
-#  address = ":443"
+  [entryPoints.https]
+  address = ":443"
 
-#  [entryPoints.https.tls]
-#    [[entryPoints.https.tls.certificates]]
-#      certFile = "/certs/yolo.crt"
-#      keyFile = "/certs/yolo.key"
+  [entryPoints.https.tls]
+    [[entryPoints.https.tls.certificates]]
+      certFile = "/certs/yolo.crt"
+      keyFile = "/certs/yolo.key"
 
   [entryPoints.traefik]
   address = ":8000"

@@ -1,8 +1,11 @@
-mkdir -p ./certs
-chmod 755 .
-chmod 750 ./certs
+if [ ! -f ./certs/yolo.key ]; then
+    echo "Generating self signed certificates for web server"
+    mkdir -p ./certs
+    chmod 755 .
+    chmod 750 ./certs
 
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ./certs/yolo.key -out ./certs/yolo.crt
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ./certs/yolo.key -out ./certs/yolo.crt
 
-chmod 644 ./certs/yolo.crt
-chmod 600 ./certs/yolo.key 
+    chmod 644 ./certs/yolo.crt
+    chmod 600 ./certs/yolo.key 
+fi

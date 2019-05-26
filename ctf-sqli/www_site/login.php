@@ -35,9 +35,9 @@ if ($_POST['passwd']) { $passwd = $_POST['passwd']; }
 
 //
 // connect to mysql
-$host = 'mysql';
-$user = 'root';
-$pass = 'rootpassword';
+$host = 'mysql';//'ctfsqli_mysql'; //'mysql';
+$user = 'readuser';
+$pass = 'passwordforreaduser';
 $dbname = 'dbmccoy';
 
 $conn = new mysqli($host, $user, $pass,$dbname);
