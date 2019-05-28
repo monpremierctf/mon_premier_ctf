@@ -82,6 +82,17 @@
                 print $Parsedown->text($string);
                 html_dump_cat($p);
             }
+            elseif ($p==="Exploit") {
+                $string = file_get_contents("head_exploit.md");
+                print $Parsedown->text($string);
+                ctf_div_server_status("ctf-exploit");
+                html_dump_cat($p);
+            }
+            elseif ($p==="Password") {
+                $string = file_get_contents("head_passwd.md");
+                print $Parsedown->text($string);
+                html_dump_cat($p);
+            }
             elseif ($p==="File Upload") {
                 $string = file_get_contents("head_upload.md");
                 print $Parsedown->text($string);
