@@ -138,7 +138,7 @@ function html_dump_cat($cat) {
         // Server
         if (isset($c['docker'])){
           if (($c['docker'])!="") {
-            echo $c['docker'];
+            //echo $c['docker'];
             ctf_div_server_status($c['docker']);
           }
         }
@@ -166,7 +166,8 @@ function ctf_div_server_status($id) {
 //echo 'REMOTE_ADDR='.$_SERVER['REMOTE_ADDR'].'</br>';
 //echo 'HTTP_HOST='.$_SERVER['HTTP_HOST'].'</br>';
 echo '     
-<p>Pour rentrer sur le serveur il faut ouvrir votre terminal dans un nouvel onglet, démarrer votre serveur dédié et vous connecter dessus avec ssh.</p>
+<p>Allez sur votre terminal.</p>
+<p>Démarrez votre serveur dédié en cliquant sur [Start server].</p>
 </br>
 <p id="ServerStatus'.$id.'">Server status : stopped</p>
 </br>
@@ -187,7 +188,7 @@ $(document).ready(function() {
                  if (resp.Port  !=0) {
                    txt = txt + "</br>Host="+window.location.host; 
                    txt = txt + "</br>Port="+resp.Port; 
-                   //txt = txt + "</br>Accès possible en : ssh user@"+window.location.host+" -p "+resp.Port;
+                   //txt = txt + "</br></br>Accès avancé possible en : IP="+window.location.host+" -PORT="+resp.Port;
                  }
                }
                $("#ServerStatus'.$id.'").html(txt);

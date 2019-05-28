@@ -467,7 +467,7 @@ func createChallengeBox(w http.ResponseWriter, r *http.Request) {
 	// find entry
 	var cindex int = -1
 	for index, chall := range challenges {
-		log.Println("Search: " + string(chall.id))
+		//log.Println("Search: " + string(chall.id))
 		if chall.id == cid {
 			cindex = index
 		}

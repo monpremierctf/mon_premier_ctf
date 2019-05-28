@@ -73,9 +73,13 @@
         //var_dump($yo);
         //echo '<a href="http://localhost:'.$yo['Port'].'" target="_blank"><pre>[Mon terminal]</pre></a>';
         echo '<a href="#" onclick="goPort('.$yo['Port'].'); " ><pre>[Mon terminal]</pre></a>';
-            echo($yo['Name']);
-            echo($yo['Port']);
-            echo "</br>";
+        echo "</br>";
+        //echo($yo['Name']);
+        echo 'Accès avancé distant possible en : </br>';
+        echo 'IP   : '.$_SERVER['HTTP_HOST'];
+        echo "</br>";
+        echo 'Port : '.$yo['Port'];
+        echo "</br>";
     } else {
         echo "Veuillez vous Identifier. Merci";
     }

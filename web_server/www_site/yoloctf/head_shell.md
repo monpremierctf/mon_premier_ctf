@@ -2,7 +2,7 @@
 
 
 </br>
-Vous venez de pénétrer sur un serveur avec le compte de Steven, designer graphique. Que faites vous maintenant ?
+Vous venez de pénétrer sur un serveur en devinant le login/password d'un utilisateur. Que faites vous maintenant ?
 
 Les administrateurs et les utilisateurs font souvent de petites entorses à la sécurité pour gagner du temps.
 Droits en execution ou lecture de fichiers ouverts à tous.

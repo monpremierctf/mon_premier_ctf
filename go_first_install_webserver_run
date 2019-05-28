@@ -191,6 +191,11 @@ chmod -R a+r web_server/www_site/yoloctf
 #docker build -t challenge-box-provider .
 #cd - > /dev/null
 
+#
+# Creante docker netkorks
+# 
+docker network create webserver_webLAN
+
 
 #
 # Build ctf-sshd
@@ -261,9 +266,7 @@ cd - > /dev/null
 echo "*****************"
 echo ""
 echo "S'il n'y a pas eu de message d'erreur, vous pouvez à présent vous connecter à l'interface web:"
-echo "http://localhost:8888"
-echo "Compte admin : CTFPasswordZ"
-echo "Pensez à changer le mot de passe"
+echo "http://localhost/yoloctf/"
 echo ""
 echo "Commandes utiles:"
 echo "docker stats"
