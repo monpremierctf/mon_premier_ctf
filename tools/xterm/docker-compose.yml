@@ -4,6 +4,8 @@ services:
   xtermjs:
     build: .
     image: ctf-tool-xterm
+    volumes:
+      - ./:/usr/src/app
     ports:
       - 3000
 

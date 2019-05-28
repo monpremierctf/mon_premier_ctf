@@ -62,20 +62,20 @@
 <?php
 
 function dumpFlagDataSet(){
-		//$ mysql -u root -p'AZ56FG78HJZE34' -h 127.0.0.1 -P 3306 -D dbctf
         $mysqli = new mysqli("webserver_mysql", "root", "AZ56FG78HJZE34", "dbctf");
         if (mysqli_connect_errno()) {
             printf("Connect failed: %s\n", mysqli_connect_error());
             exit();
         }
 
-		$user_query = "SELECT UID FROM users;";
+		$user_query = "SELECT login, UID FROM users;";
 		if ($result = $mysqli->query($user_query)) {
 			/* fetch object array */
 			while ($row = $result->fetch_assoc()) {
 				//UID,CHALLID, fdate, isvalid, flag
 				//var_dump($row);
 				$uid = $row['UID'];
+				$login = $row['login'];
 				//printf ("[%s] </br>", $uid);
 				if ($uid!="") {
 					//rgb(255, 99, 132)
@@ -83,7 +83,7 @@ function dumpFlagDataSet(){
 					$g = rand(0, 255);
 					$b = rand(0, 255);
 echo "{
-	label: 'Dataset with point data',
+	label: '$login',
 	backgroundColor: color('rgb($r, $g, $b)').alpha(0.5).rgbString(),
 	borderColor: 'rgb($r, $g, $b)',
 	fill: false,

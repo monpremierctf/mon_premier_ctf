@@ -56,6 +56,7 @@
         $cid =  $_GET['id'];
         if (isset($_GET['flag'])) {
             $flag = trim($_GET['flag']);
+            $flag = urldecode($flag);
             if (isFlagValid($cid,$flag)){
                 print "ok";
                 save_flag_submission($_SESSION['uid'], $cid, $flag, true);
