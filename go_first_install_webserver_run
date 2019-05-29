@@ -2,6 +2,34 @@
 #
 #
 
+# Set to 1 to activate ufw firewalling
+WITH_UFW=1
+if [ $WITH_UFW == 1 ] 
+then
+  echo "WITH_UFW active"
+  if [[ $(which ufw) && $(ufw --version) ]]; then
+    echo "ufw found"
+    printf "$(ufw --version)\n"
+
+    # Block all incoming
+    sudo ufw default deny incoming
+    sudo ufw default allow outgoing
+    sudo ufw allow 22
+    sudo ufw allow 80
+    sudo ufw allow 443
+    sudo ufw enable
+    cd tools/ufw
+    python proxy_ufw.py &
+    cd -
+  else
+    echo "Ko"
+    echo "Pour installer ufw rapidement:"
+    echo "sudo apt-get update"
+    echo "sudo apt-get install ufw"
+    exit;
+  fi
+fi
+exit
 
 
 # http://patorjk.com/software/taag/#p=display&f=Small&t=Mon%20Premier%20CTF
