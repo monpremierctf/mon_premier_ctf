@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
+	"io/ioutil"
 	//"io/ioutil"
 
 	"github.com/docker/docker/api/types"
@@ -29,6 +29,7 @@ type challenge struct {
 }
 
 var (
+	ufwProxyPort		       int
 	challengeBoxDockerImage    string
 	challengeBoxDockerPort     int
 	challengeBoxDockerLifespan int
@@ -44,6 +45,7 @@ const CONST_USER_NET_DURATION = 3600
 
 func init() {
 	// Set program flags
+	flag.IntVar(&ufwProxyPort, "ufwport", 0, "Activate firewall thanks ufw proxy")
 	flag.StringVar(&challengeBoxDockerImage, "image", "ubuntu", "Docker image")
 	flag.IntVar(&challengeBoxDockerPort, "port", 22, "Container exposed port to dynamically map on the host")
 	flag.IntVar(&challengeBoxDockerLifespan, "life", 60, "Challenge lifetime before the box closes")
@@ -79,6 +81,59 @@ func init() {
 	}
 
 }
+
+//
+// Ufw proxy
+//
+
+func ufw_status(proxyport int) {
+	if (proxyport==0) { return}
+    req := fmt.Sprintf("http://localhost:%d/?cmd=status", proxyport)
+    response, err := http.Get(req)
+    if err != nil {
+        fmt.Printf("%s", err)
+    } else {
+        defer response.Body.Close()
+        contents, err := ioutil.ReadAll(response.Body)
+        if err != nil {
+            fmt.Printf("%s", err)
+        }
+        fmt.Printf("%s\n", string(contents))
+    }
+}
+
+func ufw_open_port(proxyport int, port string, ip string) {
+	if (proxyport==0) { return}
+	req := fmt.Sprintf("http://localhost:%d/?cmd=open&ip=%s&port=%s", proxyport, ip, port)
+    response, err := http.Get(req)
+    if err != nil {
+        fmt.Printf("%s", err)
+    } else {
+        defer response.Body.Close()
+        contents, err := ioutil.ReadAll(response.Body)
+        if err != nil {
+            fmt.Printf("%s", err)
+        }
+        fmt.Printf("%s\n", string(contents))
+    }
+}
+
+func ufw_close_port(proxyport int, port string, ip string) {
+	if (proxyport==0) {return}
+	req := fmt.Sprintf("http://localhost:%d/?cmd=close&ip=%s&port=%s", proxyport, ip, port)
+    response, err := http.Get(req)
+    if err != nil {
+        fmt.Printf("%s", err)
+    } else {
+        defer response.Body.Close()
+        contents, err := ioutil.ReadAll(response.Body)
+        if err != nil {
+            fmt.Printf("%s", err)
+        }
+        fmt.Printf("%s\n", string(contents))
+    }
+}
+
 
 //
 //
@@ -228,21 +283,18 @@ func createNewChallengeBox(box string, duration, port int, uid string) (containe
 
 	fmt.Println(resp.ID)
 	containerID = resp.ID
-	/*
-		containerIDDirty, err := exec.Command(
-			"docker", "container", "run",
-			"--detach", "--rm",
-			"--label", fmt.Sprintf("ctf-uid=CTF_UID_%s", uid),
-			"--label", fmt.Sprintf("ctf-start-time=%s", time.Now().String()),
-			"--label", fmt.Sprintf("ctf-duration=%s", string(strconv.Itoa(duration))),
-			"--network", fmt.Sprintf("Net_%s", uid),
-			"--hostname", fmt.Sprintf("%s", box),
-			"--name", fmt.Sprintf("%s_%s", box, uid),
-			"--publish", fmt.Sprintf("%d", port),
-			fmt.Sprintf("%s", box),
-		).Output()
-		//containerID = bytes.TrimSpace(containerIDDirty)
-	*/
+	
+	// Open firewall 
+	if (ufwProxyPort>0) {
+		
+		sshPort, err2 := getHostSSHPort(string(containerID))
+		if err2 != nil {
+			log.Printf(err2.Error())
+			return
+		}
+		log.Printf("Open ufw port %s", sshPort)
+		ufw_open_port(ufwProxyPort, sshPort, "12.0.0.10")
+	}
 	return
 }
 
@@ -367,6 +419,19 @@ func provideChallengeBox(w http.ResponseWriter, r *http.Request) {
 
 func terminateContainer(containerID string) error {
 	fmt.Printf("Terminate [%s]\n", containerID)
+
+	// Open firewall 
+	if (ufwProxyPort>0) {
+		
+		sshPort, err2 := getHostSSHPort(string(containerID))
+		if err2 != nil {
+			log.Printf(err2.Error())
+			return (err2)
+		}
+		log.Printf("Close ufw rule for associated port %s", sshPort)
+		ufw_close_port(ufwProxyPort, sshPort, "12.0.0.10")
+	}
+
 	err := dockerClient.ContainerStop(ctx, containerID, nil)
 	if err != nil {
 		panic(err)

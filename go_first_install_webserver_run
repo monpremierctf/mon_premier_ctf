@@ -2,8 +2,27 @@
 #
 #
 
+
+#
+# python 2.xx installed
+printf "=> Verification : python 2.7 installé : "
+if [[ $(which python) ]]; then
+    echo "Ok"
+    printf "$(python --version)"
+  else
+    echo "Ko"
+    echo "Pour installer python rapidement:"
+    echo "sudo apt-get update"
+    echo "sudo apt install python-minimal"
+    exit;
+fi
+
+
 # Set to 1 to activate ufw firewalling
+# The daemon must have sudo without password to set ufw rules
+# sudo echo "$USER ALL = NOPASSWD: /usr/sbin/ufw" >> /etc/sudoers
 WITH_UFW=1
+
 if [ $WITH_UFW == 1 ] 
 then
   echo "WITH_UFW active"
@@ -11,6 +30,15 @@ then
     echo "ufw found"
     printf "$(ufw --version)\n"
 
+    # Check no password
+    echo "ufw sudo without passwd : "
+    if sudo -l | grep ufw | grep NOPASSaWD; then
+        echo "ok"
+    else
+        echo "ko"
+        echo "Pour activer : "
+        echo 'sudo echo "$USER ALL = NOPASSWD: /usr/sbin/ufw" >> /etc/sudoers'
+    fi
     # Block all incoming
     sudo ufw default deny incoming
     sudo ufw default allow outgoing
@@ -106,19 +134,6 @@ if [[ $(which docker) && $(docker --version) ]]; then
 fi
 
 
-#
-# python 2.xx installed
-printf "=> Verification : python 2.7 installé : "
-if [[ $(which python) ]]; then
-    echo "Ok"
-    printf "$(python --version)"
-  else
-    echo "Ko"
-    echo "Pour installer python rapidement:"
-    echo "sudo apt-get update"
-    echo "sudo apt install python-minimal"
-    exit;
-fi
 
 
 #
