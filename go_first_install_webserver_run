@@ -57,7 +57,7 @@ then
     exit;
   fi
 fi
-exit
+
 
 
 # http://patorjk.com/software/taag/#p=display&f=Small&t=Mon%20Premier%20CTF
