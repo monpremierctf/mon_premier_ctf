@@ -62,11 +62,7 @@
 <?php
 
 function dumpFlagDataSet(){
-        $mysqli = new mysqli("webserver_mysql", "root", "AZ56FG78HJZE34", "dbctf");
-        if (mysqli_connect_errno()) {
-            printf("Connect failed: %s\n", mysqli_connect_error());
-            exit();
-        }
+		include "ctf_sql.php";
 
 		$user_query = "SELECT login, UID FROM users;";
 		if ($result = $mysqli->query($user_query)) {
@@ -79,9 +75,16 @@ function dumpFlagDataSet(){
 				//printf ("[%s] </br>", $uid);
 				if ($uid!="") {
 					//rgb(255, 99, 132)
-					$r = rand(0, 255);
-					$g = rand(0, 255);
-					$b = rand(0, 255);
+					if ($_SESSION['login']===$login){
+						$r = 240;
+						$g = 20;
+						$b = 80;
+					} else {
+						$r = rand(0, 88);
+						$g = 40+rand(0, 80);
+						$b = 40+rand(0, 80);
+					}
+					
 echo "{
 	label: '$login',
 	backgroundColor: color('rgb($r, $g, $b)').alpha(0.5).rgbString(),

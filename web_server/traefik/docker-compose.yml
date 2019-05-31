@@ -4,16 +4,29 @@ services:
   traefik:
     image: traefik:latest
     restart: always
+    container_name: traefik
     ports:
       - "80:80"
       - "443:443"
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     networks:
       - webserver_webLAN
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.toml:/traefik.toml
       - ./certs/:/certs/
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=PathPrefix:/dashboard/" #";ReplacePathRegex: ^/yoloboard/(.*) /$$1"
+      # get md5 from htpasswd or http://www.htaccesstools.com/htpasswd-generator/
+      # and then double all $ to $$ to avoid docker-compose
+      # yoloboard: md5(yoloboard)
+      # echo $(htpasswd -nbB <USER> "<PASS>") | sed -e s/\\$/\\$\\$/g
+      # sudo apt install apache2-utils
+      # echo $(htpasswd -nbB yoloboard "yoloboard") | sed -e s/\\$/\\$\\$/g
+      #  Please use traefik.frontend.auth.basic.users."
+      #- "traefik.frontend.auth.basic=yoloboard:$$2y$$05$$kkeDkLd.htjb7sMk7eTynuqJeyl8EaQGVH8J0d9INuRD4fIrNk/Ba"
+      - "traefik.port: 8000"
     container_name: traefik
     
 

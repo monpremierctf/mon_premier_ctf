@@ -3,13 +3,7 @@
     session_start ();
     if (isset($_POST['login']) && isset($_POST['password'])) {
 
-
-        //$conn = mysqli_connect("mysql_webserver","root","AZ56FG78HJZE34","dbctf");
-        $mysqli = new mysqli("webserver_mysql", "root", "AZ56FG78HJZE34", "dbctf");
-        if (mysqli_connect_errno()) {
-            printf("Connect failed: %s\n", mysqli_connect_error());
-            exit();
-        }
+        include "ctf_sql.php";
 
         $login = mysqli_real_escape_string($mysqli, $_POST['login']);
         $passwd = md5($_POST['password']);

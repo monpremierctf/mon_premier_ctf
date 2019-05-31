@@ -25,11 +25,7 @@
 <?php
 
     if ($_SESSION['login'] ==='admin') {
-        $mysqli = new mysqli("webserver_mysql", "root", "AZ56FG78HJZE34", "dbctf");
-        if (mysqli_connect_errno()) {
-            printf("Connect failed: %s\n", mysqli_connect_error());
-            exit();
-        }
+        include "ctf_sql.php";
 
         $request = "SELECT * FROM users";
         $result = $mysqli->query($request);

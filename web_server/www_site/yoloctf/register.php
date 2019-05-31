@@ -1,14 +1,18 @@
 <?php
 
     session_start ();
-    if (isset($_POST['login']) && isset($_POST['password'])) {
+    if (isset($_POST['login']) && isset($_POST['password']) && isset($_POST['code'])) {
 
-
-        $mysqli = new mysqli("webserver_mysql", "root", "AZ56FG78HJZE34", "dbctf");
-        if (mysqli_connect_errno()) {
-            printf("Connect failed: %s\n", mysqli_connect_error());
-            exit();
+        if(strtoupper($_POST['code'])!=="YOLO") {
+            // Le visiteur n'a pas été reconnu comme étant membre de notre site. On utilise alors un petit javascript lui signalant ce fait
+            echo '<body onLoad="alert(\'Code Invitation invalide\')">';
+            // puis on le redirige vers la page de login
+            echo '<meta http-equiv="refresh" content="0;URL=register.php">';
+            // dans ce cas, tout est ok, on peut démarrer notre session
+           
         }
+
+        include "ctf_sql.php";
 
         $login = mysqli_real_escape_string($mysqli, $_POST['login']);
         $passwd = md5($_POST['password']);
@@ -35,12 +39,11 @@
             $result = $mysqli->query($request);
             $count  = $result->affected_rows;
             if($result) {
-                // on redirige notre visiteur vers une page de notre section membre
-                header ('location: index.php');
-                            // on enregistre les paramètres de notre visiteur comme variables de session ($login et $pwd) (notez bien que l'on utilise pas le $ pour enregistrer ces variables)
+                // on enregistre les paramètres de notre visiteur comme variables de session ($login et $pwd) (notez bien que l'on utilise pas le $ pour enregistrer ces variables)
                 $_SESSION['login'] = $login;
                 $_SESSION['uid'] = $uid;
-
+                // on redirige notre visiteur vers une page de notre section membre
+                header ('location: index.php?p=Welcome_1');
             } else {
                 echo $request;
                 printf("Insert failed: %s\n", $mysqli->error);
@@ -81,23 +84,32 @@
 
 
 
-    <div class="col-sm-5 text-center">
+    <div class="col-sm-10 text-center">
 	  <form action="register.php"  method="post">
 		<div class="form-group text-left row">
-		  <label for="usr" class="col">Login (*)</label>
-		  <input type="text" class="col-8 form-control" id="login" name="login">
+		  <label for="usr" class="col-2">Login (*)</label>
+		  <input type="text" class="col-6 form-control" id="login" name="login">
+          <label for="usr" class="col-2">Votre identifiant de connection</label>
         </div>
         <div class="form-group text-left  row ">
-		  <label for="usr" class="col">Password (*)</label>
-		  <input type="password" class="col-8 form-control" id="password" name="password">
+		  <label for="usr" class="col-2">Password (*)</label>
+		  <input type="password" class="col-6 form-control" id="password" name="password">
+          <label for="usr" class="col-2">...</label>
         </div>
         <div class="form-group text-left  row ">
-		  <label for="usr" class="col">Mail</label>
-		  <input type="text" class="col-8 form-control" id="mail" name="mail">
+		  <label for="usr" class="col-2">Mail</label>
+		  <input type="text" class="col-6 form-control" id="mail" name="mail">
+          <label for="usr" class="col-2"></label>
         </div>
         <div class="form-group text-left  row ">
-		  <label for="usr" class="col">Pseudo</label>
-		  <input type="text" class="col-8 form-control" id="pseudo" name="pseudo">
+		  <label for="usr" class="col-2">Pseudo</label>
+		  <input type="text" class="col-6 form-control" id="pseudo" name="pseudo">
+          <label for="usr" class="col-2">Le Pseudo à afficher sur le tableau de score à la place du login.</label>
+		</div>
+        <div class="form-group text-left  row ">
+		  <label for="usr" class="col-2">Code Invitation (*)</label>
+		  <input type="text" class="col-6 form-control" id="code" name="code">
+          <label for="usr" class="col-2"></label>
 		</div>
 		<button type="submit" class="btn btn-primary">Register</button>
 	  </form>

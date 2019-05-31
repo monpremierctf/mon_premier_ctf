@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+  traefik:
+    image: traefik:latest
+    restart: always
+    container_name: traefik
+    ports:
+      - "80:80"
+      - "443:443"
+      - "127.0.0.1:8000:8000"
+    networks:
+      - webserver_webLAN
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.toml:/traefik.toml
+      - ./acme.json:/acme.json
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=PathPrefix:/dashboard/"
+      - "traefik.port: 8000"
+    container_name: traefik
+    
+
+networks:
+  webserver_webLAN:
+    external: true

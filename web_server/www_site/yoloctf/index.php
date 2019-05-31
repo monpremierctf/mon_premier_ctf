@@ -98,29 +98,21 @@
                 print $Parsedown->text($string);
                 ctf_div_server_status(6);
                 html_dump_cat($p);
-            } else {
+            }
+            elseif ($p==="Dashboard") {
+                include "containers.php";
+            }
+            elseif ($p==="Welcome_1") {
+                $string = file_get_contents("welcome_1.md");
+                print $Parsedown->text($string);
+            }
+            else {
                 $string = file_get_contents("head_index.md");
                 print $Parsedown->text($string);
             }
 
 
-            /*
-            foreach(getCategories() as $cat){
-                print'<!-- Categorie : Begin -->';
-                print '<div class="container">';
-                    print '<div class="row">';
-                    print '<h4>';
-                    print ($cat);
-                    print "</h4>";
-                    print "</div>";
-                    
-                    html_dump_cat($cat);
-                    print '</br></br>';
-                   
-                print "</div>";
-                print'<!-- Categorie : End -->';
-            }
-                */
+            
         ?>
          </div>
         </div>

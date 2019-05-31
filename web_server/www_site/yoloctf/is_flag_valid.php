@@ -2,11 +2,7 @@
     function is_flag_validated($uid, $cid)
     {
         $ret=0;
-        $mysqli = new mysqli("webserver_mysql", "root", "AZ56FG78HJZE34", "dbctf");
-        if (mysqli_connect_errno()) {
-            printf("Connect failed: %s\n", mysqli_connect_error());
-            exit();
-        }
+        include "ctf_sql.php";
         $query = "select UID from flags where (UID='$uid' and CHALLID='$cid' and isvalid=TRUE);";
         //echo $query;
 		if ($result = $mysqli->query($query)) {
@@ -20,11 +16,7 @@
 
     function save_flag_submission($uid, $cid, $flag, $isvalid)
     {
-        $mysqli = new mysqli("webserver_mysql", "root", "AZ56FG78HJZE34", "dbctf");
-        if (mysqli_connect_errno()) {
-            printf("Connect failed: %s\n", mysqli_connect_error());
-            exit();
-        }
+        include "ctf_sql.php";
 
         //echo $valid;
         $count = is_flag_validated($uid, $cid);

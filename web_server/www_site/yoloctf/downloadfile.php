@@ -12,7 +12,7 @@
     }
     
 
-    $attachment_location = $_SERVER["DOCUMENT_ROOT"] . "/uploads/".$path;
+    $attachment_location = $_SERVER["DOCUMENT_ROOT"] . "/yoloctf/uploads/".$path;
     //echo $attachment_location;
     if (file_exists($attachment_location)) {
 

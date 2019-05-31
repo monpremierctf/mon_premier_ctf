@@ -17,5 +17,5 @@
             print '<a  ><pre> </pre></a> ';
             print '<a href="my_term.php" target="_blank"><pre>[Mon terminal]</pre></a> ';
             print '<a href="scoreboard.php" target="_blank"><pre>[Score board]</pre></a> ';
-            print '<a href="containers.php" target="_blank"><pre>[Running Challenges]</pre></a> ';
+            print '<a href="index.php?p=Dashboard" target="_blank"><pre>[Dashboard]</pre></a> ';
             ?>

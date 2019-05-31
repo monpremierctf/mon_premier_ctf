@@ -2,6 +2,18 @@
 #
 #
 
+# Set to 1 to activate ufw firewalling
+# The daemon must have sudo without password to set ufw rules
+# Add in /etc/sudoers the following line
+# username ALL = NOPASSWD: /usr/sbin/ufw 
+WITH_UFW=1
+
+# Set to 1 for LAN use.
+# For use with Let's encrypt on Internet, use web_server/traefik_acme,
+# copy your certs manualy in acme.json
+# and docker-compose up --build manually
+TRAEFIK_SELF_SIGNED_CERTS=1
+
 
 #
 # python 2.xx installed
@@ -18,10 +30,6 @@ if [[ $(which python) ]]; then
 fi
 
 
-# Set to 1 to activate ufw firewalling
-# The daemon must have sudo without password to set ufw rules
-# sudo echo "$USER ALL = NOPASSWD: /usr/sbin/ufw" >> /etc/sudoers
-WITH_UFW=1
 
 if [ $WITH_UFW == 1 ] 
 then
@@ -271,9 +279,23 @@ python -c 'from gen_config import build_challenges; build_challenges()'
 #
 # Generate self-signed certificates
 #
-cd web_server
+if [ $TRAEFIK_SELF_SIGNED_CERTS == 1 ] 
+then
+cd web_server/traefik
 ./go_gen_certs
 cd - > /dev/null
+fi
+
+#
+# Start traefik
+#
+if [ $TRAEFIK_SELF_SIGNED_CERTS == 1 ] 
+then
+cd web_server/traefik
+docker-compose build
+docker-compose up -d
+cd - > /dev/null
+fi
 
 
 #
@@ -283,6 +305,9 @@ cd web_server
 docker-compose build
 docker-compose up -d
 cd - > /dev/null
+
+
+
 
 #
 # Start challenge box provider
