@@ -32,7 +32,7 @@ then
 
     # Check no password
     echo "ufw sudo without passwd : "
-    if sudo -l | grep ufw | grep NOPASSaWD; then
+    if sudo -l | grep ufw | grep NOPASSWD; then
         echo "ok"
     else
         echo "ko"
