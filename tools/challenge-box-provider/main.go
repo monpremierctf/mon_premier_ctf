@@ -10,6 +10,8 @@ import (
 	"strings"
 	"time"
 	"io/ioutil"
+//	"os"
+	"encoding/json"
 	//"io/ioutil"
 
 	"github.com/docker/docker/api/types"
@@ -21,13 +23,19 @@ import (
 	bolt "go.etcd.io/bbolt"
 )
 
-type challenge struct {
-	id       string
-	image    string
-	port     int
-	duration int
+
+type Challenge struct {
+	Id       string
+	Image    string 
+	Port     string    
+	Duration string    
 }
 
+/*
+type Challenges struct {
+    challenges []Challenge `json:"challenges"`
+}
+*/
 var (
 	ufwProxyPort		       int
 	challengeBoxDockerImage    string
@@ -38,7 +46,7 @@ var (
 	db           *bolt.DB
 	dockerClient *client.Client
 	ctx          = context.Background()
-	challenges   [11]challenge
+	challenges   []Challenge
 )
 
 const CONST_USER_NET_DURATION = 3600
@@ -215,14 +223,14 @@ func getNetworkIdFromUID(uid string) (networkID string) {
 //
 // Create New Challenge Container
 //
-func createNewChallengeBox(box string, duration, port int, uid string) (containerID string, err error) {
+func createNewChallengeBox(box string, duration string, port string, uid string) (containerID string, err error) {
 	ctx := context.Background()
 
 	// Labels
 	labels := map[string]string{
 		"ctf-uid":               fmt.Sprintf("CTF_UID_%s", uid),
 		"ctf-start-time":        time.Now().Format("2006-01-02 15:04:05"),
-		"ctf-duration":          string(strconv.Itoa(duration)),
+		"ctf-duration":          duration,
 		"traefik.enable":        "true",                                      //traefik.enable=true
 		"traefik.frontend.rule": fmt.Sprintf("PathPrefix:/%s_%s/", box, uid), //traefik.frontend.rule=Path:/yoloboard
 		"traefik.port":          fmt.Sprintf("%d", port),
@@ -321,7 +329,7 @@ func createNewUserNet(uid string, duration int) (containerID string, err error) 
 	return
 }
 
-func oldcreateNewChallengeBox(box string, duration, port int) (containerID []byte, err error) {
+func oldcreateNewChallengeBox(box string, duration, port string) (containerID []byte, err error) {
 	/*
 		containerIDDirty, err := exec.Command(
 			"docker", "container", "run",
@@ -366,55 +374,6 @@ func getHostSSHPort(containerID string) (port string, err error) {
 			port = bytes.TrimSpace(port)
 		}*/
 	return
-}
-
-func provideChallengeBox(w http.ResponseWriter, r *http.Request) {
-	db, err := bolt.Open("./state.db", 0600, nil)
-	if err != nil {
-		log.Fatalf("Error creating Bbolt DB : %s", err)
-	}
-	defer db.Close()
-
-	var srcIP string
-	srcIP = strings.Split(r.RemoteAddr, ":")[0]
-
-	db.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("State"))
-		containerID := b.Get([]byte(srcIP))
-
-		if containerID == nil {
-			log.Printf("Source IP %s is not known: creating a new challenge box.", srcIP)
-			boxID, err := oldcreateNewChallengeBox(challengeBoxDockerImage, challengeBoxDockerLifespan, challengeBoxDockerPort)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-			}
-			db.Update(func(tx *bolt.Tx) error {
-				b := tx.Bucket([]byte("State"))
-				err := b.Put([]byte(srcIP), boxID)
-				return err
-			})
-
-			sshPort, err := getHostSSHPort(string(boxID))
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-			}
-
-			fmt.Fprintf(w, "A new challenge box has been created : available via SSH for %d seconds on port %s", challengeBoxDockerLifespan, sshPort)
-
-		} else {
-			log.Printf("Source IP %s has already a challenge box : %s", srcIP, containerID)
-			sshPort, err := getHostSSHPort(string(containerID))
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-			}
-			log.Printf("The port associated with SSH in the box is %s", sshPort)
-
-			fmt.Fprintf(w, "Picking an existing Challenge box on port %s", sshPort)
-
-		}
-		return nil
-	})
-
 }
 
 func terminateContainer(containerID string) error {
@@ -533,7 +492,7 @@ func createChallengeBox(w http.ResponseWriter, r *http.Request) {
 	var cindex int = -1
 	for index, chall := range challenges {
 		//log.Println("Search: " + string(chall.id))
-		if chall.id == cid {
+		if chall.Id == cid {
 			cindex = index
 		}
 	}
@@ -546,7 +505,7 @@ func createChallengeBox(w http.ResponseWriter, r *http.Request) {
 
 	// Existe ?
 	boxID := getChallengeBox(
-		challenges[cindex].image,
+		challenges[cindex].Image,
 		uid,
 	)
 
@@ -555,19 +514,19 @@ func createChallengeBox(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Fprintf(w, "Found box")
 		} else {
-			fmt.Fprintf(w, "{\"Name\":\"%s\", \"Port\":\"%s\"}", challenges[cindex].image+"_"+uid, sshPort)
+			fmt.Fprintf(w, "{\"Name\":\"%s\", \"Port\":\"%s\"}", challenges[cindex].Image+"_"+uid, sshPort)
 		}
 		return
 	}
 	// create docker
 	log.Println("Starting new docker box")
-	log.Println("id   : " + string(challenges[cindex].id))
-	log.Println("image: " + string(challenges[cindex].image))
-	log.Println("port : " + string(strconv.Itoa(challenges[cindex].port)))
+	log.Println("id   : " + string(challenges[cindex].Id))
+	log.Println("image: " + string(challenges[cindex].Image))
+	log.Println("port : " + string(challenges[cindex].Port))
 	boxID, err := createNewChallengeBox(
-		challenges[cindex].image,
-		challenges[cindex].duration,
-		challenges[cindex].port,
+		challenges[cindex].Image,
+		challenges[cindex].Duration,
+		challenges[cindex].Port,
 		uid,
 	)
 
@@ -582,7 +541,7 @@ func createChallengeBox(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Fprintf(w, "Create box")
 	} else {
-		fmt.Fprintf(w, "{\"Name\":\"%s\", \"Port\":\"%s\"}", challenges[cindex].image+"_"+uid, sshPort)
+		fmt.Fprintf(w, "{\"Name\":\"%s\", \"Port\":\"%s\"}", challenges[cindex].Image+"_"+uid, sshPort)
 	}
 
 }
@@ -744,8 +703,8 @@ func statusChallengeBox(w http.ResponseWriter, r *http.Request) {
 	// find entry
 	var cindex int = -1
 	for index, chall := range challenges {
-		log.Println("Search: " + string(chall.id))
-		if chall.id == cid {
+		log.Println("Search: " + string(chall.Id))
+		if chall.Id == cid {
 			cindex = index
 		}
 	}
@@ -758,7 +717,7 @@ func statusChallengeBox(w http.ResponseWriter, r *http.Request) {
 
 	// Existe ?
 	boxID := getChallengeBox(
-		challenges[cindex].image,
+		challenges[cindex].Image,
 		uid,
 	)
 
@@ -768,7 +727,7 @@ func statusChallengeBox(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w, "Ko")
 
 		} else {
-			fmt.Fprintf(w, "{\"Name\":\"%s\", \"Port\":\"%s\"}", challenges[cindex].image+"_"+uid, sshPort)
+			fmt.Fprintf(w, "{\"Name\":\"%s\", \"Port\":\"%s\"}", challenges[cindex].Image+"_"+uid, sshPort)
 		}
 		return
 	}
@@ -809,7 +768,90 @@ func cleanDB() {
 
 }
 
+func Keys(m map[string]interface{}) (keys []string) {
+    for k := range m {
+        keys = append(keys, k)
+    }
+    return keys
+}
+
+
+type Yolo struct {
+	Id       string 
+	Image    string 
+	Port     string    
+	Duration string  
+}
+
+
+func readConfigFile() {
+	var chall Challenge
+	var yolo Yolo
+	bb := []byte(`{ "Id":"1", "Image":"ctf", "Port": "22"}`)
+	err := json.Unmarshal(bb, &yolo)
+		if err != nil {
+			log.Printf("Error parsing %s", err.Error)
+			return;
+		}
+	fmt.Println(yolo)
+
+
+	//b := []byte(`{ "Name":"Bob","Food":"Pickle"}`)
+	//b := []byte(`{ "id":"1","image":"ctf-tool-xterm"}`)
+	fn :="challenge_box_provider.cfg"
+	content, err := ioutil.ReadFile(fn)
+	lines := strings.Split(string(content), "\n")
+	for _, ch := range lines {
+		fmt.Println("["+ch)
+		//challenges = append(challenges, ch)
+		
+		err = json.Unmarshal([]byte(ch), &chall)
+
+		//err = json.Unmarshal(b, &chall)
+		if err != nil {
+			log.Printf("Error parsing %s", err.Error)
+			return;
+		}
+		fmt.Println(chall)
+	}
+
+/*
+	jsonFile, err := os.Open(fn)
+	if err != nil {
+		log.Printf("Can t read config file %s", err.Error)
+		return;
+	}
+	defer jsonFile.Close()
+	byteValue, err1 := ioutil.ReadAll(jsonFile)
+	if err1 != nil {
+		log.Printf("Error read all",  err1.Error)
+		return;
+	}
+
+
+	var challs Challenges
+	err = json.Unmarshal(byteValue, &challs)
+	if err != nil {
+		log.Printf("Error parsing %s", err.Error)
+		return;
+	}
+	fmt.Println(challs)
+*/
+/*
+	var result map[string]interface{}
+	json.Unmarshal([]byte(byteValue), &result)
+	fmt.Println(result)
+	fmt.Println(result["challenges"])
+	for _, ch := range Keys(result) {
+		fmt.Println(ch)
+		//challenges = append(challenges, ch)
+	}
+
+*/
+}
+
 func main() {
+	/*
 	chall := [11]challenge{
 		// xterm
 		challenge{"1", "ctf-tool-xterm", 3000, 30 * 3600}, // 3h
@@ -826,7 +868,17 @@ func main() {
 		challenge{"ctf-ftp", "ctf-ftp", 22, 10 * 60 * 60},
 		challenge{"ctf-smtp", "ctf-smtp", 22, 10 * 60 * 60},
 	}
-	challenges = chall
+
+	
+	for _, ch := range chall {
+		challenges = append(challenges, ch)
+	}
+*/
+	readConfigFile()
+
+	return
+
+	//challenges = chall
 	fmt.Println(challenges)
 	flag.Parse()
 
@@ -843,7 +895,7 @@ func main() {
 	//fmt.Println("==\n")
 
 	//http.Handle("/", http.FileServer(http.Dir("./src")))
-	//http.HandleFunc("/provide/", provideChallengeBox)
+
 	http.HandleFunc("/listChallengeBox/", listChallengeBox)
 
 	http.HandleFunc("/createUserNet/", createUserNet)

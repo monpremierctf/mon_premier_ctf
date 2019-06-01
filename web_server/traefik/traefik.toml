@@ -32,5 +32,5 @@ dashboard = true
 endpoint = "unix:///var/run/docker.sock"
 #domain = "docker.localhost"
 watch = true
-exposedByDefault = true
+exposedByDefault = false
 

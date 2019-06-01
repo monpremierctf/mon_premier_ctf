@@ -1,4 +1,4 @@
-{"count": 38, "results": [
+{"count": 47, "results": [
     {
         "category": "Ghost in the Shell",
         "state": "visible",
@@ -288,6 +288,42 @@
         "description": "\nConnectez vous en netcat au IPSERVER sur le port 110 pour relever le courrier de jean.</br>\nSon mot de passe est bon.</br>\nRenseignez-vous sur le protocole POP3: https://www.shellhacks.com/retrieve-email-pop3-server-command-line/"
     },
     {
+        "category": "Password",
+        "state": "visible",
+        "requirements": "null",
+        "name": "Une affaire de famille",
+        "docker": "",
+        "max_attempts": 0,
+        "type": "standard",
+        "id": 25,
+        "value": 1,
+        "description": "\nJean Bon vient de monter sa startup spécialisée dans la vente de sabres lasers.\nIl vient de passer la soirée à consolider ses commandes, en pensant à l'anniversaire de son fils Luke le lendemain.\nAvant de rentrer, regarder le dernier épisode de Game of Throne, il sauvegarde ses documents dans un zip chiffré sur une clef usb.</br>\nQuand winzip lui demande un mot de passe, sans contrainte partculière, il entre rapidement un mot de passe facile à retrouver.\nLe flag est le mot de passe qu'il va utiliser."
+    },
+    {
+        "category": "Password",
+        "state": "visible",
+        "requirements": "null",
+        "name": "Au boulot",
+        "docker": "",
+        "max_attempts": 0,
+        "type": "standard",
+        "id": 26,
+        "value": 2,
+        "description": "\nLes affaires décollent, Jean peut se permettre prender Jar Jar en stage pour développer une solution de gestion de stock adaptée aux sabres laser en php.\nJar Jar a trouvé un super code sur github, et l'installe sans tarder.\nAu moment de créer son compte, Jean découvre avec énervement que le logiciel refuse de créer son compte s'il n'y a pas de lettre majuscule dans le mot de passe.\nLe flag est le mot de passe que Jean va utiliser."
+    },
+    {
+        "category": "Password",
+        "state": "visible",
+        "requirements": "null",
+        "name": "Une politique de sécurité forte",
+        "docker": "",
+        "max_attempts": 0,
+        "type": "standard",
+        "id": 27,
+        "value": 3,
+        "description": "\nLe logiciel de gestion de stock marche pluto bien. Jar Jar, se dit qu'il est temps de penser à le sécuriser un peu.\nIl décide de renforcer la sécurité en forcant l'utilisation d'un caractère spécial dans le mot de passe."
+    },
+    {
         "category": "SQLi",
         "state": "visible",
         "requirements": "null",
@@ -295,9 +331,9 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 25,
+        "id": 28,
         "value": 10,
-        "description": "\n```\nhttp://IPSERVER:8081/login.php\n```\nTente de te commecter avec le compte admin et le mot de passe admin. On ne sait jamais...</br></br>\nComment passer l'authentification quand on ne connait pas le mot de passe ?</br></br>\nPar chance, le site est encore un prototype et le développeur a laissé actif des options pour débugguer.</br>\nTu vois qu'il utilise une base de donnée SQL pour gérer les utilisateurs.</br></br>\nIl utilise la requête :SELECT * FROM users WHERE login='admin' AND passwd=md5('admin')</br></br>\nAjoute une quote ' à la fin du nom de user et regarde le résultat...</br>\nCette quote a corrompu la requête SQL. Good. Nous pouvons la modifier pour la réécrire.</br></br>\nEssaye de te connecter avec comme nom de compte:\n```\nadmin' or 1=1#\n```\nNous générons la requète:\n```\nSELECT * FROM users WHERE login='admin' or 1=1#' AND passwd=md5('admin')\n```\nTous les caractère après le # sont ignorés comme des commentaires.</br>\nLe filtre devient\n```\nlogin='admin' or 1=1\n```\nNous sommes authentifié comme le premier user de la base de donnée."
+        "description": "\n```\nhttps://{IP_SERVER}/sqli/login.php\n```\nTente de te commecter avec le compte admin et le mot de passe admin. On ne sait jamais...</br></br>\nComment passer l'authentification quand on ne connait pas le mot de passe ?</br></br>\nPar chance, le site est encore un prototype et le développeur a laissé actif des options pour débugguer.</br>\nTu vois qu'il utilise une base de donnée SQL pour gérer les utilisateurs.</br></br>\nIl utilise la requête :SELECT * FROM users WHERE login='admin' AND passwd=md5('admin')</br></br>\nAjoute une quote ' à la fin du nom de user et regarde le résultat...</br>\nCette quote a corrompu la requête SQL. Good. Nous pouvons la modifier pour la réécrire.</br></br>\nEssaye de te connecter avec comme nom de compte:\n```\nadmin' or 1=1#\n```\nNous générons la requète:\n```\nSELECT * FROM users WHERE login='admin' or 1=1#' AND passwd=md5('admin')\n```\nTous les caractère après le # sont ignorés comme des commentaires.</br>\nLe filtre devient\n```\nlogin='admin' or 1=1\n```\nNous sommes authentifié comme le premier user de la base de donnée."
     },
     {
         "category": "SQLi",
@@ -307,7 +343,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 26,
+        "id": 29,
         "value": 10,
         "description": "\nRegarde l'url de consultation des messages, et le texte de débug en bas.</br>\nLa valeur 673489 est passée en paramètre de la requète SQL.</br></br>\nNous allons faire une Injection SQL utilisant UNION.</br>\nRemplace cette valeur par\n```\n673489 UNION select login from users\n```\nTu vas générer la requète :\n```\nSELECT msg FROM messages WHERE idmsg= 673489 UNION select login from users\n```\nCette requète va ajouter les logins des utilisateurs à la fin de la liste des messages."
     },
@@ -319,7 +355,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 27,
+        "id": 30,
         "value": 10,
         "description": "\nContinue sur la même url. Cette fois, en plus de noms des users, on va récupérer le hash de leurs password...</br></br>\nRemplace le paramètre 673489 par :\n```\n673489 UNION select concat(login,\" \",passwd) from users\n```\nTu vas générer la requète :\n```\nSELECT msg FROM messages WHERE idmsg= 673489 UNION select concat(login,\" \",passwd) from users\n```\nQui va concaténer la liste des users et leur hash de leur password à la fin de la liste des messages."
     },
@@ -331,7 +367,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 28,
+        "id": 31,
         "value": 10,
         "description": "\n```\nssh bender@IPSERVER\nmdp: leelu\n```\nLe programme say_hello vient de remporter le concours de l'IA la plus futée du MIT. Malheureusement ses concepteurs se sont concentrés sur les performances du CPU et un peu négligé la sécurité.</br>\nJette un oeil a son source: buffer_01.c </br>\n```\n$ ./say_hello bob\n```\nRemplace bob par 12345678901234567890.\nCa dépasse des 10 caractères alloués au tableau name.\nEt ça va écraser le tableau intro[10]=\"Hello\";\nSi nous continuons, nous pouvons écraser la variable tst, et forcer un appel à print_flag();"
     },
@@ -343,7 +379,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 29,
+        "id": 32,
         "value": 15,
         "description": "\n```\nssh leela@IPSERVER\nmdp: yivo\n```\nLes programmeurs ont sorti une version 2 de leur IA, avec une sécurité renforcée.\nJette un oeil a son source: buffer_02.c </br>\nIl faut forcer la valeur de tst à 'Z' pour déclencher un appel à print_flag();"
     },
@@ -355,7 +391,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 30,
+        "id": 33,
         "value": 20,
         "description": "\n```\nssh philip@IPSERVER\nmdp: elzar\n```\nAlertés par la communauté, et sous la pression des investisseurs qui détestent le bad nuzz, les programmeurs ont sorti une version 3 de leur IA, toujours plus sécure.\nJette un oeil a son source: buffer_03.c </br>\nIl faut forcer la valeur de tst à 'SecCheck' pour déclencher un appel à print_flag();"
     },
@@ -367,7 +403,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 31,
+        "id": 34,
         "value": 5,
         "description": "\nLes ordinateurs codent leurs informations sur des octets qui peuvent prendre une valeur entre 0 et 255.</br>\nUn octet est composé de 8 bits, chacun valant 0 ou 1, que l'on peut grouper deux fois 4 bits.</br>\n0000 0000 vaut 0</br>\n0000 0001 vaut 1</br>\n0000 0010 vaut 2</br>\n0000 0011 vaut 3</br>\n1111 1111 vaut 255.</br>\nLe système hexadécimal est basé 4 bits et permet de compter jusqu'à 16 : 0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F</br>\n0 = 0  = 0000</br>\nA = 10 = 1010</br>\nB = 11 = 1011</br>\nF = 15 = 1111</br>\nLa notation hexadécimale, telle 0x1F, est souvent utilisée pour donner la valeur 'brutes' d'un octet.</br>\n0x00 = 0</br>\n0x01 = 1</br>\n0xFF = 255</br>\nLe flag est la valeur de 0x1F."
     },
@@ -379,7 +415,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 32,
+        "id": 35,
         "value": 5,
         "description": "\nLes ordinateurs codent leurs informations, sur des octets.</br>\nUn octet peut prendre une valeur entre 0 et 255.</br>\nLe code ascii standardise l'utilisation de ces valeurs.</br>\n```\nhttps://fr.wikipedia.org/wiki/American_Standard_Code_for_Information_Interchange#/media/File:ASCII-Table-wide.svg\n```\nCertaines valeurs permettent d'afficher du texte, d'autres de déplacer le curseur à l'écran...</br>\nLe flag est constitué de quatre lettres dont les codes ascii sont : 89 111 108 111</br>"
     },
@@ -391,9 +427,9 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 33,
+        "id": 36,
         "value": 5,
-        "description": "\nUn fichier binaire utilise les 255 valeurs des octets.</br>\nUn fichier texte n'utilise que la sous partie texte du code ascii.\nL'encodage base64 permet de coder un fichier binaire en n'utilisant que cette sous partie texte.\nLe flag est l'encodage en base64 du bloc ABCD(_#hj%:-893d\n```\necho 'tralala' | base64\nhttp://www.utilities-online.info/base64/\n```"
+        "description": "\nUn fichier binaire utilise les 255 valeurs des octets.</br>\nUn fichier texte n'utilise que la sous partie texte du code ascii.\nL'encodage base64 permet de coder un fichier binaire en n'utilisant que cette sous partie texte.\nLe flag est l'encodage en base64 du bloc ABCD(_#hj:-893d\n```\nprintf 'tralala' | base64\nhttp://www.utilities-online.info/base64/\n```"
     },
     {
         "category": "Decode",
@@ -403,21 +439,69 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 34,
+        "id": 37,
         "value": 5,
-        "description": "\nLe flag est le decodage de ZmxhZ191bl9zNGNyM3RfZDNjMGQzdXI=\nLe = à la fin n'est pas systématique, mais est caractéristique de l'encodage base64.\n```\necho 'dHJhbGFsYQo=' | base64 -d\nhttp://www.utilities-online.info/base64/\n```"
+        "description": "\nLe flag est le decodage de ZmxhZ191bl9zNGNyM3RfZDNjMGQzdXI=\nLe = à la fin n'est pas systématique, mais est caractéristique de l'encodage base64.\n```\nprintf 'dHJhbGFsYQo=' | base64 -d\nhttp://www.utilities-online.info/base64/\n```"
     },
     {
         "category": "Decode",
         "state": "visible",
         "requirements": "null",
-        "name": "URL",
+        "name": "Code Caesar",
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 35,
+        "id": 38,
         "value": 5,
-        "description": "\nLe flag est l'url décodée:\n```\nwww.myhackervault.org/backdoor.php%3Flogin%3Dadmin%27%20or%201%3D1%23\n```\nPro tips: http://www.utilities-online.info/urlencode/"
+        "description": "\nLe flag est le decodage de iodj_Oh_frgh_Fdhvdu_f_hvw_gh_od_edooh\nCe code est un code Caesar. On décale les lettres d'un nombre fixe. Ici +3.\nf->i   l->o\nLe site dcode.fr vous permet de voir d'un coup d'oeil toutes les combinaisons.\n```\nhttps://www.dcode.fr/caesar-cipher\n```"
+    },
+    {
+        "category": "Decode",
+        "state": "visible",
+        "requirements": "null",
+        "name": "Code Caesar 2",
+        "docker": "",
+        "max_attempts": 0,
+        "type": "standard",
+        "id": 39,
+        "value": 5,
+        "description": "\nLe flag est le decodage de ntio_Tm_kwlm_Kimaiz_k_mab_nikqtm_i_kiaamz\n```\nhttps://www.dcode.fr/caesar-cipher\n```"
+    },
+    {
+        "category": "Decode",
+        "state": "visible",
+        "requirements": "null",
+        "name": "Code Vigenere",
+        "docker": "",
+        "max_attempts": 0,
+        "type": "standard",
+        "id": 40,
+        "value": 5,
+        "description": "\nLe flag est le decodage de hefi_Ej_ehig_Onixsgkj_e_xxv_fngnc\nCe code est un code Vigenere. On décale les lettres d'un nombre egal aux lettres d'une clef. Ici CTF.\nf+C->E   l+T->e  a+F->f ...\n```\nhttps://www.dcode.fr/vigenere-cipher\n```\nPensez à remettre le flag au format flag_xx_x_xxx"
+    },
+    {
+        "category": "Decode",
+        "state": "visible",
+        "requirements": "null",
+        "name": "Code Vigenere 2",
+        "docker": "",
+        "max_attempts": 0,
+        "type": "standard",
+        "id": 41,
+        "value": 5,
+        "description": "\nLe flag est le decodage de hefi_c_y_cb_hclxg_wz_phwf_tz_uni\nPour casser le code il faut des informations: longueur de la clef, langue utilisée ou mot décodé.\nIci on peut supposer que FLAG est un mot du message décodé.\n```\nhttps://www.dcode.fr/vigenere-cipher\n```\nPensez à remettre le flag au format flag_xx_x_xxx"
+    },
+    {
+        "category": "Decode",
+        "state": "visible",
+        "requirements": "null",
+        "name": "Weak RSA",
+        "docker": "",
+        "max_attempts": 0,
+        "type": "standard",
+        "id": 42,
+        "value": 5,
+        "description": "\n```\nhttps://bentrobotlabs.wordpress.com/2018/08/26/weak-rsa-challenge/\n```"
     },
     {
         "category": "File Upload",
@@ -427,7 +511,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 36,
+        "id": 43,
         "value": 10,
         "description": "\nAvant tout, télécharge le fichier flag01_enc.bin sur ton Kali.\n```\ncat flag01_enc.bin\n```\nEt oui, c est du binaire illisible.</br></br>\n```\nhttp://IPSERVER:9090/index.htm\n```\nOuvre cette URL dans un autre onglet pour obtenir un serveur. </br>\nPuis connecte toi au serveur en ssh, avec le user 'user1' et le mot de passe 'password'.</br>\nLe programme dechiffre_01 va te déchiffrer le fichier flag01_enc.bin une fois transféré sur le serveur.</br>\n```\ncat flag01_enc.bin | base64\n```\nSur ton kali, encode flag01_enc.bin en base64. L'encodage base64 permet de transférer des fichier binaires en mode texte.</br></br>\n```\necho \\\"RXQgb3VpLCDDp2EgbWFyY2hlCg===\\\"| base64 --decode > flag01_enc\n```\nFais ensuite un copier/coller de la chaine base64 générée qui ressemble à RXQgb3VpLCDDp2EgbWFyY2hlCg== dans ton shell sur le serveur.\nDécode avec base64 --decode, et sauve dans le fichier flag01_enc.</br></br>\n```\ndechiffre_01 flag01_enc flag01.txt\n```\nUtilise dechiffre_01 pour déchiffrer le flag encodé et le sauver dans flag01.txt"
     },
@@ -439,7 +523,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 37,
+        "id": 44,
         "value": 10,
         "description": "\nAvant tout, télécharge le fichier dechiffre_02 sur ton Kali.</br>\n```\nls -al dechiffre_02\n```\nIl fait 8k, c est un peu gros cette fois pour un copier/coller...</br></br>\n```\nhttp://IPSERVER:9090/index.htm\n```\nOuvre cette URL dans un autre onglet pour obtenir un serveur. </br>\nPuis connecte toi au serveur en ssh, avec le user 'user2' et le mot de passe 'password'.</br></br>\n```\nscp -P 2224 dechiffre_02 user2@IPSERVER:dechiffre02\n```\nTu as un accès ssh, utilise le mode de transfert de fichier de ssh.\nQuels sont les droits de ton binaire après le transfert ?"
     },
@@ -451,8 +535,32 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 38,
+        "id": 45,
         "value": 10,
         "description": "\nAvant tout, télécharge le fichier dechiffre_03 sur ton Kali.</br>\n```\npython -m SimpleHTTPServer 8080\n```\nDans le même répertoire que ce fichier, lance un serveur web avec une ligne de python.</br>\nTon Kali dispose maintenant d un serveur web prêt à transférer les fichiers localisés dans le même répertoire.</br></br>\n```\nifconfig\n```\nRecupère l adresse IP de ton Kali.</br></br>\n```\nhttp://IPSERVER:9090/index.htm\n```\nOuvre cette URL dans un autre onglet pour obtenir un serveur. </br>\nPuis connecte toi au serveur en ssh, avec le user 'user3' et le mot de passe 'password'.</br></br>\n```\nwget http://[IP de ton Kali]:8080/dechiffre_03\n```\nRécupère le fichier en utilisant une requête HTTP."
+    },
+    {
+        "category": "Exploit",
+        "state": "visible",
+        "requirements": "null",
+        "name": "version",
+        "docker": "",
+        "max_attempts": 0,
+        "type": "standard",
+        "id": 46,
+        "value": 40,
+        "description": "\nLe serveur ftp vstfp sur le serveur sur IPSERVER a été équipé d'une backdoor. Vérifie la version du serveur.\nPour cela connecte toi avec un netcat sur le serveur\n```\nnc IPSERVEUR port\n```"
+    },
+    {
+        "category": "Exploit",
+        "state": "visible",
+        "requirements": "null",
+        "name": "vsftp2",
+        "docker": "",
+        "max_attempts": 0,
+        "type": "standard",
+        "id": 47,
+        "value": 40,
+        "description": "\nPour activer la backdoor, connecte-toi avec un nom d'utilisateur se terminant par un smiley :)</br>\nTon shell va se geler.</br>\nUne backdoor est ouverte sur le port 6200 en tcp. Utilise un netcat pour y accéder..."
     }
 ], "meta": {}}
