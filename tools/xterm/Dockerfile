@@ -3,7 +3,7 @@ FROM node:8
 RUN apt-get update && apt-get install -y net-tools netcat john
 
 RUN adduser yolo
-USER yolo
+
 
 # Set the working directory
 WORKDIR /usr/src/app
@@ -15,16 +15,18 @@ CMD ["npm", "run", "start"]
 
 # First, install dependencies to improve layer caching
 COPY package.json /usr/src/app/
+
 RUN npm install
 
 # Add the code
-COPY . /usr/src/app
+COPY --chown=yolo:yolo . /usr/src/app
 
 
 RUN echo "cd" >> ~/.bashrc
 
 
 # Run the tests and build, to make sure everything is working nicely
-RUN npm run build 
-# && npm run test
+RUN npm run build && npm run test
 
+RUN chown -R yolo:yolo /usr/src/app/
+USER yolo

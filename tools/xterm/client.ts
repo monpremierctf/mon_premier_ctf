@@ -212,10 +212,10 @@ function initOptions(term: TerminalType): void {
   options.filter(o => blacklistedOptions.indexOf(o) === -1).forEach(o => {
     switch (typeof term.getOption(o)) {
       case 'boolean':
-        //booleanOptions.push(o);
+        // booleanOptions.push(o);
         break;
       case 'number':
-        if ( (o==="cols")||(o==="rows")||(o==="fontSize")) {
+        if ( (o === 'cols') || (o === 'rows') || (o === 'fontSize')) {
           numberOptions.push(o);
         }
         break;
@@ -256,7 +256,7 @@ function initOptions(term: TerminalType): void {
   container.innerHTML = html;
 
   // Attach listeners
-  
+
   booleanOptions.forEach(o => {
     const input = <HTMLInputElement>document.getElementById(`opt-${o}`);
     addDomListener(input, 'change', () => {
