@@ -77,6 +77,7 @@ const disposeRecreateButtonHandler = () => {
 document.getElementById('dispose').addEventListener('click', disposeRecreateButtonHandler);
 
 function createTerminal(): void {
+  const urlPrefix = 'URLPREFIX';
   // Clean terminal
   while (terminalContainer.children.length) {
     terminalContainer.removeChild(terminalContainer.children[0]);
@@ -92,12 +93,12 @@ function createTerminal(): void {
     }
     const cols = size.cols;
     const rows = size.rows;
-    const url = '/terminals/' + pid + '/size?cols=' + cols + '&rows=' + rows;
+    const url = urlPrefix + '/terminals/' + pid + '/size?cols=' + cols + '&rows=' + rows;
 
     fetch(url, {method: 'POST'});
   });
   protocol = (location.protocol === 'https:') ? 'wss://' : 'ws://';
-  socketURL = protocol + location.hostname + ((location.port) ? (':' + location.port) : '') + '/terminals/';
+  socketURL = protocol + location.hostname + ((location.port) ? (':' + location.port) : '') + urlPrefix + '/terminals/';
 
   term.open(terminalContainer);
 
@@ -130,7 +131,7 @@ function createTerminal(): void {
     // Set terminal size again to set the specific dimensions on the demo
     updateTerminalSize();
 
-    fetch('/terminals?cols=' + term.cols + '&rows=' + term.rows, {method: 'POST'}).then((res) => {
+    fetch(urlPrefix + '/terminals?cols=' + term.cols + '&rows=' + term.rows, {method: 'POST'}).then((res) => {
       res.text().then((processId) => {
         pid = processId;
         socketURL += processId;
