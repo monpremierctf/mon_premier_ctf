@@ -8,8 +8,8 @@ services:
   webserver_nginx:
     image: nginx:latest
     container_name: webserver_nginx
-    ports:
-      - "8888:80"
+    #ports:
+    #  - "8888:80"
     networks:
       - webserver_webLAN
     volumes:

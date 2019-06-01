@@ -9,8 +9,8 @@ services:
     image: ubuntu:latest
     #build: ./ 
     container_name: challenge-box-provider
-    ports:
-      - "9080:8080"
+    #ports:
+    #  - "9080:8080"
     networks:
         - webserver_webLAN
     labels:
