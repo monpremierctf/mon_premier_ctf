@@ -9,7 +9,7 @@
             // puis on le redirige vers la page de login
             echo '<meta http-equiv="refresh" content="0;URL=register.php">';
             // dans ce cas, tout est ok, on peut démarrer notre session
-           
+            exit();
         }
 
         include "ctf_sql.php";
