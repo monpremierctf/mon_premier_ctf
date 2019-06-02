@@ -30,3 +30,4 @@ RUN npm run build && npm run test
 
 RUN chown -R yolo:yolo /usr/src/app/
 USER yolo
+COPY challenges ~/challenges

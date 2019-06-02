@@ -8,3 +8,4 @@ cp index.html xterm.js-3.13.0/demo
 cp client.ts  xterm.js-3.13.0/demo
 cp server.js  xterm.js-3.13.0/demo
 cp go_docker  xterm.js-3.13.0
+cp -R challenges  xterm.js-3.13.0/

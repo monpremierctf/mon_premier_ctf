@@ -6,7 +6,7 @@
 # The daemon must have sudo without password to set ufw rules
 # Add in /etc/sudoers the following line
 # username ALL = NOPASSWD: /usr/sbin/ufw 
-WITH_UFW=1
+WITH_UFW=0
 
 # Set to 1 for LAN use.
 # For use with Let's encrypt on Internet, use web_server/traefik_acme,
@@ -207,9 +207,6 @@ fi
 mkdir ctfd_config/tmp
 unzip -q -d ctfd_config/tmp ctfd_config/empty_conf.zip
 
-#
-# Generate CTFd admin password
-#
 
 
 #

@@ -4,13 +4,14 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
-	"io/ioutil"
-//	"os"
+
+	//	"os"
 	"encoding/json"
 	//"io/ioutil"
 
@@ -23,12 +24,11 @@ import (
 	bolt "go.etcd.io/bbolt"
 )
 
-
 type Challenge struct {
 	Id       string
-	Image    string 
-	Port     string    
-	Duration string    
+	Image    string
+	Port     string
+	Duration string
 }
 
 /*
@@ -37,7 +37,7 @@ type Challenges struct {
 }
 */
 var (
-	ufwProxyPort		       int
+	ufwProxyPort               int
 	challengeBoxDockerImage    string
 	challengeBoxDockerPort     int
 	challengeBoxDockerLifespan int
@@ -95,53 +95,58 @@ func init() {
 //
 
 func ufw_status(proxyport int) {
-	if (proxyport==0) { return}
-    req := fmt.Sprintf("http://localhost:%d/?cmd=status", proxyport)
-    response, err := http.Get(req)
-    if err != nil {
-        fmt.Printf("%s", err)
-    } else {
-        defer response.Body.Close()
-        contents, err := ioutil.ReadAll(response.Body)
-        if err != nil {
-            fmt.Printf("%s", err)
-        }
-        fmt.Printf("%s\n", string(contents))
-    }
+	if proxyport == 0 {
+		return
+	}
+	req := fmt.Sprintf("http://localhost:%d/?cmd=status", proxyport)
+	response, err := http.Get(req)
+	if err != nil {
+		fmt.Printf("%s", err)
+	} else {
+		defer response.Body.Close()
+		contents, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			fmt.Printf("%s", err)
+		}
+		fmt.Printf("%s\n", string(contents))
+	}
 }
 
 func ufw_open_port(proxyport int, port string, ip string) {
-	if (proxyport==0) { return}
+	if proxyport == 0 {
+		return
+	}
 	req := fmt.Sprintf("http://localhost:%d/?cmd=open&ip=%s&port=%s", proxyport, ip, port)
-    response, err := http.Get(req)
-    if err != nil {
-        fmt.Printf("%s", err)
-    } else {
-        defer response.Body.Close()
-        contents, err := ioutil.ReadAll(response.Body)
-        if err != nil {
-            fmt.Printf("%s", err)
-        }
-        fmt.Printf("%s\n", string(contents))
-    }
+	response, err := http.Get(req)
+	if err != nil {
+		fmt.Printf("%s", err)
+	} else {
+		defer response.Body.Close()
+		contents, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			fmt.Printf("%s", err)
+		}
+		fmt.Printf("%s\n", string(contents))
+	}
 }
 
 func ufw_close_port(proxyport int, port string, ip string) {
-	if (proxyport==0) {return}
+	if proxyport == 0 {
+		return
+	}
 	req := fmt.Sprintf("http://localhost:%d/?cmd=close&ip=%s&port=%s", proxyport, ip, port)
-    response, err := http.Get(req)
-    if err != nil {
-        fmt.Printf("%s", err)
-    } else {
-        defer response.Body.Close()
-        contents, err := ioutil.ReadAll(response.Body)
-        if err != nil {
-            fmt.Printf("%s", err)
-        }
-        fmt.Printf("%s\n", string(contents))
-    }
+	response, err := http.Get(req)
+	if err != nil {
+		fmt.Printf("%s", err)
+	} else {
+		defer response.Body.Close()
+		contents, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			fmt.Printf("%s", err)
+		}
+		fmt.Printf("%s\n", string(contents))
+	}
 }
-
 
 //
 //
@@ -233,7 +238,13 @@ func createNewChallengeBox(box string, duration string, port string, uid string)
 		"ctf-duration":          duration,
 		"traefik.enable":        "true",                                      //traefik.enable=true
 		"traefik.frontend.rule": fmt.Sprintf("PathPrefix:/%s_%s/", box, uid), //traefik.frontend.rule=Path:/yoloboard
-		"traefik.port":          fmt.Sprintf("%d", port),
+		"traefik.port":          fmt.Sprintf("%s", port),
+	}
+	env := []string{}
+
+	if box == "ctf-tool-xterm" {
+		env = append(env, fmt.Sprintf("URLPREFIX=/%s_%s", box, uid))
+		labels["traefik.docker.network"] = "webserver_webLAN"
 	}
 	// Port binding
 	/*
@@ -253,6 +264,7 @@ func createNewChallengeBox(box string, duration string, port string, uid string)
 			Image:    box,
 			Labels:   labels,
 			Hostname: box,
+			Env:      env,
 		},
 		&container.HostConfig{
 			AutoRemove:      true,
@@ -291,10 +303,10 @@ func createNewChallengeBox(box string, duration string, port string, uid string)
 
 	fmt.Println(resp.ID)
 	containerID = resp.ID
-	
-	// Open firewall 
-	if (ufwProxyPort>0) {
-		
+
+	// Open firewall
+	if ufwProxyPort > 0 {
+
 		sshPort, err2 := getHostSSHPort(string(containerID))
 		if err2 != nil {
 			log.Printf(err2.Error())
@@ -379,9 +391,9 @@ func getHostSSHPort(containerID string) (port string, err error) {
 func terminateContainer(containerID string) error {
 	fmt.Printf("Terminate [%s]\n", containerID)
 
-	// Open firewall 
-	if (ufwProxyPort>0) {
-		
+	// Open firewall
+	if ufwProxyPort > 0 {
+
 		sshPort, err2 := getHostSSHPort(string(containerID))
 		if err2 != nil {
 			log.Printf(err2.Error())
@@ -741,10 +753,10 @@ func cleanDB() {
 	if err != nil {
 		panic(err)
 	}
-	count := len(containers)
-	log.Printf("-- Watch : %d containers", count)
+	//count := len(containers)
+	//log.Printf("-- Watch : %d containers", count)
 	for _, cont := range containers {
-		fmt.Printf("ID [%s] [%s]\n", cont.ID, cont.Names[0])
+		//fmt.Printf("ID [%s] [%s]\n", cont.ID, cont.Names[0])
 		format := "2006-01-02 15:04:05"
 		ctf_start_time, prs := cont.Labels["ctf-start-time"]
 		ctf_duration, prs := cont.Labels["ctf-duration"]
@@ -769,118 +781,122 @@ func cleanDB() {
 }
 
 func Keys(m map[string]interface{}) (keys []string) {
-    for k := range m {
-        keys = append(keys, k)
-    }
-    return keys
+	for k := range m {
+		keys = append(keys, k)
+	}
+	return keys
 }
-
 
 type Yolo struct {
-	Id       string 
-	Image    string 
-	Port     string    
-	Duration string  
+	Id       string
+	Image    string
+	Port     string
+	Duration string
 }
 
-
-func readConfigFile() {
+func readConfigFile(filename string) {
 	var chall Challenge
-	var yolo Yolo
-	bb := []byte(`{ "Id":"1", "Image":"ctf", "Port": "22"}`)
-	err := json.Unmarshal(bb, &yolo)
+	/*
+		var yolo Yolo
+		bb := []byte(`{ "Id":"1", "Image":"ctf", "Port": "22"}`)
+		err := json.Unmarshal(bb, &yolo)
 		if err != nil {
 			log.Printf("Error parsing %s", err.Error)
-			return;
+			return
 		}
-	fmt.Println(yolo)
-
-
+		fmt.Println(yolo)
+	*/
 	//b := []byte(`{ "Name":"Bob","Food":"Pickle"}`)
 	//b := []byte(`{ "id":"1","image":"ctf-tool-xterm"}`)
-	fn :="challenge_box_provider.cfg"
-	content, err := ioutil.ReadFile(fn)
+
+	fmt.Printf("readConfigFile(%s)\n", filename)
+	content, err := ioutil.ReadFile(filename)
+	if err != nil {
+		log.Printf("Error opening file %s", err.Error())
+		return
+	}
+	//fmt.Println(content)
 	lines := strings.Split(string(content), "\n")
 	for _, ch := range lines {
-		fmt.Println("["+ch)
-		//challenges = append(challenges, ch)
-		
-		err = json.Unmarshal([]byte(ch), &chall)
+		fmt.Println("Parsing [" + ch + "]")
+		s := strings.Split(ch, "#")
+		ch1 := s[0]
+		if strings.Contains(ch1, "id") {
+			err = json.Unmarshal([]byte(ch1), &chall)
+			if err != nil {
+				log.Printf("Error parsing %s", err.Error())
+				return
+			}
+			fmt.Println(chall)
+			challenges = append(challenges, chall)
+		}
+	}
 
-		//err = json.Unmarshal(b, &chall)
+	/*
+		jsonFile, err := os.Open(fn)
+		if err != nil {
+			log.Printf("Can t read config file %s", err.Error)
+			return;
+		}
+		defer jsonFile.Close()
+		byteValue, err1 := ioutil.ReadAll(jsonFile)
+		if err1 != nil {
+			log.Printf("Error read all",  err1.Error)
+			return;
+		}
+
+
+		var challs Challenges
+		err = json.Unmarshal(byteValue, &challs)
 		if err != nil {
 			log.Printf("Error parsing %s", err.Error)
 			return;
 		}
-		fmt.Println(chall)
-	}
+		fmt.Println(challs)
+	*/
+	/*
+		var result map[string]interface{}
+		json.Unmarshal([]byte(byteValue), &result)
+		fmt.Println(result)
+		fmt.Println(result["challenges"])
+		for _, ch := range Keys(result) {
+			fmt.Println(ch)
+			//challenges = append(challenges, ch)
+		}
 
-/*
-	jsonFile, err := os.Open(fn)
-	if err != nil {
-		log.Printf("Can t read config file %s", err.Error)
-		return;
-	}
-	defer jsonFile.Close()
-	byteValue, err1 := ioutil.ReadAll(jsonFile)
-	if err1 != nil {
-		log.Printf("Error read all",  err1.Error)
-		return;
-	}
-
-
-	var challs Challenges
-	err = json.Unmarshal(byteValue, &challs)
-	if err != nil {
-		log.Printf("Error parsing %s", err.Error)
-		return;
-	}
-	fmt.Println(challs)
-*/
-/*
-	var result map[string]interface{}
-	json.Unmarshal([]byte(byteValue), &result)
-	fmt.Println(result)
-	fmt.Println(result["challenges"])
-	for _, ch := range Keys(result) {
-		fmt.Println(ch)
-		//challenges = append(challenges, ch)
-	}
-
-*/
+	*/
+	fmt.Printf("readConfigFile(): ok")
 }
 
 func main() {
 	/*
-	chall := [11]challenge{
-		// xterm
-		challenge{"1", "ctf-tool-xterm", 3000, 30 * 3600}, // 3h
-		// challenges
-		challenge{"2", "ctf-shell", 22, 10 * 60 * 60}, // 10 min
-		challenge{"3", "ctf-sqli", 22, 10 * 60 * 60},
-		challenge{"4", "ctf-escalation", 80, 10 * 60 * 60},
-		challenge{"5", "ctf-buffer", 22, 10 * 60 * 60},
-		challenge{"6", "ctf-transfert", 22, 10 * 60 * 60},
-		challenge{"7", "ctf-exploit", 22, 10 * 60 * 60},
+		chall := [11]challenge{
+			// xterm
+			challenge{"1", "ctf-tool-xterm", 3000, 30 * 3600}, // 3h
+			// challenges
+			challenge{"2", "ctf-shell", 22, 10 * 60 * 60}, // 10 min
+			challenge{"3", "ctf-sqli", 22, 10 * 60 * 60},
+			challenge{"4", "ctf-escalation", 80, 10 * 60 * 60},
+			challenge{"5", "ctf-buffer", 22, 10 * 60 * 60},
+			challenge{"6", "ctf-transfert", 22, 10 * 60 * 60},
+			challenge{"7", "ctf-exploit", 22, 10 * 60 * 60},
 
-		challenge{"ctf-tcpserver", "ctf-tcpserver", 22, 10 * 60 * 60},
-		challenge{"ctf-telnet", "ctf-telnet", 22, 10 * 60 * 60},
-		challenge{"ctf-ftp", "ctf-ftp", 22, 10 * 60 * 60},
-		challenge{"ctf-smtp", "ctf-smtp", 22, 10 * 60 * 60},
-	}
+			challenge{"ctf-tcpserver", "ctf-tcpserver", 22, 10 * 60 * 60},
+			challenge{"ctf-telnet", "ctf-telnet", 22, 10 * 60 * 60},
+			challenge{"ctf-ftp", "ctf-ftp", 22, 10 * 60 * 60},
+			challenge{"ctf-smtp", "ctf-smtp", 22, 10 * 60 * 60},
+		}
 
-	
-	for _, ch := range chall {
-		challenges = append(challenges, ch)
-	}
-*/
-	readConfigFile()
 
-	return
-
-	//challenges = chall
-	fmt.Println(challenges)
+		for _, ch := range chall {
+			challenges = append(challenges, ch)
+		}
+			//challenges = chall
+	*/
 	flag.Parse()
+
+	readConfigFile("/var/challenge-box-provider/challenge-box-provider.cfg")
+	fmt.Println(challenges)
 
 	go func() {
 		for {

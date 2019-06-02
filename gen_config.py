@@ -158,10 +158,10 @@ def add_flag(flag):
         "data": ""}
     )
 
-def copy_file(challenge_dir, filename):
+def copy_file(dest_dir, challenge_dir, filename):
     src = challenge_dir+"/"+filename
     dst = challenge_dir+"/"+filename
-    dst_tmp = "ctfd_config/tmp/uploads/"+dst
+    dst_tmp = dest_dir+dst
     directory = os.path.dirname(dst_tmp)
     if not os.path.exists(directory):
         os.makedirs(directory)
@@ -175,7 +175,8 @@ def add_file(challenge_dir, filename):
     global challenge_id
     global file_id
     file_id+=1
-    filename_dest = copy_file(challenge_dir, filename)
+    copy_file("tools/xterm/challenges/", challenge_dir, filename)
+    filename_dest = copy_file("ctfd_config/tmp/uploads/", challenge_dir, filename)
     files.append({
         "id": int(file_id), 
         "type": "challenge", 
@@ -220,6 +221,8 @@ def parse_dir(challenge_dir):
         add_flag(flag)
         add_file(challenge_dir, filename) 
 
+
+
 if __name__ == '__main__':
     read_challenges_dir_list()
     for challenge_dir in challenges_dir_list:
@@ -255,3 +258,4 @@ if __name__ == '__main__':
                         separators=(',', ': '), ensure_ascii=False)
         outfile.write(unicode(str_))
         outfile.write(unicode(', "meta": {}}'))
+

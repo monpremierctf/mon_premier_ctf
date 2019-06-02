@@ -12,5 +12,6 @@ web_server/www_site/yoloctf/db/*
 web_server/www_site/yoloctf/uploads/*
 web_server/traefik/certs/*
 tools/xterm/xterm.js-3.13.0/*
+tools/xterm/challenges/*
 ctfd_config/tmp/*
 
