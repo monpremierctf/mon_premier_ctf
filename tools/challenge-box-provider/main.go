@@ -268,7 +268,7 @@ func createNewChallengeBox(box string, duration string, port string, uid string)
 		},
 		&container.HostConfig{
 			AutoRemove:      true,
-			PublishAllPorts: true,
+			PublishAllPorts: false,
 			//PortBindings: portBinding,
 		},
 		nil,
@@ -293,6 +293,12 @@ func createNewChallengeBox(box string, duration string, port string, uid string)
 		nid, _ = createNewUserNet(uid, 3600)
 	}
 	if err := dockerClient.NetworkConnect(ctx, nid, resp.ID, nil); err != nil {
+		panic(err)
+	}
+
+	// Remove default network : bridge
+	nid = getNetworkId("bridge")
+	if err := dockerClient.NetworkDisconnect(ctx, nid, resp.ID, true); err != nil {
 		panic(err)
 	}
 
