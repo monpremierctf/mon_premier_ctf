@@ -15,10 +15,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.toml:/traefik.toml
       - ./acme.json:/acme.json
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:/dashboard/"
-      - "traefik.port: 8000"
     container_name: traefik
     logging:
       driver: "json-file"
