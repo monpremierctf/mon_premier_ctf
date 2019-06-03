@@ -22,7 +22,7 @@ RUN npm install
 COPY --chown=yolo:yolo . /usr/src/app
 
 
-RUN echo "cd" >> ~/.bashrc
+
 
 
 # Run the tests and build, to make sure everything is working nicely
@@ -30,4 +30,5 @@ RUN npm run build && npm run test
 
 RUN chown -R yolo:yolo /usr/src/app/
 USER yolo
-COPY challenges ~/challenges
+RUN echo "cd" >> ~/.bashrc
+COPY --chown=yolo:yolo challenges /home/yolo/challenges
