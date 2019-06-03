@@ -27,6 +27,10 @@ exposedByDefault = false
 email = "admin@yoloctf.org"
 storage = "acme.json"
 entryPoint = "https"
-onHostRule = true
+#onHostRule = true
+
 [acme.httpChallenge]
 entryPoint = "http"
+
+[[acme.domains]]
+main = "yoloctf.org"
