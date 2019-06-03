@@ -30,5 +30,5 @@ RUN npm run build && npm run test
 
 RUN chown -R yolo:yolo /usr/src/app/
 USER yolo
-RUN echo "cd" >> ~/.bashrc
+RUN echo "cd" >> /home/yolo/.bashrc
 COPY --chown=yolo:yolo challenges /home/yolo/challenges
