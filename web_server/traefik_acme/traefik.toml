@@ -28,6 +28,8 @@ email = "admin@yoloctf.org"
 storage = "acme.json"
 entryPoint = "https"
 #onHostRule = true
+caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
+acmeLogging = true
 
 [acme.httpChallenge]
 entryPoint = "http"
