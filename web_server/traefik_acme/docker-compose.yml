@@ -20,6 +20,11 @@ services:
       - "traefik.frontend.rule=PathPrefix:/dashboard/"
       - "traefik.port: 8000"
     container_name: traefik
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "1"
     
 
 networks:
