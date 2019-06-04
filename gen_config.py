@@ -194,6 +194,9 @@ def getParam(config, section, param):
     return value
 
 
+def copy_intro_to_webserver(challenge_dir):
+    if os.path.isfile(challenge_dir+"/challenges_intro.md"):
+        copy_file("web_server/www_site/yoloctf/intro/", challenge_dir, "challenges_intro.md")
 
 def parse_dir(challenge_dir):   
     config = ConfigParser.ConfigParser()
@@ -228,6 +231,7 @@ if __name__ == '__main__':
     for challenge_dir in challenges_dir_list:
         print "Enter ["+challenge_dir+"]"
         parse_dir(challenge_dir)
+        copy_intro_to_webserver(challenge_dir)
 
     out_dir = "ctfd_config/tmp/db/"
     directory = os.path.dirname(out_dir)

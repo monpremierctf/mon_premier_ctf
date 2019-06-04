@@ -1,6 +1,6 @@
 FROM node:8
 
-RUN apt-get update && apt-get install -y net-tools netcat john
+RUN apt-get update && apt-get install -y net-tools 
 
 RUN adduser yolo
 

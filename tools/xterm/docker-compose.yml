@@ -3,7 +3,7 @@ version: "3"
 services:
   xtermjs:
     build: .
-    image: ctf-tool-xterm
+    image: tool-xterm
     volumes:
       - ./:/usr/src/app
     ports:

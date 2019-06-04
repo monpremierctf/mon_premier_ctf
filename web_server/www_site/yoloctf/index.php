@@ -48,8 +48,26 @@
         <div class="container">
 
         <?php
+
+/*
+            function print_ctf_intro($challenge){
+                // Check challenge name
+                echo "$challenge";
+                if (in_array($challenge, getCategories())) {
+                    $filename = "intro/".$challenge."/challenges_intro.md";
+                    echo $filename;
+                    if (file_exists($filename)) {
+                        $string = file_get_contents($filename);
+                        print $Parsedown->text($string);
+                    }
+                }
+            }
+  */              
+
+            
             $p = $_GET['p'];
             if ($p==="Ghost in the Shell") {
+                //print_ctf_intro($p);
                 $string = file_get_contents("head_shell.md");
                 print $Parsedown->text($string);
                 ctf_div_server_status(2);

@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+  ctf-tool-xterm:
+    build: .
+    image: ctf-tool-xterm
+
