@@ -25,6 +25,17 @@ function dumpChallengesNames(){
 }
 
 
+function getChallengeById($challId){
+  global $challenges;
+  foreach ($challenges['results'] as $c) {
+    if ($c['id']==$challId){
+      return $c;
+    }
+  }
+  return null;
+}
+
+
 function isFlagValid($id, $flag){
   global $flags;
   foreach ($flags['results'] as $f) {
@@ -100,7 +111,7 @@ function html_dump_cat($cat) {
         
         // titre
         print '<div class="row chall-titre bg-secondary text-white">';
-        print ($c['name']);
+        print ($c['name'].'  --  ['.$c['value'].']');
         print "</div>";
         // Description
         print '<div class="container chall-desc">';

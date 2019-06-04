@@ -38,7 +38,7 @@
 <?php
     include "Parsedown.php";
     $Parsedown = new Parsedown();
-    include 'header.php'; 
+	include 'header.php'; 
 ?>
 
 
@@ -99,7 +99,14 @@ echo "{
 							//UID,CHALLID, fdate, isvalid, flag
 							//var_dump($row);
 							//printf ("%s (%s) (%s) (%s)</br>", $frow['UID'], $frow['flag'], $frow['isvalid'], $frow['fdate']);
-							if ($frow['isvalid']) { $count++;}
+							if ($frow['isvalid']) { 
+								$chall = getChallengeById($frow['CHALLID']);
+								if ($chall!=null){
+									$count+=$chall['value'];
+								} else {
+								    $count++;
+								}
+							}
 							$dd = $frow['fdate'];
 							$format = '%Y-%m-%d %H:%M:%S'; // 
 							//$dd = '2019-05-18 15:32:15';
@@ -243,73 +250,10 @@ echo "{
 			window.myLine = new Chart(ctx, config);
 
 		};
+	
 
-		document.getElementById('randomizeData').addEventListener('click', function() {
-			config.data.datasets.forEach(function(dataset) {
-				dataset.data.forEach(function(dataObj, j) {
-					if (typeof dataObj === 'object') {
-						dataObj.y = randomScalingFactor();
-					} else {
-						dataset.data[j] = randomScalingFactor();
-					}
-				});
-			});
 
-			window.myLine.update();
-		});
 
-		var colorNames = Object.keys(window.chartColors);
-		document.getElementById('addDataset').addEventListener('click', function() {
-			var colorName = colorNames[config.data.datasets.length % colorNames.length];
-			var newColor = window.chartColors[colorName];
-			var newDataset = {
-				label: 'Dataset ' + config.data.datasets.length,
-				borderColor: newColor,
-				backgroundColor: color(newColor).alpha(0.5).rgbString(),
-				data: [],
-			};
-
-			for (var index = 0; index < config.data.labels.length; ++index) {
-				newDataset.data.push(randomScalingFactor());
-			}
-
-			config.data.datasets.push(newDataset);
-			window.myLine.update();
-		});
-
-		document.getElementById('addData').addEventListener('click', function() {
-			if (config.data.datasets.length > 0) {
-				config.data.labels.push(newDate(config.data.labels.length));
-
-				for (var index = 0; index < config.data.datasets.length; ++index) {
-					if (typeof config.data.datasets[index].data[0] === 'object') {
-						config.data.datasets[index].data.push({
-							x: newDate(config.data.datasets[index].data.length),
-							y: randomScalingFactor(),
-						});
-					} else {
-						config.data.datasets[index].data.push(randomScalingFactor());
-					}
-				}
-
-				window.myLine.update();
-			}
-		});
-
-		document.getElementById('removeDataset').addEventListener('click', function() {
-			config.data.datasets.splice(0, 1);
-			window.myLine.update();
-		});
-
-		document.getElementById('removeData').addEventListener('click', function() {
-			config.data.labels.splice(-1, 1); // remove the label first
-
-			config.data.datasets.forEach(function(dataset) {
-				dataset.data.pop();
-			});
-
-			window.myLine.update();
-		});
 	</script>
 
 <?php

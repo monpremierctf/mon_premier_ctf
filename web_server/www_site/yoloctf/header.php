@@ -14,7 +14,7 @@ if (isset($_SESSION['login'] )) {
     <script>
     $(document).ready(function() {
         $("#Logout").click(function(){
-            alert("Logout");
+            alert("Deconnection");
             window.location.href = "logout.php";
         }); 
     });

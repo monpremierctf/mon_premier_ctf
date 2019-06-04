@@ -101,11 +101,13 @@
 		  <input type="text" class="col-6 form-control" id="mail" name="mail">
           <label for="usr" class="col-2"></label>
         </div>
+        <!---
         <div class="form-group text-left  row ">
 		  <label for="usr" class="col-2">Pseudo</label>
 		  <input type="text" class="col-6 form-control" id="pseudo" name="pseudo">
           <label for="usr" class="col-2">Le Pseudo à afficher sur le tableau de score à la place du login.</label>
-		</div>
+        </div>
+        -->
         <div class="form-group text-left  row ">
 		  <label for="usr" class="col-2">Code Invitation (*)</label>
 		  <input type="text" class="col-6 form-control" id="code" name="code">
