@@ -160,9 +160,9 @@ function runFakeTerminal(): void {
     term.write('\r\n$ ');
   };
 
-  term.writeln('Welcome to xterm.js');
-  term.writeln('This is a local terminal emulation, without a real terminal in the back-end.');
-  term.writeln('Type some keys and commands to play around.');
+  term.writeln('-- Yolo Xterm --');
+  term.writeln('Probleme de connection au serveur: Temps de connection trop long...');
+  term.writeln('veuillez recharger la page.');
   term.writeln('');
   term.prompt();
 
