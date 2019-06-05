@@ -694,6 +694,68 @@ func oldcleanDB() {
 
 }
 
+
+
+func stopChallengeBox(w http.ResponseWriter, r *http.Request) {
+
+	// Get uid
+	uids, ok := r.URL.Query()["uid"]
+	if !ok || len(uids[0]) < 1 {
+		log.Println("stopChallengeBox 'uid' is missing")
+		fmt.Fprintf(w, "ko")
+		return
+	}
+	uid := uids[0]
+	log.Println("stopChallengeBox 'uid' is: " + string(uid))
+
+	// Is uid allowed ?
+
+	// get Cid
+	cids, ok := r.URL.Query()["cid"]
+	if !ok || len(cids[0]) < 1 {
+		log.Println("stopChallengeBox'cid' is missing")
+		fmt.Fprintf(w, "ko")
+		return
+	}
+	cid := cids[0]
+	log.Println("stopChallengeBox 'cid' is: " + string(cid))
+
+	// find entry
+	var cindex int = -1
+	for index, chall := range challenges {
+		log.Println("Search: " + string(chall.Id))
+		if chall.Id == cid {
+			cindex = index
+		}
+	}
+	if cindex == -1 {
+
+		log.Println("cid not found : " + string(cid))
+		fmt.Fprintf(w, "ko")
+		return
+	}
+
+	// Existe ?
+	boxID := getChallengeBox(
+		challenges[cindex].Image,
+		uid,
+	)
+
+	// Stop
+	if boxID != "" {
+		err := cli.ContainerStop(ctx, boxID, nil); 
+		if err != nil {
+			fmt.Fprintf(w, "Problem stopping")
+
+		} else {
+			fmt.Fprintf(w, "Stopped")
+		}
+		return
+	}
+	fmt.Fprintf(w, "Cant find box")
+}
+
+
 func statusChallengeBox(w http.ResponseWriter, r *http.Request) {
 
 	// Get uid
@@ -924,6 +986,7 @@ func main() {
 	//http.HandleFunc("/createUserTerm/", createUserTerm)
 	http.HandleFunc("/createChallengeBox/", createChallengeBox)
 	http.HandleFunc("/statusChallengeBox/", statusChallengeBox)
+	http.HandleFunc("/stopChallengeBox/", stopChallengeBox)
 	//fmt.Printf("Net id =%s ==", getNetworkId("22"))
 	log.Fatal(http.ListenAndServe(httpServerListener, nil))
 

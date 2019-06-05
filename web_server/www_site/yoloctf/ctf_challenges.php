@@ -111,7 +111,12 @@ function html_dump_cat($cat) {
         
         // titre
         print '<div class="row chall-titre bg-secondary text-white">';
-        print ($c['name'].'  --  ['.$c['value'].']');
+          print '<div class="col-sm text-left">';
+          print ($c['name']);
+          print "</div>";
+          print '<div class="col-sm text-right">';
+          print ($c['value']);
+          print "</div>";
         print "</div>";
         // Description
         print '<div class="container chall-desc">';
@@ -177,7 +182,7 @@ function ctf_div_server_status($id) {
 //echo 'REMOTE_ADDR='.$_SERVER['REMOTE_ADDR'].'</br>';
 //echo 'HTTP_HOST='.$_SERVER['HTTP_HOST'].'</br>';
 echo '     
-<p>Allez sur votre terminal.</p>
+<p></p>
 <p>Démarrez votre serveur dédié en cliquant sur [Start server].</p>
 </br>
 <p id="ServerStatus'.$id.'">Server status : stopped</p>
@@ -186,23 +191,57 @@ echo '
 <button type="button" class="btn btn-default btn-warning" id="StopServer'.$id.'" value="StopServer">Stop Server</button></p>
 
 <script>
+// Status at startup
 $(document).ready(function() {
+
+
+      $.get("containers_cmd.php?status='.$id.'",function(data) { 
+          if (data=="ko") {
+              $("#ServerStatus'.$id.'").html("Server status: Problem... Cant start");
+          } else  {
+             var resp = JSON.parse(data);
+             //$("#ServerStatus'.$id.'").html(resp.Name); 
+             var txt = "Server status: Running as "+resp.Name;
+             if (resp.Port  !== undefined ) { 
+               if (resp.Port  !=0) {
+                 txt = txt + "</br>Host="+window.location.host; 
+                 txt = txt + "</br>Port="+resp.Port; 
+                 //txt = txt + "</br></br>Accès avancé possible en : IP="+window.location.host+" -PORT="+resp.Port;
+               }
+             }
+             $("#ServerStatus'.$id.'").html(txt);
+          }
+      });
+
+
+
+});
+
+// Start button
+$(document).ready(function() {
+
     $("#StartServer'.$id.'").click(function(){
+        $("#ServerStatus'.$id.'").html("Server status: Starting...");
         $.get("containers_cmd.php?create='.$id.'",function(data) { 
             if (data=="ko") {
                 $("#ServerStatus'.$id.'").html("Server status: Problem... Cant start");
             } else  {
+               $("#ServerStatus'.$id.'").html(data);
                var resp = JSON.parse(data);
                //$("#ServerStatus'.$id.'").html(resp.Name); 
-               var txt = "Server status: Running as "+resp.Name;
-               if (resp.Port  !== undefined ) { 
-                 if (resp.Port  !=0) {
-                   txt = txt + "</br>Host="+window.location.host; 
-                   txt = txt + "</br>Port="+resp.Port; 
-                   //txt = txt + "</br></br>Accès avancé possible en : IP="+window.location.host+" -PORT="+resp.Port;
-                 }
-               }
-               $("#ServerStatus'.$id.'").html(txt);
+
+                var txt = "Server status: Running as "+resp.Name;
+                /*
+                if (resp.Port  !== undefined ) { 
+                  if (resp.Port  !=0) {
+                    txt = txt + "</br>Host="+window.location.host; 
+                    txt = txt + "</br>Port="+resp.Port; 
+                    //txt = txt + "</br></br>Accès avancé possible en : IP="+window.location.host+" -PORT="+resp.Port;
+                  }
+                }
+                */
+                $("#ServerStatus'.$id.'").html(txt);
+
             }
         });
 
@@ -210,6 +249,7 @@ $(document).ready(function() {
 
 });
 $(document).ready(function() {
+    // Stop button
     $("#StopServer'.$id.'").click(function(){
         $.get("/stop/",function(data) { $("#ServerStatus'.$id.'").html(data); });
     }); 

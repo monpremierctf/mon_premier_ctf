@@ -28,7 +28,10 @@
             echo $json1;
         }
         if (isset($_GET['terminate'])){
-            
+            $url = 'http://challenge-box-provider:8080/statusChallengeBox/?uid='.$_SESSION['uid'].'&cid='.$_GET['status'];
+            //echo "==".$url."";
+            $json1 = file_get_contents_curl($url);
+            echo $json1;
         }
     } else {
         echo "Merci de vous connecter.";

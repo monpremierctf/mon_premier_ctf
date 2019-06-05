@@ -31,7 +31,6 @@ if (isset($_SESSION['login'] )) {
     <script>
     $(document).ready(function() {
         $("#Login").click(function(){
-            //alert("Login");
             window.location.href = "login.php";
         }); 
     });
