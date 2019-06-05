@@ -3,9 +3,9 @@
  
 $string = file_get_contents("./db/challenges.json");
 $challenges = json_decode($string, true);
-$string = file_get_contents("db/flags.json");
+$string = file_get_contents("./db/flags.json");
 $flags = json_decode($string, true);
-$string = file_get_contents("db/files.json");
+$string = file_get_contents("./db/files.json");
 $files = json_decode($string, true);
 
 

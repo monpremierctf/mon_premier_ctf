@@ -15,10 +15,10 @@
     <?php
     include "passwd_utils.php";
 
-    if (($_POST['login']=="admin") && ($_POST['password']=="admin")) {
-        passwd_access_ok("img/ok_1.gif", "Flag_C3st_0ouv3rt");
+    if (($_POST['login']=="admin") && ($_POST['password']=="superman")) {
+        passwd_access_ok("img/ok_2.jpg", "Flag_C0mm3_d4ns_un_m0ul1n");
     } else {
-        passwd_login("Authentification V1.0", "img/guard_1.jpg");
+        passwd_login("Authentification V2.0", "img/guard_2.jpg");
     }
     ?>
 </div>
