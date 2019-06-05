@@ -240,7 +240,7 @@ chmod -R a+r web_server/www_site/yoloctf
 #cd - > /dev/null
 
 #
-# Creante docker netkorks
+# Create docker netkorks
 # 
 docker network create webserver_webLAN
 
@@ -319,7 +319,9 @@ cd - > /dev/null
 cd ctf-sqli
 docker-compose up -d
 cd - > /dev/null
-
+cd ctf-passwd
+docker-compose up -d
+cd - > /dev/null
 
 
 #
