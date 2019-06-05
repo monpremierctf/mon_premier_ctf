@@ -5,6 +5,7 @@ services:
 
   web:
     image: nginx:latest
+    container_name: ctf-sqli
     #ports:
     #  - "${PORT_HTTP}:80"
     networks:
