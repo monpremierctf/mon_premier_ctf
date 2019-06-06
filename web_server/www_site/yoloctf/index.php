@@ -48,22 +48,6 @@
         <div class="container">
 
         <?php
-
-/*
-            function print_ctf_intro($challenge){
-                // Check challenge name
-                echo "$challenge";
-                if (in_array($challenge, getCategories())) {
-                    $filename = "intro/".$challenge."/challenges_intro.md";
-                    echo $filename;
-                    if (file_exists($filename)) {
-                        $string = file_get_contents($filename);
-                        print $Parsedown->text($string);
-                    }
-                }
-            }
-  */              
-
             
             $p = $_GET['p'];
             $intro = getIntro($p);
@@ -76,59 +60,6 @@
                 }
                 html_dump_cat($intro['category']);
             }
-            /*
-            if ($p==="Ghost in the Shell") {
-                //print_ctf_intro($p);
-                $string = file_get_contents("head_shell.md");
-                print $Parsedown->text($string);
-                ctf_div_server_status(2);
-                html_dump_cat($p);
-            }
-            elseif ($p==="Privilege Escalation") {
-                $string = file_get_contents("head_pesc.md");
-                print $Parsedown->text($string);
-                ctf_div_server_status(4);
-                html_dump_cat($p);
-            }
-            elseif ($p==="Network protocol") {
-                $string = file_get_contents("head_net.md");
-                print $Parsedown->text($string);
-                html_dump_cat($p);
-            }
-            elseif ($p==="SQLi") {
-                $string = file_get_contents("head_sqli.md");
-                print $Parsedown->text($string);
-                html_dump_cat($p);
-            }
-            elseif ($p==="Buffer overflows") {
-                $string = file_get_contents("head_overflows.md");
-                print $Parsedown->text($string);
-                ctf_div_server_status(5);
-                html_dump_cat($p);
-            }
-            elseif ($p==="Decode") {
-                $string = file_get_contents("head_decode.md");
-                print $Parsedown->text($string);
-                html_dump_cat($p);
-            }
-            elseif ($p==="Exploit") {
-                $string = file_get_contents("head_exploit.md");
-                print $Parsedown->text($string);
-                ctf_div_server_status("ctf-exploit");
-                html_dump_cat($p);
-            }
-            elseif ($p==="Password") {
-                $string = file_get_contents("head_passwd.md");
-                print $Parsedown->text($string);
-                html_dump_cat($p);
-            }
-            elseif ($p==="File Upload") {
-                $string = file_get_contents("head_upload.md");
-                print $Parsedown->text($string);
-                ctf_div_server_status(6);
-                html_dump_cat($p);
-            }
-            */
             elseif ($p==="Dashboard") {
                 include "containers.php";
             }
@@ -141,8 +72,6 @@
                 print $Parsedown->text($string);
             }
 
-
-            
         ?>
          </div>
         </div>

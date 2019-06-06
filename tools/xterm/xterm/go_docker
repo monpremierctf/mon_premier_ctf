@@ -1,0 +1,3 @@
+export URLPREFIX="/xterm_23"
+docker build . -t xtermjs
+docker run --env URLPREFIX=$URLPREFIX -p 3000 --rm -l traefik.enable=true -l traefik.frontend.rule=PathPrefix:$URLPREFIX -l traefik.docker.network=webserver_webLAN --network webserver_webLAN xtermjs

@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  xtermjs:
+    build: .
+    image: tool-xterm
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - 3000
+
+
+    
