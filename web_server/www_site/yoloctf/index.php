@@ -66,6 +66,17 @@
 
             
             $p = $_GET['p'];
+            $intro = getIntro($p);
+            if ($intro!=null) {
+                $string = $intro['description'];
+                print $Parsedown->text($string);
+                print "<p class='chall-spacer'><p>";
+                if ($intro['docker']!=null){
+                    ctf_div_server_status($intro['docker']);
+                }
+                html_dump_cat($intro['category']);
+            }
+            /*
             if ($p==="Ghost in the Shell") {
                 //print_ctf_intro($p);
                 $string = file_get_contents("head_shell.md");
@@ -117,6 +128,7 @@
                 ctf_div_server_status(6);
                 html_dump_cat($p);
             }
+            */
             elseif ($p==="Dashboard") {
                 include "containers.php";
             }

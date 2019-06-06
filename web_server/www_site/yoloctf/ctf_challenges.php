@@ -7,7 +7,8 @@ $string = file_get_contents("./db/flags.json");
 $flags = json_decode($string, true);
 $string = file_get_contents("./db/files.json");
 $files = json_decode($string, true);
-
+$string = file_get_contents("./db/intros.json");
+$intros = json_decode($string, true);
 
 function getChallengeCount(){
   global $challenges;
@@ -24,6 +25,15 @@ function dumpChallengesNames(){
   }
 }
 
+function getIntro($cat){
+  global $intros;
+  foreach ($intros['results'] as $i) {
+    if ($i['category']==$cat){
+      return $i;
+    }
+  }
+  return null;
+}
 
 function getChallengeById($challId){
   global $challenges;

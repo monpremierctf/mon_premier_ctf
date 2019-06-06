@@ -117,6 +117,40 @@ def stop_challenges():
         else:
             print "no docker-compose.yml file. Pass."
 
+def isMarkdown(line):
+    if line.strip()=="</br>": 
+        return True
+    if line.strip().startswith("#"): 
+        return True
+    if line.strip().startswith(("```")): 
+        return True
+    if line.strip().startswith(("-")): 
+        return True
+    if line.strip().startswith(("*")): 
+        return True
+    return False
+
+UNIX_NEWLINE = '\n'
+WINDOWS_NEWLINE = '\r\n'
+MAC_NEWLINE = '\r'
+def replace_crlf_by_br(buf):
+    out=""
+    buf = buf.replace(WINDOWS_NEWLINE, UNIX_NEWLINE)
+    buf = buf.replace(MAC_NEWLINE, UNIX_NEWLINE)
+    num=0
+    for line in buf.splitlines():
+        #print "test ["+line+"]"
+        # ignore first line if empty
+        if not (len(line)==0 and num==0):
+            if (isMarkdown(line)):
+                print "Marksown found"
+                out = out+line+UNIX_NEWLINE
+            else:
+                print "Add br"
+                out = out+line+"</br>"+UNIX_NEWLINE
+        num = num+1
+    return out
+
 #
 # Populate global lists (challenges, flags, files) while reading file challenges.cfg
 # in each directory
@@ -128,21 +162,34 @@ flag_id=0
 files=[]
 file_id=0
 
+intros=[]
+
+def add_intro(challenge_dir, label, desc, category, docker):
+    global intros
+    desc = replace_crlf_by_br(desc)
+    intros.append({
+        "dir": str(challenge_dir), 
+        "label": str(label), 
+        "category": str(category), 
+        "docker": str(docker),
+        "description": desc.decode('utf-8')
+    })
+
 def add_challenge(name, desc, value, category, docker):
     global challenge_id
     challenge_id+=1
     challenges.append({
-            "id": int(challenge_id), 
-            "name": str(name), 
-            "description": str(desc), 
-            "max_attempts": 0, 
-            "value": int (value), 
-            "category": str(category), 
-            "type": "standard", 
-            "state": "visible", 
-            "requirements": "null",
-            "docker": str(docker)
-        })
+        "id": int(challenge_id), 
+        "name": str(name), 
+        "description": str(desc), 
+        "max_attempts": 0, 
+        "value": int (value), 
+        "category": str(category), 
+        "type": "standard", 
+        "state": "visible", 
+        "requirements": "null",
+        "docker": str(docker)
+    })
 
 def add_flag(flag):
     if flag=='':
@@ -205,24 +252,33 @@ def parse_dir(challenge_dir):
 
     for challenge in config.sections():
         print "- Processing "+challenge
-        name = config.get(challenge, 'name')
-        #name = name.encode('string-escape')
-        desc = config.get(challenge, 'description')
-        desc = desc.replace("IPSERVER", IPSERVER)
-        #print(desc)
-        #desc_enc = desc.encode('string-escape') #unicode-escape
-        #print(desc_enc)
-        value = config.get(challenge, 'value')
-        category = config.get(challenge, 'category')
-        #category = category.encode('string-escape')
-        filename = getParam(config, challenge, 'file')
-        flag = getParam(config, challenge, 'flag')
-        docker = getParam(config, challenge, 'docker')
-        #print(name)
-        #print (description)
-        add_challenge(name, desc, value, category,docker)
-        add_flag(flag)
-        add_file(challenge_dir, filename) 
+        
+        if (challenge=='Intro'):
+            category = config.get(challenge, 'category')
+            docker = getParam(config, challenge, 'docker')
+            label = getParam(config, challenge, 'label')
+            desc = config.get(challenge, 'description')
+            desc = desc.replace("IPSERVER", IPSERVER)
+            add_intro(challenge_dir, label, desc, category, docker)
+        else:
+            name = config.get(challenge, 'name')
+            #name = name.encode('string-escape')
+            desc = config.get(challenge, 'description')
+            desc = desc.replace("IPSERVER", IPSERVER)           
+            #print(desc)
+            #desc_enc = desc.encode('string-escape') #unicode-escape
+            #print(desc_enc)
+            value = config.get(challenge, 'value')
+            category = config.get(challenge, 'category')
+            #category = category.encode('string-escape')
+            filename = getParam(config, challenge, 'file')
+            flag = getParam(config, challenge, 'flag')
+            docker = getParam(config, challenge, 'docker')
+            #print(name)
+            #print (description)
+            add_challenge(name, desc, value, category,docker)
+            add_flag(flag)
+            add_file(challenge_dir, filename) 
 
 
 
@@ -231,7 +287,7 @@ if __name__ == '__main__':
     for challenge_dir in challenges_dir_list:
         print "Enter ["+challenge_dir+"]"
         parse_dir(challenge_dir)
-        copy_intro_to_webserver(challenge_dir)
+        #copy_intro_to_webserver(challenge_dir)
 
     out_dir = "ctfd_config/tmp/db/"
     directory = os.path.dirname(out_dir)
@@ -263,3 +319,16 @@ if __name__ == '__main__':
         outfile.write(unicode(str_))
         outfile.write(unicode(', "meta": {}}'))
 
+    if not os.path.exists('web_server/www_site/yoloctf/db/'):
+        os.makedirs('web_server/www_site/yoloctf/db/')
+    #print (intros)
+    with io.open('web_server/www_site/yoloctf/db/intros.json', 'w', encoding='utf8') as outfile:
+        outfile.write(unicode('{"count": '+str(len(intros))+', "results": '))
+        print(intros)
+        str_ = json.dumps(intros,
+                        indent=4, sort_keys=True,
+                        separators=(',', ': '), ensure_ascii=False)
+        print(str_)
+        #outfile.write(unicode(str_, errors='ignore'))
+        outfile.write(str_)
+        outfile.write(unicode(', "meta": {}}'))

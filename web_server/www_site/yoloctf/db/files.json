@@ -35,21 +35,21 @@
         "type": "challenge"
     },
     {
-        "challenge_id": 45,
+        "challenge_id": 46,
         "id": 6,
         "location": "ctf-transfert/flag01_enc.bin",
         "page_id": null,
         "type": "challenge"
     },
     {
-        "challenge_id": 46,
+        "challenge_id": 47,
         "id": 7,
         "location": "ctf-transfert/dechiffre_02",
         "page_id": null,
         "type": "challenge"
     },
     {
-        "challenge_id": 47,
+        "challenge_id": 48,
         "id": 8,
         "location": "ctf-transfert/dechiffre_03",
         "page_id": null,

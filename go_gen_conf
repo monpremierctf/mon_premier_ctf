@@ -38,8 +38,8 @@ python ./gen_config.py
 # Copy json files to web server
 #
 echo "Copying files to web server"
-cp -R ./ctfd_config/tmp/* web_server/www_site
-chmod -R a+r web_server/www_site
+cp -R ./ctfd_config/tmp/* web_server/www_site/yoloctf/
+chmod -R a+r web_server/www_site/yoloctf/
 
 
 #

