@@ -82,8 +82,8 @@ def challenges_set_config():
 #
 
 def build_challenges():
-    print "Build [ctf-sshd]"
-    (Popen(["docker", "build", "-t","ctf-sshd","./ctf-sshd"], stdout=sys.stdout, stderr=sys.stderr)).communicate()
+    #print "Build [ctf-sshd]"
+    #(Popen(["docker", "build", "-t","ctf-sshd","./ctf-sshd"], stdout=sys.stdout, stderr=sys.stderr)).communicate()
     print "Build [ctf-transfert]"
     (Popen(["docker", "build", "-t","ctf-transfert","./ctf-transfert"], stdout=sys.stdout, stderr=sys.stderr)).communicate()
     read_challenges_dir_list()
@@ -143,10 +143,10 @@ def replace_crlf_by_br(buf):
         # ignore first line if empty
         if not (len(line)==0 and num==0):
             if (isMarkdown(line)):
-                print "Marksown found"
+                #print "Marksown found"
                 out = out+line+UNIX_NEWLINE
             else:
-                print "Add br"
+                #print "Add br"
                 out = out+line+"</br>"+UNIX_NEWLINE
         num = num+1
     return out
@@ -324,11 +324,11 @@ if __name__ == '__main__':
     #print (intros)
     with io.open('web_server/www_site/yoloctf/db/intros.json', 'w', encoding='utf8') as outfile:
         outfile.write(unicode('{"count": '+str(len(intros))+', "results": '))
-        print(intros)
+        #print(intros)
         str_ = json.dumps(intros,
                         indent=4, sort_keys=True,
                         separators=(',', ': '), ensure_ascii=False)
-        print(str_)
+        #print(str_)
         #outfile.write(unicode(str_, errors='ignore'))
         outfile.write(str_)
         outfile.write(unicode(', "meta": {}}'))

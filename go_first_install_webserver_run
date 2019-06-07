@@ -315,7 +315,7 @@ cd - > /dev/null
 
 
 # Start static challenges
-#
+# 
 cd ctf-sqli
 docker-compose up -d
 cd - > /dev/null

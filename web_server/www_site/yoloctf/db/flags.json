@@ -1,203 +1,203 @@
 {"count": 50, "results": [
     {
         "challenge_id": 1,
-        "content": "373c51258167377b8a81168f11aea626",
+        "content": "martinique",
         "data": "",
         "id": 1,
         "type": "static"
     },
     {
         "challenge_id": 2,
-        "content": "flag_{m0n_pr3m13r_fl4g}",
+        "content": "Martinique",
         "data": "",
         "id": 2,
         "type": "static"
     },
     {
         "challenge_id": 3,
-        "content": "flag01{F1srt_flags_l1v3_f0r3v3r}",
+        "content": "Martinique$",
         "data": "",
         "id": 3,
         "type": "static"
     },
     {
         "challenge_id": 4,
-        "content": "flag02{pOur_v1vr3_h3ur3ux_v1v0ns_cach3s}",
+        "content": "Flag_C3st_0ouv3rt",
         "data": "",
         "id": 4,
         "type": "static"
     },
     {
         "challenge_id": 5,
-        "content": "flag03{C_p4s_m4l_ch3z_t01}",
+        "content": "Flag_C0mm3_d4ns_un_m0ul1n",
         "data": "",
         "id": 5,
         "type": "static"
     },
     {
         "challenge_id": 6,
-        "content": "flag06{a40053051c978701fa8bb66f110fc487}",
+        "content": "373c51258167377b8a81168f11aea626",
         "data": "",
         "id": 6,
         "type": "static"
     },
     {
         "challenge_id": 7,
-        "content": "flag04{M4y_th3_f0rc3_b3_w1th_y0u}",
+        "content": "flag_{m0n_pr3m13r_fl4g}",
         "data": "",
         "id": 7,
         "type": "static"
     },
     {
         "challenge_id": 8,
-        "content": "flag07{4_v0s_1ntu1t10ns_v0us_f13r_1l_f4ut}",
+        "content": "flag01{F1srt_flags_l1v3_f0r3v3r}",
         "data": "",
         "id": 8,
         "type": "static"
     },
     {
         "challenge_id": 9,
-        "content": "flag09{4ut4nt_3mbr4c3r_un_w00k13}",
+        "content": "flag02{pOur_v1vr3_h3ur3ux_v1v0ns_cach3s}",
         "data": "",
         "id": 9,
         "type": "static"
     },
     {
         "challenge_id": 10,
-        "content": "flag10{Un3_41gu1ll3_d4ns_un3_b0tt3_d3_f01n}",
+        "content": "flag03{C_p4s_m4l_ch3z_t01}",
         "data": "",
         "id": 10,
         "type": "static"
     },
     {
         "challenge_id": 11,
-        "content": "flag11{3mb4ll3z_c_3st_p3s3}",
+        "content": "flag06{a40053051c978701fa8bb66f110fc487}",
         "data": "",
         "id": 11,
         "type": "static"
     },
     {
         "challenge_id": 12,
-        "content": "flag12{D3t4rr3r_d3s_t4r3s}",
+        "content": "flag04{M4y_th3_f0rc3_b3_w1th_y0u}",
         "data": "",
         "id": 12,
         "type": "static"
     },
     {
         "challenge_id": 13,
-        "content": "flag02{l_3sp01r_c_3st_c0mm3_l3s_d0m1n0s}",
+        "content": "flag07{4_v0s_1ntu1t10ns_v0us_f13r_1l_f4ut}",
         "data": "",
         "id": 13,
         "type": "static"
     },
     {
         "challenge_id": 14,
-        "content": "flag03{j3_su1s_un_b1d0n_d_3ss3nc3_av3c_un3_4llum3tt3}",
+        "content": "flag09{4ut4nt_3mbr4c3r_un_w00k13}",
         "data": "",
         "id": 14,
         "type": "static"
     },
     {
         "challenge_id": 15,
-        "content": "flag04{sup3r_j_4im3_l3s_f3ux_d3_j01e}",
+        "content": "flag10{Un3_41gu1ll3_d4ns_un3_b0tt3_d3_f01n}",
         "data": "",
         "id": 15,
         "type": "static"
     },
     {
         "challenge_id": 16,
-        "content": "flag01{c_3st_p4s_b0_d_3c0ut3r_4ux_p0rtes}",
+        "content": "flag11{3mb4ll3z_c_3st_p3s3}",
         "data": "",
         "id": 16,
         "type": "static"
     },
     {
         "challenge_id": 17,
-        "content": "flag_02_telnet_c_pas_net",
+        "content": "flag12{D3t4rr3r_d3s_t4r3s}",
         "data": "",
         "id": 17,
         "type": "static"
     },
     {
         "challenge_id": 18,
-        "content": "flag03{3v1t3r_l3s_tr4nsf3rts_n0n_ch1ffr3s}",
+        "content": "flag02{l_3sp01r_c_3st_c0mm3_l3s_d0m1n0s}",
         "data": "",
         "id": 18,
         "type": "static"
     },
     {
         "challenge_id": 19,
-        "content": "flag04{3v1t3r_VR41M3NT_l3s_tr4nsf3rts_n0n_ch1ffr3s_S3RI3UX}",
+        "content": "flag03{j3_su1s_un_b1d0n_d_3ss3nc3_av3c_un3_4llum3tt3}",
         "data": "",
         "id": 19,
         "type": "static"
     },
     {
         "challenge_id": 20,
-        "content": "flag05{F0r_y0ur_3y3s_0nly}",
+        "content": "flag04{sup3r_j_4im3_l3s_f3ux_d3_j01e}",
         "data": "",
         "id": 20,
         "type": "static"
     },
     {
         "challenge_id": 21,
-        "content": "flag_m01_c4_v4",
+        "content": "flag01{c_3st_p4s_b0_d_3c0ut3r_4ux_p0rtes}",
         "data": "",
         "id": 21,
         "type": "static"
     },
     {
         "challenge_id": 22,
-        "content": "flag{B4s1c_syst3m}",
+        "content": "flag_02_telnet_c_pas_net",
         "data": "",
         "id": 22,
         "type": "static"
     },
     {
         "challenge_id": 23,
-        "content": "flag{T3l3p0rt3z_Mr_Sp0ck}",
+        "content": "flag03{3v1t3r_l3s_tr4nsf3rts_n0n_ch1ffr3s}",
         "data": "",
         "id": 23,
         "type": "static"
     },
     {
         "challenge_id": 24,
-        "content": "flag_m0n_n0m_c_3st_B0n_J3an_B0n",
+        "content": "flag04{3v1t3r_VR41M3NT_l3s_tr4nsf3rts_n0n_ch1ffr3s_S3RI3UX}",
         "data": "",
         "id": 24,
         "type": "static"
     },
     {
         "challenge_id": 25,
-        "content": "martinique",
+        "content": "flag05{F0r_y0ur_3y3s_0nly}",
         "data": "",
         "id": 25,
         "type": "static"
     },
     {
         "challenge_id": 26,
-        "content": "Martinique",
+        "content": "flag_m01_c4_v4",
         "data": "",
         "id": 26,
         "type": "static"
     },
     {
         "challenge_id": 27,
-        "content": "Martinique$",
+        "content": "flag{B4s1c_syst3m}",
         "data": "",
         "id": 27,
         "type": "static"
     },
     {
         "challenge_id": 28,
-        "content": "Flag_C3st_0ouv3rt",
+        "content": "flag{T3l3p0rt3z_Mr_Sp0ck}",
         "data": "",
         "id": 28,
         "type": "static"
     },
     {
         "challenge_id": 29,
-        "content": "Flag_C0mm3_d4ns_un_m0ul1n",
+        "content": "flag_m0n_n0m_c_3st_B0n_J3an_B0n",
         "data": "",
         "id": 29,
         "type": "static"
