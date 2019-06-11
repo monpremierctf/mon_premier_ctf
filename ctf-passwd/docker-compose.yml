@@ -5,6 +5,7 @@ services:
 
   web_password:
     image: nginx:latest
+    container_name: ctf-passwd-web
     networks:
       - webserver_webLAN
       - passwordLAN

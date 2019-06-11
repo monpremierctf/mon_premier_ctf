@@ -139,6 +139,7 @@ function html_dump_cat($cat) {
         if ($cat==="SQLi") {$server="ctf-sqli"."_".$_SESSION['uid'];}
         if ($cat==="Buffer overflows") {$server="ctf-buffer"."_".$_SESSION['uid'];}
         if ($cat==="File Upload") {$server="ctf-transfert"."_".$_SESSION['uid'];}
+        if ($cat==="Exploit") {$server="ctf-exploit"."_".$_SESSION['uid'];}
 
         if (isset($c['docker'])){
           if (($c['docker'])!="") {
@@ -147,6 +148,7 @@ function html_dump_cat($cat) {
           }
         }        
         $desc = str_replace("IPSERVER", $server, $desc);
+        $desc = str_replace("CTF_UID", $_SESSION['uid'], $desc);
 
         if (isset($_SERVER['HTTP_HOST'])) {
           $desc = str_replace("{IP_SERVER}", $_SERVER['HTTP_HOST'], $desc);
@@ -264,7 +266,7 @@ $(document).ready(function() {
 $(document).ready(function() {
     // Stop button
     $("#StopServer'.$id.'").click(function(){
-      $("#ServerStatus'.$id.'").html("Server status: Starting...");
+      $("#ServerStatus'.$id.'").html("Server status: Stopping...");
       $.get("containers_cmd.php?terminate='.$id.'",function(data) { 
           if (data=="ko") {
               $("#ServerStatus'.$id.'").html("Server status: Problem... Cant stop");

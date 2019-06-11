@@ -246,6 +246,17 @@ def copy_intro_to_webserver(challenge_dir):
         copy_file("web_server/www_site/yoloctf/intro/", challenge_dir, "challenges_intro.md")
 
 def parse_dir(challenge_dir):   
+    # .env
+    try:
+        if os.path.isfile(challenge_dir+"/.env"):
+            print("- .env exists")
+        else:
+            if os.path.isfile(challenge_dir+"/env.default"):
+                print("- Create default .env")
+                shutil.copy2(challenge_dir+"/env.default", challenge_dir+"/.env")
+    except:
+        print("- Pb with .env")
+
     config = ConfigParser.ConfigParser()
     config.read(challenge_dir+"/challenges.cfg")
     #print config.sections()

@@ -11,4 +11,4 @@ COPY flag.txt /home/jane/flag.txt
 RUN chmod a+r /home/jane/flag.txt
 
 EXPOSE 23
-
+CMD ["sleep", "360"]

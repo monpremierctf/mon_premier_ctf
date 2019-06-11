@@ -1,7 +1,7 @@
 FROM tool-xterm:latest
 
 USER root
-RUN apt-get update && apt-get install -y netcat john nmap vim hydra zip
+RUN apt-get update && apt-get install -y netcat john nmap vim hydra zip telnet ftp
 
 COPY sqlmap.zip /tmp
 RUN unzip /tmp/sqlmap.zip -d /opt

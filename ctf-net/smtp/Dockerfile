@@ -12,3 +12,4 @@ RUN chown jean:mail /var/mail/jean
 RUN chmod 600 /var/mail/jean
 EXPOSE 25
 EXPOSE 110
+CMD ["sleep", "360"]

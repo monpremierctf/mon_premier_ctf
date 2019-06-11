@@ -11,3 +11,4 @@ RUN chmod a+r /tmp/flag.txt
 EXPOSE 20
 EXPOSE 21
 EXPOSE 64000-64321 
+CMD ["sleep", "360"]

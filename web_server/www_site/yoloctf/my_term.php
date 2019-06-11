@@ -80,6 +80,11 @@
         //echo '<a href="#" onclick="goPort('.$yo['Port'].'); " ><pre>[Mon terminal]</pre></a>';
         echo 'Votre terminal s\'initialise. Laissez lui 10 secondes et cliquez ici : <a href="https://'.$_SERVER['HTTP_HOST'].'/ctf-tool-xterm_'.$_SESSION['uid'].'/" ><pre>[Mon terminal]</pre></a>';
         echo "</br>";
+
+        echo "Le message : Error: ENOENT: no such file or directory, stat '/usr/src/app/demo/index_ok.html' est normal.</br> ";
+        echo "Attendez 10 secondes et rechargez la page.</br>";
+        echo "</br>";
+        echo "Les copier/coller dans le teminal se font avec le menu du click droit.</br>";
         //echo($yo['Name']);
         /*
         echo 'Accès avancé distant possible en : </br>';

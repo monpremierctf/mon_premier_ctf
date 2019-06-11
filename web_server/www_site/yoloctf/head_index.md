@@ -87,7 +87,7 @@ Ceci dit, ce n'est pas forcément l'idée du siècle de venir à un CTF avec un 
 #### Mains sur le clavier
 
 Vous êtes encore en train de lire ???
-Il est temps de s'y mettre. Vous pouvez prendre les thèmes dans l'ordre qui vous plait dans le menu à gauche, mais le mieux est de les prendre dans l'ordre, en commançant par des rappels sur l'utilisation d'un shell linux.
+Il est temps de s'y mettre. Vous pouvez prendre les thèmes dans l'ordre qui vous plait dans le menu à gauche, mais le mieux est de les prendre dans l'ordre, en commançant par [Premier Flag], puis les rappels sur l'utilisation d'un shell linux.
 
 Enjoy !
 
