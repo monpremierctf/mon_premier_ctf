@@ -264,6 +264,9 @@ cd - > /dev/null
 cd tools/xterm/xterm.js-3.13.0/
 docker-compose build
 cd - > /dev/null
+cd tools/xterm/ctf-tool-xterm/
+docker-compose build
+cd - > /dev/null
 
 
 #

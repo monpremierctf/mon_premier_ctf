@@ -1,5 +1,10 @@
 <?php
 
+    ini_set('session.cookie_httponly', 1);
+    ini_set('session.cookie_secure', 1);
+    header_remove("X-Powered-By");
+    header("X-XSS-Protection: 1");
+    header('X-Frame-Options: SAMEORIGIN'); 
     session_start ();
     if (isset($_POST['login']) && isset($_POST['password']) && isset($_POST['code'])) {
 
@@ -60,9 +65,9 @@
   <title>Y0L0 CTF</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/yoloctf/js/bootstrap.min.css">
   <link rel="stylesheet" href="style.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="/yoloctf/js/jquery.min.js"></script>
 </head>
 <body>
 

@@ -10,4 +10,5 @@ Sur la gauche: le menu des Challenges
 Tous les challenges sont à destination des grands débutants. Vous pouvez démarrer direct sans rien installer. Un compte kali-light est à votre disposition à l'onglet [Mon terminal]
 
 
+Pour commencer allez sur [Intro]
 

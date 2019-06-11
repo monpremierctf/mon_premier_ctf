@@ -132,11 +132,14 @@ function html_dump_cat($cat) {
         print '<div class="container chall-desc">';
         $desc = $c['description'];
         $server="";
+        // YOP : FIX : Get from Intro
+        if ($cat==="Terminal") {$server="ctf-shell"."_".$_SESSION['uid'];}
         if ($cat==="Ghost in the Shell") {$server="ctf-shell"."_".$_SESSION['uid'];}
         if ($cat==="Privilege Escalation") {$server="ctf-escalation"."_".$_SESSION['uid'];}
         if ($cat==="SQLi") {$server="ctf-sqli"."_".$_SESSION['uid'];}
         if ($cat==="Buffer overflows") {$server="ctf-buffer"."_".$_SESSION['uid'];}
         if ($cat==="File Upload") {$server="ctf-transfert"."_".$_SESSION['uid'];}
+
         if (isset($c['docker'])){
           if (($c['docker'])!="") {
             $server=$c['docker']."_".$_SESSION['uid'];

@@ -61,7 +61,7 @@ Pour s'amuser il faut un minimum de connaissances sur les vulnérabilités, et d
 L'ambition de cette plateforme est de vous faire gagner du temps, en vous présentant les cas types et quelques  outils simples.
 Tout est pré-configuré, et à portée de main. Vous n'avez besoin que d'un navigateur web.
 
-Nous avons fait un trade-off entre une plateforme robuste et sécurisée, incassable, mais lourde à utilisée et une plate-forme mutualisée débutant friendly sans authentification forte, facile à déployer pour un atelier de formation.
+Nous avons fait un trade-off entre une plateforme robuste et sécurisée, incassable, mais lourde à utiliser et une plate-forme mutualisée débutant friendly sans authentification forte, facile à déployer pour un atelier de formation.
 Quand vous aurez testé les VM publiques de hackthebox qui sont resetées toutes les 5 minutes, les shells de root-me ou vous ne pouvez pas écrire, et les VMs qui passent en état instable et refusent votre exploit pourtant bien écrit, ou les collègues farceurs qui changent les mots de passe vous comprendrez...
 
 Vous avez pour chaque challenge :
