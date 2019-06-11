@@ -272,13 +272,17 @@ def parse_dir(challenge_dir):
             category = config.get(challenge, 'category')
             #category = category.encode('string-escape')
             filename = getParam(config, challenge, 'file')
+            filename1 = getParam(config, challenge, 'file1')
+            filename2 = getParam(config, challenge, 'file2')
             flag = getParam(config, challenge, 'flag')
             docker = getParam(config, challenge, 'docker')
             #print(name)
             #print (description)
-            add_challenge(name, desc, value, category,docker)
+            add_challenge(name, desc, value, category, docker)
             add_flag(flag)
             add_file(challenge_dir, filename) 
+            add_file(challenge_dir, filename1) 
+            add_file(challenge_dir, filename2) 
 
 
 

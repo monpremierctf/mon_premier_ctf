@@ -1,9 +1,11 @@
 FROM ctf-sshd:latest
 
+
 ## cat 
 RUN useradd -m -d /home/luke -s /bin/bash  luke
 RUN echo 'luke:tatooine' | chpasswd
 COPY --chown=luke flag01.txt /home/luke/flag01.txt
+COPY --chown=luke profile /home/luke/.profile
 RUN chmod 400 /home/luke/flag01.txt
 
 ## la -al 
@@ -77,3 +79,7 @@ RUN echo 'finn:yavin' | chpasswd
 COPY --chown=finn flag12.tar /home/finn/flag12.tar
 RUN chmod 400 /home/finn/flag12.tar
 RUN apt-get update && apt-get install -y vim
+
+## Remove Message of the day
+RUN chmod -x /etc/update-motd.d/*
+RUN echo "" > /etc/motd
