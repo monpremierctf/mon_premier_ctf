@@ -694,8 +694,6 @@ func oldcleanDB() {
 
 }
 
-
-
 func stopChallengeBox(w http.ResponseWriter, r *http.Request) {
 
 	// Get uid
@@ -723,14 +721,14 @@ func stopChallengeBox(w http.ResponseWriter, r *http.Request) {
 	// find entry
 	var cindex int = -1
 	for index, chall := range challenges {
-		log.Println("Search: " + string(chall.Id))
+		//log.Println("Search: " + string(chall.Id))
 		if chall.Id == cid {
 			cindex = index
 		}
 	}
 	if cindex == -1 {
 
-		log.Println("cid not found : " + string(cid))
+		log.Println("stopChallengeBox cid not found : " + string(cid))
 		fmt.Fprintf(w, "ko")
 		return
 	}
@@ -743,7 +741,8 @@ func stopChallengeBox(w http.ResponseWriter, r *http.Request) {
 
 	// Stop
 	if boxID != "" {
-		err := cli.ContainerStop(ctx, boxID, nil); 
+		log.Println("stopChallengeBox stopping : " + boxID)
+		err := dockerClient.ContainerStop(ctx, boxID, nil)
 		if err != nil {
 			fmt.Fprintf(w, "Problem stopping")
 
@@ -754,7 +753,6 @@ func stopChallengeBox(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Fprintf(w, "Cant find box")
 }
-
 
 func statusChallengeBox(w http.ResponseWriter, r *http.Request) {
 

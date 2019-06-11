@@ -264,7 +264,14 @@ $(document).ready(function() {
 $(document).ready(function() {
     // Stop button
     $("#StopServer'.$id.'").click(function(){
-        $.get("/stop/",function(data) { $("#ServerStatus'.$id.'").html(data); });
+      $("#ServerStatus'.$id.'").html("Server status: Starting...");
+      $.get("containers_cmd.php?terminate='.$id.'",function(data) { 
+          if (data=="ko") {
+              $("#ServerStatus'.$id.'").html("Server status: Problem... Cant stop");
+          } else  {
+             $("#ServerStatus'.$id.'").html("Server status: "+data);
+          }
+      });
     }); 
 });
 
