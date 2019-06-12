@@ -30,7 +30,7 @@ Tout ce qui peut être mal configuré ou présenter une vulnérabilité exploita
 - Web dans le navigateur
 - Web sur le serveur
 - Protocole réseau
-- IoT (caméras, tv, voiture,...
+- IoT: caméras, tv, voiture,...
 
 Vous trouverez des challenges sur [root-me.org](https://www.root-me.org), et sur [hackthebox.eu](https://www.hackthebox.eu/).
 
