@@ -17,7 +17,7 @@ Chaque challenge rapporte des points en fonction de sa difficulté, et le classe
 
 #### Jeopardy vs Attack-Defense ?
 
-Il existe deux types de CTF, le 'jeopardy', où tout le monde résout des challenges, et l' 'Attack-Défense' qui demande un niveau certain. Dans ce dernier mode, vous devez patcher/défendre votre serveur tout en allant prendre les flags chez vos concurrents.
+Il existe deux types de CTF, le 'Jeopardy', où tout le monde résout des challenges, et l' 'Attack-Défense' qui demande un niveau certain. Dans ce dernier mode, vous devez patcher/défendre votre serveur tout en allant prendre les flags chez vos concurrents. Ce CTF est un Jeopardy.
 
 
 
