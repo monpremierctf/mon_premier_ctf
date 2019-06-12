@@ -281,9 +281,14 @@ python -c 'from gen_config import build_challenges; build_challenges()'
 #
 if [ $TRAEFIK_SELF_SIGNED_CERTS == 1 ] 
 then
-cd web_server/traefik
-./go_gen_certs
-cd - > /dev/null
+  cd web_server/traefik
+  ./go_gen_certs
+  cd - > /dev/null
+else
+  if [ ! -f web_server/traefik_acme/acme.json]
+  then
+    cp web_server/traefik_acme/acme.json.default web_server/traefik_acme/acme.json
+  fi
 fi
 
 #
