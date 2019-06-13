@@ -258,6 +258,11 @@ func createNewChallengeBox(box string, duration string, port string, uid string)
 		}
 		portBinding := nat.PortMap{containerPort: []nat.PortBinding{hostBinding}}
 	*/
+	// You can define memory limit using Resources field of HostConfig struct.
+	// Resources: container.Resources{ Memory:3e+7 }
+	// https://godoc.org/github.com/docker/docker/api/types/container#Resources
+
+
 	// Create
 	resp, err := dockerClient.ContainerCreate(ctx,
 		&container.Config{
@@ -269,6 +274,7 @@ func createNewChallengeBox(box string, duration string, port string, uid string)
 		&container.HostConfig{
 			AutoRemove:      true,
 			PublishAllPorts: false,
+			Resources: container.Resources{ Memory:3e+7 }, // in bytes
 			//PortBindings: portBinding,
 		},
 		nil,

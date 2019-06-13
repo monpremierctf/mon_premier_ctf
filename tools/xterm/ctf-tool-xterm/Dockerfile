@@ -1,7 +1,8 @@
 FROM tool-xterm:latest
 
 USER root
-RUN apt-get update && apt-get install -y net-tools netcat john nmap vim hydra zip telnet ftp
+RUN apt-get update && apt-get install -y net-tools netcat john nmap vim hydra zip telnet ftp 
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y tshark
 
 COPY sqlmap.zip /tmp
 RUN unzip /tmp/sqlmap.zip -d /opt
