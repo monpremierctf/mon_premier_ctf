@@ -8,20 +8,28 @@ function replacePrefix(prefix, filein, fileout) {
   var fs = require('fs');
   if (fs.existsSync(fileout)) { return; }
 
+  var data = fs.readFileSync(filein, 'utf8');
+  var result = data.replace(/URLPREFIX/g, prefix);
+  fs.writeFileSync(fileout, result, 'utf8');
+/*
   fs.readFile(filein, 'utf8', function (err,data) {
     if (err) {
       return console.log(err);
     }
     var result = data.replace(/URLPREFIX/g, prefix);
 
+    fs.writeFileSync(fileout, result, 'utf8');
+    
     fs.writeFile(fileout, result, 'utf8', function (err) {
       if (err) return console.log(err);
     });
+    
   });
+*/
 }
 
 function startServer() {
-  var prefix="/xtermjs_22";
+  var prefix="/xterm";
   if (process.env.URLPREFIX != null) { prefix = process.env.URLPREFIX; }
   
   var app = express();
