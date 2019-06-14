@@ -1,0 +1,5 @@
+{"count": 2, "results": [
+    {"id": 1, "type": "standard", "challenge_id": 1, "content": "Hint1", "cost": 2, "requirements": "null"}, 
+    {"id": 2, "type": "standard", "challenge_id": 1, "content": "hint2", "cost": 4, "requirements": "null"}
+    ], "meta": {}
+}

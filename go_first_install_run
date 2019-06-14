@@ -136,9 +136,7 @@ else
     echo $(docker info 2>/dev/null | grep "Server Version")
 fi
 
-<<<<<<< HEAD
-IPSERVER=12.0.0.10
-=======
+
 #
 # Dump Docker config files .env
 echo "Verification du système terminée"
@@ -154,7 +152,6 @@ while true; do
         * ) echo "Ok, on continue."; break;;
     esac
 done
->>>>>>> 58dc9fb09475afb912de0b8d2230ebfdd262e21f
 
 #
 # Build challenge-box-provider

@@ -161,8 +161,26 @@ flags=[]
 flag_id=0
 files=[]
 file_id=0
+hints=[]
+hint_id=0
 
 intros=[]
+
+
+def add_hint(hint_desc):
+    global hint_id
+    if hint_desc=='':
+        return
+    hint_id+=1
+    hints.append({
+        "id": int(hint_id), 
+        "type": "standard", 
+        "challenge_id": challenge_id, 
+        "content": hint_desc.decode('utf-8'), 
+        "cost": int (1),
+        "requirements": "null"
+    })
+
 
 def add_intro(challenge_dir, label, desc, category, docker):
     global intros
@@ -287,6 +305,9 @@ def parse_dir(challenge_dir):
             filename2 = getParam(config, challenge, 'file2')
             flag = getParam(config, challenge, 'flag')
             docker = getParam(config, challenge, 'docker')
+            hint = getParam(config, challenge, 'hint')
+            hint1 = getParam(config, challenge, 'hint1')
+            hint2 = getParam(config, challenge, 'hint2')
             #print(name)
             #print (description)
             add_challenge(name, desc, value, category, docker)
@@ -294,7 +315,9 @@ def parse_dir(challenge_dir):
             add_file(challenge_dir, filename) 
             add_file(challenge_dir, filename1) 
             add_file(challenge_dir, filename2) 
-
+            add_hint(hint) 
+            add_hint(hint1) 
+            add_hint(hint2) 
 
 
 if __name__ == '__main__':
@@ -330,6 +353,14 @@ if __name__ == '__main__':
         outfile.write(unicode('{"count": '+str(file_id)+', "results": '))
         str_ = json.dumps(files,
                         indent=4, sort_keys=True,
+                        separators=(',', ': '), ensure_ascii=False)
+        outfile.write(unicode(str_))
+        outfile.write(unicode(', "meta": {}}'))
+
+    with io.open(out_dir+'hints.json', 'w', encoding='utf8') as outfile:
+        outfile.write(unicode('{"count": '+str(hint_id)+', "results": '))
+        str_ = json.dumps(hints,
+                        indent=4, sort_keys=False,
                         separators=(',', ': '), ensure_ascii=False)
         outfile.write(unicode(str_))
         outfile.write(unicode(', "meta": {}}'))

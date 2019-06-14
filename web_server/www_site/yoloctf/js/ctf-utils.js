@@ -39,3 +39,10 @@ function ctf_onload(id, flag_field)
     });
     ;
 } 
+
+
+
+function ctf_toggle_hide(id)
+{
+    $(id).toggle();
+}

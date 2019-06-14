@@ -9,6 +9,9 @@ $string = file_get_contents("./db/files.json");
 $files = json_decode($string, true);
 $string = file_get_contents("./db/intros.json");
 $intros = json_decode($string, true);
+$string = file_get_contents("./db/hints.json");
+$hints = json_decode($string, true);
+
 
 function getChallengeCount(){
   global $challenges;
@@ -113,6 +116,7 @@ function getChallengeFileLocation($challengeId) {
 function html_dump_cat($cat) {
   global $challenges;
   global $files;
+  global $hints;
   global $Parsedown;
 
   foreach ($challenges['results'] as $c) {
@@ -155,6 +159,22 @@ function html_dump_cat($cat) {
         }
         print $Parsedown->text($desc);
         print "</div>";
+
+        // Hints
+        
+        foreach ($hints['results'] as $h) {
+          if ($h['challenge_id']===$c['id']) {
+            print '<div class="row chall-desc bg-light">';
+            print '<div class="col-md-auto text-left">  <label for="usr">Indice:</label>  </div>
+            <div class="col text-left"><label id="hint_'.$h['id'].'"  style="display: none;" >'.$h['content'].'</label></div>
+            <div class="col-2 text-right"><button type="Button" class="btn btn-primary" onclick="ctf_toggle_hide(\'#hint_'.$h['id'].'\')">Afficher</button></div>';
+            print "</div>";
+            
+
+          }
+        }
+
+
         // Files
         foreach ($files['results'] as $f) {
           if ($f['challenge_id']===$c['id']) {
