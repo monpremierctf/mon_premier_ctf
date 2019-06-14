@@ -172,6 +172,7 @@ def add_hint(hint_desc):
     if hint_desc=='':
         return
     hint_id+=1
+    hint_desc = replace_crlf_by_br(hint_desc)
     hints.append({
         "id": int(hint_id), 
         "type": "standard", 
