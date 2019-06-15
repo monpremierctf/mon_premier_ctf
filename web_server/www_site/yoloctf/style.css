@@ -1,3 +1,29 @@
+@font-face {
+    font-family: Prisma;
+    src: url("Prisma.otf") format("opentype");
+}
+
+.ctf-title {
+    font-family: Prisma;
+    padding: 1rem 0.5rem;
+}
+
+.ctf-title-size {
+    font-size: 5rem;
+    color: rgb(94, 90, 16);
+}
+
+.ctf-menu-color {
+    color: rgb(94, 90, 16);
+}
+
+.ctf-toc-backcolor {
+    background-color: rgb(221, 216, 214);
+}
+
+.ctf-subtitle-size {
+    font-size: 1.5rem
+}
 .chall-titre {
     margin-top: 2rem !important;
     margin-bottom: 2rem !important;

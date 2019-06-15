@@ -76,10 +76,12 @@
     $Parsedown = new Parsedown();
 ?>
 
-<div class="jumbotron text-center">
-  <h1>Y0L0 CTF</h1>
-  <p>Mon premier CTF !</p> 
+
+<div class="jumbotron ctf-title text-center">
+<h1 class="ctf-title-size">Y0L0 CTF</h1>
+<p ><pre class="ctf-subtitle-size">Mon premier CTF !</pre></p> 
 </div>
+
   
 <div class="container-fluid">
     <div class="row">
