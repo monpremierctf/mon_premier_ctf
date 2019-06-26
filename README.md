@@ -207,8 +207,7 @@ et reconnectez vous.
 </br>
 Enfin les dockers sont lancés, ainsi que le serveur web.
 
-```
-```
+
 
 </br>
 
@@ -228,9 +227,9 @@ Stats sur les dockers
 docker stats
 ````
 
-Log de CTFd
+Log de ctf-xxx
 ```
-cd CTFd
+cd ctf-xxx
 docker-compose logs
 ````
 
