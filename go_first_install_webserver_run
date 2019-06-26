@@ -25,7 +25,7 @@ if [[ $(which python) ]]; then
     echo "Ko"
     echo "Pour installer python rapidement:"
     echo "sudo apt-get update"
-    echo "sudo apt install python-minimal"
+    echo "sudo apt-get install python-minimal"
     exit;
 fi
 
