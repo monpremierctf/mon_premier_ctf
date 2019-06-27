@@ -345,15 +345,15 @@ func createNewUserNet(uid string, duration int) (containerID string, err error) 
 	net_2++
 	if net_2 > 250 {
 		net_1++
-		net_2 = 1
+		net_2 = 10
 	}
 	ipamConfig := network.IPAMConfig{
-		Subnet:  "172." + string(net_1) + "." + string(net_2) + ".0/16",
-		Gateway: "172." + string(net_1) + "." + string(net_2) + ".1/16",
+		Subnet:  fmt.Sprintf("%d.%d.0.0/16", net_1, net_2),
+		Gateway: fmt.Sprintf("%d.%d.0.1", net_1, net_2),
 	}
 	log.Printf("Create subnet : %s", ipamConfig.Subnet)
 	ipam := network.IPAM{
-		Driver: "Default",
+		//Driver: "Default",
 		Config: []network.IPAMConfig{ipamConfig},
 	}
 	resp, err := dockerClient.NetworkCreate(
@@ -989,8 +989,8 @@ func main() {
 		}
 			//challenges = chall
 	*/
-	net_1 = 0
-	net_2 = 0
+	net_1 = 16
+	net_2 = 1
 	flag.Parse()
 
 	readConfigFile("/var/challenge-box-provider/challenge-box-provider.cfg")

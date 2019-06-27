@@ -163,7 +163,7 @@ if __name__ == '__main__':
                     print("open_terminal ")
                     u.xterm=True
                     nb_xterm=nb_xterm+1
-                    print "nb_xterm => "+str(nb_xterm))
+                    print "nb_xterm => "+str(nb_xterm) 
 
             # Create container
             if (randint(0, 9)>=80):
@@ -173,7 +173,7 @@ if __name__ == '__main__':
                     create_container(u, cont_id)
                     print("create "+cont_id)
                     nb_containers=nb_containers+1
-                    print "nb_containers => "+str(nb_containers))
+                    print "nb_containers => "+str(nb_containers)
         time.sleep(randint(3, 8))
     exit()
 
