@@ -17,6 +17,7 @@ import (
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
+	"github.com/docker/docker/api/types/network"
 	"github.com/docker/docker/client"
 
 	// Fix: mv ~/go_workspace//src/github.com/docker/docker/vendor/github.com/docker/go-connections/{nat,nat.old}
@@ -47,6 +48,9 @@ var (
 	dockerClient *client.Client
 	ctx          = context.Background()
 	challenges   []Challenge
+
+	net_1 int
+	net_2 int
 )
 
 const CONST_USER_NET_DURATION = 3600
@@ -262,7 +266,6 @@ func createNewChallengeBox(box string, duration string, port string, uid string)
 	// Resources: container.Resources{ Memory:3e+7 }
 	// https://godoc.org/github.com/docker/docker/api/types/container#Resources
 
-
 	// Create
 	resp, err := dockerClient.ContainerCreate(ctx,
 		&container.Config{
@@ -274,7 +277,10 @@ func createNewChallengeBox(box string, duration string, port string, uid string)
 		&container.HostConfig{
 			AutoRemove:      true,
 			PublishAllPorts: false,
-			Resources: container.Resources{ Memory:3e+7 }, // in bytes
+			Resources: container.Resources{
+				Memory:   3e+7, // in bytes, 30 000 000, 30Mb
+				NanoCPUs: 1e+8, // 0.1 CPU max per container
+			},
 			//PortBindings: portBinding,
 		},
 		nil,
@@ -336,7 +342,25 @@ func createNewUserNet(uid string, duration int) (containerID string, err error) 
 		"ctf-start-time": time.Now().String(),
 		"ctf-duration":   string(strconv.Itoa(duration))}
 
-	resp, err := dockerClient.NetworkCreate(ctx, fmt.Sprintf("Net_%s", uid), types.NetworkCreate{Labels: labels})
+	net_2++
+	if net_2 > 250 {
+		net_1++
+		net_2 = 1
+	}
+	ipamConfig := network.IPAMConfig{
+		Subnet:  "172." + string(net_1) + "." + string(net_2) + ".0/16",
+		Gateway: "172." + string(net_1) + "." + string(net_2) + ".1/16",
+	}
+	log.Printf("Create subnet : %s", ipamConfig.Subnet)
+	ipam := network.IPAM{
+		Driver: "Default",
+		Config: []network.IPAMConfig{ipamConfig},
+	}
+	resp, err := dockerClient.NetworkCreate(
+		ctx, fmt.Sprintf("Net_%s", uid),
+		types.NetworkCreate{
+			Labels: labels,
+			IPAM:   &ipam})
 	if err != nil {
 		panic(err)
 	}
@@ -965,6 +989,8 @@ func main() {
 		}
 			//challenges = chall
 	*/
+	net_1 = 0
+	net_2 = 0
 	flag.Parse()
 
 	readConfigFile("/var/challenge-box-provider/challenge-box-provider.cfg")
