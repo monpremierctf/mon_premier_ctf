@@ -43,5 +43,5 @@ if (isset($_SESSION['login'] )) {
 
 <div class="jumbotron ctf-title text-center">
 <h1 class="ctf-title-size">Y0L0 CTF</h1>
-<p ><pre class="ctf-subtitle-size">Mon premier CTF !</pre></p> 
+<p ><pre class="ctf-subtitle-size">Mon premier CTF</pre></p> 
 </div>

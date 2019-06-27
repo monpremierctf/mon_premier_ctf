@@ -6,6 +6,7 @@
     header("X-XSS-Protection: 1");
     header('X-Frame-Options: SAMEORIGIN'); 
     session_start ();
+
     if (isset($_POST['login']) && isset($_POST['password']) && isset($_POST['code'])) {
 
         if(strtoupper($_POST['code'])!=="YOLO") {
@@ -13,7 +14,7 @@
             echo '<body onLoad="alert(\'Code Invitation invalide\')">';
             // puis on le redirige vers la page de login
             echo '<meta http-equiv="refresh" content="0;URL=register.php">';
-            // dans ce cas, tout est ok, on peut démarrer notre session
+           
             exit();
         }
 
@@ -32,7 +33,7 @@
             echo '<body onLoad="alert(\'Ce login est déjà existant\')">';
             // puis on le redirige vers la page de login
             echo '<meta http-equiv="refresh" content="0;URL=register.php">';
-            // dans ce cas, tout est ok, on peut démarrer notre session
+            
            
         }
         else {
@@ -79,7 +80,7 @@
 
 <div class="jumbotron ctf-title text-center">
 <h1 class="ctf-title-size">Y0L0 CTF</h1>
-<p ><pre class="ctf-subtitle-size">Mon premier CTF !</pre></p> 
+<p ><pre class="ctf-subtitle-size">Mon premier CTF</pre></p> 
 </div>
 
   

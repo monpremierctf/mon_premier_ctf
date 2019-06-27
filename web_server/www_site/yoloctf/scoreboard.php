@@ -55,7 +55,7 @@
 
 
        
-        <div style="width:75%;">
+        <div>
 		<canvas id="canvas"></canvas>
 	    </div>
 

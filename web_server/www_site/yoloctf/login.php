@@ -57,7 +57,7 @@
 
 <div class="jumbotron ctf-title text-center">
 <h1 class="ctf-title-size">Y0L0 CTF</h1>
-<p ><pre class="ctf-subtitle-size">Mon premier CTF !</pre></p> 
+<p ><pre class="ctf-subtitle-size">Mon premier CTF</pre></p> 
 </div>
 
   
@@ -81,11 +81,11 @@
 	  </form>
     </div>
     <div class="col-sm-4 text-center">
-      <h3>Anonymous</h3>        
+      <h3>Pas encore de compte ?</h3>        
       <p><img src="admin_02_200.png" alt="Anonymous"></p>
       <form action="register.php"  method="post">
 		<div class="form-group text-center">
-		  Pas encore de compte ?
+		  Créer un compte
 		</div>
 		<button type="submit" class="btn btn-primary">Register</button>
 	  </form>
