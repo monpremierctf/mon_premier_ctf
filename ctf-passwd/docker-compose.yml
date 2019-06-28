@@ -23,6 +23,7 @@ services:
 
   php_password:
     image: php:7-fpm
+    container_name: ctf-passwd-php
     networks:
       - passwordLAN
     volumes:

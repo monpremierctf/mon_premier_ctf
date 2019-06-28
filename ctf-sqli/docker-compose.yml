@@ -5,7 +5,7 @@ services:
 
   web:
     image: nginx:latest
-    container_name: ctf-sqli
+    container_name: ctf-sqli_nginx
     #ports:
     #  - "${PORT_HTTP}:80"
     networks:
@@ -25,6 +25,7 @@ services:
 
   php:
     build: ./php/ 
+    container_name: ctf-sqli_php
     networks:
       - webserver_webLAN
       - sqliLAN
@@ -37,7 +38,7 @@ services:
 
   mysql:
     build: ./mysql/
-    container_name: ctfsqli_mysql
+    container_name: ctf-sqli_mysql
     networks:
       - sqliLAN
     # for debug

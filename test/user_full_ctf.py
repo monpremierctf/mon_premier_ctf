@@ -6,6 +6,7 @@ import time
 import json
 from pprint import pprint
 from random import randint
+import os
 
 # Generate random name
 VOWELS = "aeiou"
@@ -32,6 +33,7 @@ class UserSession():
         global userCount
         userCount = userCount+1
         self.id = userCount
+        self.uid=""
         self.session = requests.Session()
         self.session.verify = False
         self.login = generate_name(8)
@@ -64,7 +66,7 @@ def register_user(user, login, password, mail, code):
     #print(user.session.cookies.get_dict())
     #print(resp.text + '...')
     # On est d accord, pas de test avec une balise html comme nom.. hein ?
-    if (resp.text.find(login)):
+    if (resp.text.find(login)>0):
         return True
     return False
 
@@ -89,6 +91,8 @@ def open_terminal(user):
     #print(resp)
     #print(resp.text)
     id = get_terminal_id(resp.text)
+    user.uid = id[15:-1]
+    #print("====> uid="+user.uid)
     #print (id)
     time.sleep(5)  # 5 seconds
     resp = user.session.get('https://localhost/'+id)
@@ -98,7 +102,7 @@ def open_terminal(user):
 def create_container(user, cont_id):
     resp = user.session.get('https://localhost/yoloctf/containers_cmd.php?create='+cont_id)
     #print(resp.text)
-    if (resp.text.find("Name")):
+    if (resp.text.find("Name")>0):
         return True
     return False
 
@@ -120,15 +124,47 @@ def validate_flag(user, chal_id, flag):
     #print (chal_id, flag)
     resp = user.session.get('https://localhost/yoloctf/is_flag_valid.php?id='+str(chal_id)+'&flag='+flag)
     #print(resp.text)
-    if (resp.text.find("ok")):
+    if (resp.text.find("ok")>0):
         return True
     return False
+
+
+def cmd_sqlmap(user):
+    # docker exec  ctf-tool-xterm_5d161ec2da045 /opt/sqlmap/sqlmap.py -u http://ctf-sqli/getmsg.php?idmsg=673489 --tables
+    return
+
+def cmd_cpu_load(user):
+    # 100% load during 10s
+    # docker exec  ctf-tool-xterm_5d161ec2da045 timeout 10  dd if=/dev/zero of=/dev/null
+    os.system("docker exec  ctf-tool-xterm_"+user.uid+" timeout 10  dd if=/dev/zero of=/dev/null")
+    return
+
+
+def run_rand_cmd(user):
+    if (user.uid == ""):
+        print "["+str(u.id)+"] uid not set "
+        return
+    
+    target = randint(0, u.container_count)
+    if (target<1): 
+        print "["+str(u.id)+"] no container "
+        return
+    
+    if (target==1):
+        return
+
+    if (target==2):
+        return
+    #cmd_cpu_load(user)
+    
+    return
 
 
 
 users=[]
 
-containers = ["ctf-shell",  
+containers = [
+    "ctf-shell",  
     "ctf-escalation",  
     "ctf-buffer",  
     "ctf-transfert", 
@@ -146,7 +182,7 @@ if __name__ == '__main__':
     flags = load_flags()
 
     # Register users
-    nbUserMax = 10
+    nbUserMax = 2
     print ("Registering "+str(nbUserMax)+" users : ")
     for x in range(nbUserMax):
         user1  = UserSession()
@@ -169,18 +205,18 @@ if __name__ == '__main__':
         for u in users:
             #
             # Flags
-            chal_id = flags['results'][u.flag_count]['challenge_id']
-            # Try the right flag or a false one ?
-            if (randint(0, 9)<u.skill):
-                if (u.flag_count<len(flags['results'])):
+            if (u.flag_count<len(flags['results'])):
+                chal_id = flags['results'][u.flag_count]['challenge_id']
+                # Try the right flag or a false one ?
+                if (randint(0, 9)<u.skill):
                     flag = flags['results'][u.flag_count]['content']
                     u.flag_count = u.flag_count+1
                     totalflag = totalflag-1
-            else:
-                flag = generate_name(12)
-            if (validate_flag(u, chal_id, flag)):
-                print "["+str(u.id)+"] Validate Flag "+str(chal_id)+" with ["+flag+"]"
-
+                else:
+                    flag = generate_name(12)
+                print "["+str(u.id)+"] Send Flag "+str(chal_id)+" : ["+flag+"]"
+                validate_flag(u, chal_id, flag)
+                
             #
             # xterm
             if (not u.xterm):
@@ -207,29 +243,23 @@ if __name__ == '__main__':
                     print "["+str(u.id)+"] Created container in "+str(round(duration))
                     nb_containers=nb_containers+1
                     #print "nb_containers => "+str(nb_containers)
-        time.sleep(randint(3, 8))
+
+            #
+            # Run cmd in container
+            if (randint(0, 9)>=5):
+                print "["+str(u.id)+"] start cmd in container "
+                run_rand_cmd(u)
+                print "["+str(u.id)+"] stop cmd in container "
+
+        time.sleep(randint(2, 4))
 
 
-    exit()
-
-    for f in flags['results']:
-        validate_flag(user1, f['challenge_id'], f['content'])
-        time.sleep(randint(3, 18))
-
-    exit()
-
-    print ("Open terminals")
-    for u in users:
-        open_terminal(u)
-
-    print ("Create containers")
-    for u in users:
-        create_container(u, 'ctf-shell')
-    
+    ## Destroy all containers
     time.sleep(5)  # 5 seconds
     print ("Terminate containers")
     for u in users:
-        terminate_container(u, 'ctf-shell')
+        for c in containers:
+            terminate_container(u, c)
 
     
     
