@@ -9,6 +9,15 @@
 
     if (isset($_POST['login']) && isset($_POST['password']) && isset($_POST['code'])) {
 
+        if ((strlen($_POST['login'])<2) or (strlen($_POST['password'])<2)) {
+            // 
+            echo '<body onLoad="alert(\'Login ou mot de passe un peu court...\')">';
+            // puis on le redirige vers la page de login
+            echo '<meta http-equiv="refresh" content="0;URL=register.php">';
+           
+            exit();
+        }
+
         if(strtoupper($_POST['code'])!=="YOLO") {
             // Le visiteur n'a pas été reconnu comme étant membre de notre site. On utilise alors un petit javascript lui signalant ce fait
             echo '<body onLoad="alert(\'Code Invitation invalide\')">';

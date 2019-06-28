@@ -276,7 +276,7 @@ echo "{
             
 
     } else {
-        echo "Merci de vous connecter.";
+        //echo "Merci de vous connecter.";
     }
 
 

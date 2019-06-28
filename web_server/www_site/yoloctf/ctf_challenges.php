@@ -58,7 +58,7 @@ function isFlagValid($id, $flag){
       $b = trim($flag);
       //var_dump ($a);
       //var_dump ($b);
-      if (strcasecmp($a,$b)==0) {
+      if (strcmp($a,$b)==0) {
         return true;
       }
       

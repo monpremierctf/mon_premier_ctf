@@ -80,6 +80,7 @@
         //echo '<a href="#" onclick="goPort('.$yo['Port'].'); " ><pre>[Mon terminal]</pre></a>';
         echo 'Votre terminal s\'initialise. Laissez lui 10 secondes et cliquez ici : <a href="https://'.$_SERVER['HTTP_HOST'].'/ctf-tool-xterm_'.$_SESSION['uid'].'/" ><pre>[Mon terminal]</pre></a>';
         echo "</br>";
+        echo "Si vous avez un 'Bad Gateway', attendez 10 secondes, et faites un Refresh de la page.</br>";
         echo "Les copier/coller dans le teminal se font avec le menu du click droit.</br>";
         echo "N'hésitez pas à redimensionner le nombre de colonnes de votre terminal.</br>";
         //echo($yo['Name']);

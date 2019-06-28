@@ -25,8 +25,13 @@ def init():
     return
 
 
+userCount=0
+
 class UserSession():
     def __init__(self):
+        global userCount
+        userCount = userCount+1
+        self.id = userCount
         self.session = requests.Session()
         self.session.verify = False
         self.login = generate_name(8)
@@ -60,7 +65,6 @@ def register_user(user, login, password, mail, code):
     #print(resp.text + '...')
     # On est d accord, pas de test avec une balise html comme nom.. hein ?
     if (resp.text.find(login)):
-        print("OK")
         return True
     return False
 
@@ -82,22 +86,25 @@ def get_terminal_id(txt):
 
 def open_terminal(user):
     resp = user.session.get('https://localhost/yoloctf/my_term.php')
-    print(resp)
+    #print(resp)
     #print(resp.text)
     id = get_terminal_id(resp.text)
-    print (id)
+    #print (id)
     time.sleep(5)  # 5 seconds
     resp = user.session.get('https://localhost/'+id)
-    print(resp)
+    #print(resp)
     
 
 def create_container(user, cont_id):
     resp = user.session.get('https://localhost/yoloctf/containers_cmd.php?create='+cont_id)
-    print(resp)
+    #print(resp.text)
+    if (resp.text.find("Name")):
+        return True
+    return False
 
 def terminate_container(user, cont_id):
     resp = user.session.get('https://localhost/yoloctf/containers_cmd.php?terminate='+cont_id)
-    print(resp)
+    print(resp.text)
 
 
 def load_flags():
@@ -110,10 +117,13 @@ def load_flags():
 
 def validate_flag(user, chal_id, flag):
     # https://localhost/yoloctf/is_flag_valid.php?id=1&flag=373c51258167377b8a81168f11aea626
-    print (chal_id, flag)
+    #print (chal_id, flag)
     resp = user.session.get('https://localhost/yoloctf/is_flag_valid.php?id='+str(chal_id)+'&flag='+flag)
-    print(resp)
-    return
+    #print(resp.text)
+    if (resp.text.find("ok")):
+        return True
+    return False
+
 
 
 users=[]
@@ -126,55 +136,80 @@ containers = ["ctf-shell",
     "ctf-tcpserver", 
 ]
 
+#
+# Main
+#
 if __name__ == '__main__':
+    # Init
     print ("= Init")
     init()
     flags = load_flags()
 
-    print ("Register users")
-    for x in range(50):
+    # Register users
+    nbUserMax = 10
+    print ("Registering "+str(nbUserMax)+" users : ")
+    for x in range(nbUserMax):
         user1  = UserSession()
-        if (not register_user(user1, user1.login, user1.password, user1.mail, 'yolo')):
-            print ("=> KO")
-        else:
+        if (register_user(user1, user1.login, user1.password, user1.mail, 'yolo')):
             users.append(user1)
+            print "."+str(user1.id)
+    print ("Registered "+str(len(users))+" users.")
 
+    # CTF ongoing
     nb_xterm=0
     nb_containers=0
-    print ("Users validate Flags")
     totalflag= len(flags['results']) * len(users)
     while (totalflag>0):
+        print("")
+        print ("=======================")
+        print ("| Nb User       : "+str(len(users)))
+        print ("| Nb Flags left : "+str(totalflag))
+        print ("| Nb xterm      : "+str(nb_xterm))
+        print ("| Nb containers : "+str(nb_containers))
         for u in users:
+            #
             # Flags
             chal_id = flags['results'][u.flag_count]['challenge_id']
+            # Try the right flag or a false one ?
             if (randint(0, 9)<u.skill):
-                if (u.flag_count<len(flags)):
+                if (u.flag_count<len(flags['results'])):
                     flag = flags['results'][u.flag_count]['content']
                     u.flag_count = u.flag_count+1
                     totalflag = totalflag-1
-
             else:
                 flag = generate_name(12)
-            validate_flag(u, chal_id, flag)
+            if (validate_flag(u, chal_id, flag)):
+                print "["+str(u.id)+"] Validate Flag "+str(chal_id)+" with ["+flag+"]"
+
+            #
             # xterm
-            if (randint(0, 9)>=8):
-                if (not u.xterm):
+            if (not u.xterm):
+                if (randint(0, 9)>=8):    
+                    starttime = time.time()
+                    print "["+str(u.id)+"] Open Terminal"
                     open_terminal(u)
-                    print("open_terminal ")
+                    duration = time.time() - starttime
                     u.xterm=True
                     nb_xterm=nb_xterm+1
-                    print "nb_xterm => "+str(nb_xterm) 
+                    print "["+str(u.id)+"] Opened Terminal in "+str(round(duration))
+                    #print "nb_xterm => "+str(nb_xterm) 
 
+            #
             # Create container
-            if (randint(0, 9)>=80):
-                if (u.container_count<len(containers)):
+            if (u.container_count<len(containers)):
+                if (randint(0, 9)>=8):
                     cont_id = containers[u.container_count]
                     u.container_count= u.container_count+1
+                    print "["+str(u.id)+"] Create container " +cont_id  
+                    starttime = time.time()    
                     create_container(u, cont_id)
-                    print("create "+cont_id)
+                    duration = time.time() - starttime
+                    print "["+str(u.id)+"] Created container in "+str(round(duration))
                     nb_containers=nb_containers+1
-                    print "nb_containers => "+str(nb_containers)
+                    #print "nb_containers => "+str(nb_containers)
         time.sleep(randint(3, 8))
+
+
     exit()
 
     for f in flags['results']:

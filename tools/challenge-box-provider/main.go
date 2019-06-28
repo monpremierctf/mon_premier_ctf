@@ -294,9 +294,11 @@ func createNewChallengeBox(box string, duration string, port string, uid string)
 	}
 
 	// If xterm, add webLAN
-	nid := getNetworkId("webserver_webLAN")
-	if err := dockerClient.NetworkConnect(ctx, nid, resp.ID, nil); err != nil {
-		panic(err)
+	if (box=="1") {
+		nid := getNetworkId("webserver_webLAN")
+		if err := dockerClient.NetworkConnect(ctx, nid, resp.ID, nil); err != nil {
+			panic(err)
+		}
 	}
 
 	// Add user network
