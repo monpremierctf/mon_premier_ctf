@@ -362,7 +362,8 @@ func createNewUserNet(uid string, duration int) (containerID string, err error) 
 		ctx, fmt.Sprintf("Net_%s", uid),
 		types.NetworkCreate{
 			Labels: labels,
-			IPAM:   &ipam})
+			IPAM:   &ipam},
+			Internal: True) // No external access
 	if err != nil {
 		panic(err)
 	}
