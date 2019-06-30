@@ -109,15 +109,20 @@ function startServer() {
     }
     const send = buffer(ws, 5);
 
+    // Data sent by server to xterm
     term.on('data', function(data) {
       try {
         send(data);
+        console.log('[ Tal '+term.pid+'] Data ['+data+']');
       } catch (ex) {
         // The WebSocket is not open, ignore
       }
     });
+
+    // Message sent by xterm to server
     ws.on('message', function(msg) {
       term.write(msg);
+      console.log('[ Tal '+term.pid+'] Msg  ['+msg+']');
     });
     ws.on('close', function () {
       term.kill();
