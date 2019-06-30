@@ -1,0 +1,9 @@
+wget -O dirb.tar.gz https://downloads.sourceforge.net/project/dirb/dirb/2.22/dirb222.tar.gz
+tar -xf ../dirb222.tar.gz
+chmod -R a+X dirb222/
+cd dirb222/
+chmod a+x configure
+sudo apt-get -y install libcurl4-gnutls-dev
+./configure
+make
+
