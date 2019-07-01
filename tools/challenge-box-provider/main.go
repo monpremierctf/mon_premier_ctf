@@ -38,6 +38,7 @@ type Challenges struct {
 }
 */
 var (
+	requestId                  int
 	ufwProxyPort               int
 	challengeBoxDockerImage    string
 	challengeBoxDockerPort     int
@@ -232,7 +233,7 @@ func getNetworkIdFromUID(uid string) (networkID string) {
 //
 // Create New Challenge Container
 //
-func createNewChallengeBox(box string, duration string, port string, uid string) (containerID string, err error) {
+func createNewChallengeBox(requestId int, box string, duration string, port string, uid string) (containerID string, err error) {
 	ctx := context.Background()
 
 	// Labels
@@ -247,6 +248,7 @@ func createNewChallengeBox(box string, duration string, port string, uid string)
 	env := []string{}
 
 	if box == "ctf-tool-xterm" {
+		log.Printf("[%d][%s] createNewChallengeBox ctf-tool-xterm : set URLPREFIX, add webserver_webLAN", requestId, string(uid))
 		env = append(env, fmt.Sprintf("URLPREFIX=/%s_%s", box, uid))
 		labels["traefik.docker.network"] = "webserver_webLAN"
 	}
@@ -275,7 +277,7 @@ func createNewChallengeBox(box string, duration string, port string, uid string)
 			Env:      env,
 		},
 		&container.HostConfig{
-			AutoRemove:      true,
+			AutoRemove:      (box != "ctf-tool-xterm"),
 			PublishAllPorts: false,
 			Resources: container.Resources{
 				Memory:   3e+7, // in bytes, 30 000 000, 30Mb
@@ -288,6 +290,7 @@ func createNewChallengeBox(box string, duration string, port string, uid string)
 			&container.NetworkingConfig{
 				EndpointsConfig ep,
 			},*/
+
 		fmt.Sprintf("%s_%s", box, uid))
 	if err != nil {
 		panic(err)
@@ -304,7 +307,12 @@ func createNewChallengeBox(box string, duration string, port string, uid string)
 	// Add user network
 	nid := getNetworkIdFromUID(uid)
 	if nid == "" {
+		log.Printf("[%d][%s] createNewChallengeBox No User network found. Creating...", requestId, string(uid))
+		start := time.Now().Unix()
 		nid, _ = createNewUserNet(uid, 3600)
+		duration := time.Now().Unix() - start
+		log.Printf("[%d][%s] createNewChallengeBox User network creation took %d s", requestId, string(uid), duration)
+
 	}
 	if err := dockerClient.NetworkConnect(ctx, nid, resp.ID, nil); err != nil {
 		panic(err)
@@ -317,11 +325,16 @@ func createNewChallengeBox(box string, duration string, port string, uid string)
 	}
 
 	// Start container
-	if err := dockerClient.ContainerStart(ctx, resp.ID, types.ContainerStartOptions{}); err != nil {
+	start2 := time.Now().Unix()
+	log.Printf("[%d][%s] createNewChallengeBox Calling ContainerStart", requestId, string(uid))
+	err = dockerClient.ContainerStart(ctx, resp.ID, types.ContainerStartOptions{})
+	duration2 := time.Now().Unix() - start2
+	log.Printf("[%d][%s] createNewChallengeBox ContainerStart took %d s", requestId, string(uid), duration2)
+	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println(resp.ID)
+	//fmt.Println(resp.ID)
 	containerID = resp.ID
 
 	// Open firewall
@@ -517,27 +530,28 @@ func listChallengeBox(w http.ResponseWriter, r *http.Request) {
 
 func createChallengeBox(w http.ResponseWriter, r *http.Request) {
 
+	requestId = requestId + 1
 	// Get uid
 	uids, ok := r.URL.Query()["uid"]
 	if !ok || len(uids[0]) < 1 {
-		log.Println("createChallengeBox 'uid' is missing")
-		fmt.Fprintf(w, "ko")
+		log.Printf("[%d][xx] createChallengeBox 'uid' is missing", requestId)
+		fmt.Fprintf(w, "ko, invalid request")
 		return
 	}
 	uid := uids[0]
-	log.Println("createChallengeBox 'uid' is: " + string(uid))
+	log.Printf("[%d][%s] createChallengeBox uid=%s", requestId, string(uid), string(uid))
 
 	// Is uid allowed ?
 
 	// get Cid
 	cids, ok := r.URL.Query()["cid"]
 	if !ok || len(cids[0]) < 1 {
-		log.Println("createChallengeBox'cid' is missing")
-		fmt.Fprintf(w, "ko")
+		log.Printf("[%d][%s] createChallengeBox 'cid' is missing", requestId, string(uid))
+		fmt.Fprintf(w, "ko, invalid request")
 		return
 	}
 	cid := cids[0]
-	log.Println("createChallengeBox 'cid' is: " + string(cid))
+	log.Printf("[%d][%s] createChallengeBox cid=%s", requestId, string(uid), string(cid))
 
 	// find entry
 	var cindex int = -1
@@ -548,49 +562,52 @@ func createChallengeBox(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if cindex == -1 {
-
-		log.Println("cid not found : " + string(cid))
-		fmt.Fprintf(w, "ko")
+		log.Printf("[%d][%s] createChallengeBox cid=%s not found", requestId, string(uid), string(cid))
+		fmt.Fprintf(w, "ko, invalid request")
 		return
 	}
 
-	// Existe ?
+	// Container already exist ?
 	boxID := getChallengeBox(
 		challenges[cindex].Image,
 		uid,
 	)
-
 	if boxID != "" {
+		log.Printf("[%d][%s] createChallengeBox Container already exists", requestId, string(uid))
 		sshPort, err := getHostSSHPort(string(boxID))
 		if err != nil {
-			fmt.Fprintf(w, "Found box")
+			fmt.Fprintf(w, "{\"Name\":\"%s\", \"Port\":\"%s\"}", challenges[cindex].Image+"_"+uid, "0")
 		} else {
 			fmt.Fprintf(w, "{\"Name\":\"%s\", \"Port\":\"%s\"}", challenges[cindex].Image+"_"+uid, sshPort)
 		}
 		return
 	}
+
 	// create docker
-	log.Println("Starting new docker box")
-	log.Println("id   : " + string(challenges[cindex].Id))
-	log.Println("image: " + string(challenges[cindex].Image))
-	log.Println("port : " + string(challenges[cindex].Port))
+	log.Printf("[%d][%s] createChallengeBox Starting new container [%s, %s, %s]", requestId, string(uid),
+		string(challenges[cindex].Id), string(challenges[cindex].Image), string(challenges[cindex].Port),
+	)
+
+	start := time.Now().Unix()
 	boxID, err := createNewChallengeBox(
+		requestId,
 		challenges[cindex].Image,
 		challenges[cindex].Duration,
 		challenges[cindex].Port,
 		uid,
 	)
-
+	duration := time.Now().Unix() - start
 	if err != nil {
-		log.Println("error: " + err.Error())
+		log.Printf("[%d][%s] createChallengeBox Error creating container: "+err.Error(), requestId, string(uid))
 		fmt.Fprintf(w, "ko")
+		return
 	} else {
-		log.Println("boxID is: " + string(boxID))
+		log.Printf("[%d][%s] createChallengeBox New container created in %d s, ID="+string(boxID), requestId, string(uid), duration)
 	}
 
 	sshPort, err := getHostSSHPort(string(boxID))
 	if err != nil {
-		fmt.Fprintf(w, "Create box")
+		fmt.Fprintf(w, "{\"Name\":\"%s\", \"Port\":\"%s\"}", challenges[cindex].Image+"_"+uid, "0")
 	} else {
 		fmt.Fprintf(w, "{\"Name\":\"%s\", \"Port\":\"%s\"}", challenges[cindex].Image+"_"+uid, sshPort)
 	}
@@ -729,27 +746,28 @@ func oldcleanDB() {
 
 func stopChallengeBox(w http.ResponseWriter, r *http.Request) {
 
+	requestId = requestId + 1
 	// Get uid
 	uids, ok := r.URL.Query()["uid"]
 	if !ok || len(uids[0]) < 1 {
-		log.Println("stopChallengeBox 'uid' is missing")
-		fmt.Fprintf(w, "ko")
+		log.Printf("[%d][xx] stopChallengeBox uid is missing", requestId)
+		fmt.Fprintf(w, "ko, invalid request")
 		return
 	}
 	uid := uids[0]
-	log.Println("stopChallengeBox 'uid' is: " + string(uid))
+	log.Printf("[%d][%s] stopChallengeBox uid="+string(uid), requestId, string(uid))
 
 	// Is uid allowed ?
 
 	// get Cid
 	cids, ok := r.URL.Query()["cid"]
 	if !ok || len(cids[0]) < 1 {
-		log.Println("stopChallengeBox'cid' is missing")
-		fmt.Fprintf(w, "ko")
+		log.Printf("[%d][%s] stopChallengeBox cid is missing", requestId, string(uid))
+		fmt.Fprintf(w, "ko, invalid request")
 		return
 	}
 	cid := cids[0]
-	log.Println("stopChallengeBox 'cid' is: " + string(cid))
+	log.Printf("[%d][%s] stopChallengeBox cid="+string(cid), requestId, string(uid))
 
 	// find entry
 	var cindex int = -1
@@ -761,7 +779,7 @@ func stopChallengeBox(w http.ResponseWriter, r *http.Request) {
 	}
 	if cindex == -1 {
 
-		log.Println("stopChallengeBox cid not found : " + string(cid))
+		log.Printf("[%d][%s] stopChallengeBox cid not found : "+string(cid), requestId, string(uid))
 		fmt.Fprintf(w, "ko")
 		return
 	}
@@ -774,16 +792,18 @@ func stopChallengeBox(w http.ResponseWriter, r *http.Request) {
 
 	// Stop
 	if boxID != "" {
-		log.Println("stopChallengeBox stopping : " + boxID)
+		log.Printf("[%d][%s] stopChallengeBox container found. Stopping "+boxID, requestId, string(uid))
 		err := dockerClient.ContainerStop(ctx, boxID, nil)
 		if err != nil {
-			fmt.Fprintf(w, "Problem stopping")
-
+			log.Printf("[%d][%s] stopChallengeBox Pb stopping "+boxID, requestId, string(uid))
+			fmt.Fprintf(w, "Ko, Problem stopping")
 		} else {
+			log.Printf("[%d][%s] stopChallengeBox Stopped "+boxID, requestId, string(uid))
 			fmt.Fprintf(w, "Stopped")
 		}
 		return
 	}
+	log.Printf("[%d][%s] stopChallengeBox container not found.", requestId, string(uid))
 	fmt.Fprintf(w, "Cant find box")
 }
 
@@ -968,7 +988,7 @@ func readConfigFile(filename string) {
 }
 
 func main() {
-
+	requestId = 0
 	net_1 = 16
 	net_2 = 1
 	flag.Parse()
@@ -984,20 +1004,14 @@ func main() {
 		}
 	}()
 
-	//fmt.Println("==\n")
-	//fmt.Println(getChallengeBox("ctf-transfert", "23"))
-	//fmt.Println("==\n")
-
 	//http.Handle("/", http.FileServer(http.Dir("./src")))
 
 	http.HandleFunc("/listChallengeBox/", listChallengeBox)
-
 	http.HandleFunc("/createUserNet/", createUserNet)
-	//http.HandleFunc("/createUserTerm/", createUserTerm)
 	http.HandleFunc("/createChallengeBox/", createChallengeBox)
 	http.HandleFunc("/statusChallengeBox/", statusChallengeBox)
 	http.HandleFunc("/stopChallengeBox/", stopChallengeBox)
-	//fmt.Printf("Net id =%s ==", getNetworkId("22"))
+
 	log.Fatal(http.ListenAndServe(httpServerListener, nil))
 
 }
