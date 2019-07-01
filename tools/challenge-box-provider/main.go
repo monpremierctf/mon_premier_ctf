@@ -294,7 +294,7 @@ func createNewChallengeBox(box string, duration string, port string, uid string)
 	}
 
 	// If xterm, add webLAN
-	if (box=="ctf-tool-xterm") {
+	if box == "ctf-tool-xterm" {
 		nidweb := getNetworkId("webserver_webLAN")
 		if err := dockerClient.NetworkConnect(ctx, nidweb, resp.ID, nil); err != nil {
 			panic(err)
@@ -361,8 +361,8 @@ func createNewUserNet(uid string, duration int) (containerID string, err error) 
 	resp, err := dockerClient.NetworkCreate(
 		ctx, fmt.Sprintf("Net_%s", uid),
 		types.NetworkCreate{
-			Labels: labels,
-			IPAM:   &ipam,
+			Labels:   labels,
+			IPAM:     &ipam,
 			Internal: true}) // No external access
 	if err != nil {
 		panic(err)
@@ -968,30 +968,7 @@ func readConfigFile(filename string) {
 }
 
 func main() {
-	/*
-		chall := [11]challenge{
-			// xterm
-			challenge{"1", "ctf-tool-xterm", 3000, 30 * 3600}, // 3h
-			// challenges
-			challenge{"2", "ctf-shell", 22, 10 * 60 * 60}, // 10 min
-			challenge{"3", "ctf-sqli", 22, 10 * 60 * 60},
-			challenge{"4", "ctf-escalation", 80, 10 * 60 * 60},
-			challenge{"5", "ctf-buffer", 22, 10 * 60 * 60},
-			challenge{"6", "ctf-transfert", 22, 10 * 60 * 60},
-			challenge{"7", "ctf-exploit", 22, 10 * 60 * 60},
 
-			challenge{"ctf-tcpserver", "ctf-tcpserver", 22, 10 * 60 * 60},
-			challenge{"ctf-telnet", "ctf-telnet", 22, 10 * 60 * 60},
-			challenge{"ctf-ftp", "ctf-ftp", 22, 10 * 60 * 60},
-			challenge{"ctf-smtp", "ctf-smtp", 22, 10 * 60 * 60},
-		}
-
-
-		for _, ch := range chall {
-			challenges = append(challenges, ch)
-		}
-			//challenges = chall
-	*/
 	net_1 = 16
 	net_2 = 1
 	flag.Parse()
