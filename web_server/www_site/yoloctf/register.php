@@ -7,6 +7,21 @@
     header('X-Frame-Options: SAMEORIGIN'); 
     session_start ();
 
+
+    function file_get_poke($url) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //Set curl to return the data instead of printing it to the browser.
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1);  // 1s timeout
+        //curl_setopt($curl_handle, CURLOPT_USERAGENT, 'Your application name');
+        $data = curl_exec($ch);
+        curl_close($ch);
+        return $data;
+    }
+
+
+
     if (isset($_POST['login']) && isset($_POST['password']) && isset($_POST['code'])) {
 
         if ((strlen($_POST['login'])<2) or (strlen($_POST['password'])<2)) {
@@ -64,6 +79,9 @@
                 printf("Insert failed: %s\n", $mysqli->error);
                 exit();
             }
+
+            // create user Network
+            //$dummy = file_get_poke('http://challenge-box-provider:8080/createChallengeBox/?uid='.$_SESSION['uid'].'&cid=1');
         }
     }
     

@@ -63,6 +63,9 @@
             elseif ($p==="Dashboard") {
                 include "containers.php";
             }
+            elseif ($p==="Xterm") {
+                include "my_term.php";
+            }
             elseif ($p==="Welcome_1") {
                 $string = file_get_contents("welcome_1.md");
                 print $Parsedown->text($string);

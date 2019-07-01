@@ -294,15 +294,15 @@ func createNewChallengeBox(box string, duration string, port string, uid string)
 	}
 
 	// If xterm, add webLAN
-	if (box=="1") {
-		nid := getNetworkId("webserver_webLAN")
-		if err := dockerClient.NetworkConnect(ctx, nid, resp.ID, nil); err != nil {
+	if (box=="ctf-tool-xterm") {
+		nidweb := getNetworkId("webserver_webLAN")
+		if err := dockerClient.NetworkConnect(ctx, nidweb, resp.ID, nil); err != nil {
 			panic(err)
 		}
 	}
 
 	// Add user network
-	nid = getNetworkIdFromUID(uid)
+	nid := getNetworkIdFromUID(uid)
 	if nid == "" {
 		nid, _ = createNewUserNet(uid, 3600)
 	}
@@ -362,8 +362,8 @@ func createNewUserNet(uid string, duration int) (containerID string, err error) 
 		ctx, fmt.Sprintf("Net_%s", uid),
 		types.NetworkCreate{
 			Labels: labels,
-			IPAM:   &ipam},
-			Internal: True) // No external access
+			IPAM:   &ipam,
+			Internal: true}) // No external access
 	if err != nil {
 		panic(err)
 	}

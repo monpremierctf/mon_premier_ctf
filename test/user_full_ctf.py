@@ -7,6 +7,8 @@ import json
 from pprint import pprint
 from random import randint
 import os
+import threading
+import signal
 
 # Generate random name
 VOWELS = "aeiou"
@@ -140,8 +142,8 @@ def cmd_cpu_load(user):
     return
 
 
-def run_rand_cmd(user):
-    if (user.uid == ""):
+def run_rand_cmd(u):
+    if (u.uid == ""):
         print "["+str(u.id)+"] uid not set "
         return
     
@@ -172,17 +174,10 @@ containers = [
     "ctf-tcpserver", 
 ]
 
-#
-# Main
-#
-if __name__ == '__main__':
-    # Init
-    print ("= Init")
+
+def scenario_serial(nbUserMax):
     init()
     flags = load_flags()
-
-    # Register users
-    nbUserMax = 2
     print ("Registering "+str(nbUserMax)+" users : ")
     for x in range(nbUserMax):
         user1  = UserSession()
@@ -260,6 +255,134 @@ if __name__ == '__main__':
     for u in users:
         for c in containers:
             terminate_container(u, c)
+    return
+
+
+
+
+SHOULD_TERMINATE = False
+
+def run_user_journey(u, flags):
+    time.sleep(randint(2, 4))
+    print ("["+str(u.id)+"] Register ")
+    register_user(u, u.login, u.password, u.mail, 'yolo')
+
+
+    totalflag= len(flags['results']) 
+    while (totalflag>0):
+        #
+        # Flags
+        if (u.flag_count<len(flags['results'])):
+            chal_id = flags['results'][u.flag_count]['challenge_id']
+            # Try the right flag or a false one ?
+            if (randint(0, 9)<u.skill):
+                flag = flags['results'][u.flag_count]['content']
+                u.flag_count = u.flag_count+1
+                totalflag = totalflag-1
+            else:
+                flag = generate_name(12)
+            print "["+str(u.id)+"] Send Flag "+str(chal_id)+" : ["+flag+"]"
+            validate_flag(u, chal_id, flag)
+            
+        #
+        # xterm
+        if (not u.xterm):
+            if (randint(0, 9)>=8):    
+                starttime = time.time()
+                print "["+str(u.id)+"] Open Terminal"
+                open_terminal(u)
+                duration = time.time() - starttime
+                u.xterm=True
+                print "["+str(u.id)+"] Opened Terminal in "+str(round(duration))
+                #print "nb_xterm => "+str(nb_xterm) 
+
+        #
+        # Create container
+        if (u.container_count<len(containers)):
+            if (randint(0, 9)>=8):
+                cont_id = containers[u.container_count]
+                u.container_count= u.container_count+1
+                print "["+str(u.id)+"] Create container " +cont_id  
+                starttime = time.time()    
+                create_container(u, cont_id)
+                duration = time.time() - starttime
+                print "["+str(u.id)+"] Created container in "+str(round(duration))
+                #print "nb_containers => "+str(nb_containers)
+
+        #
+        # Run cmd in container
+        if (randint(0, 9)>=5):
+            print "["+str(u.id)+"] start cmd in container "
+            run_rand_cmd(u)
+            print "["+str(u.id)+"] stop cmd in container "
+
+
+        if SHOULD_TERMINATE:
+            return
+
+    time.sleep(randint(2, 4))
+
+
+    
+    return
+
+thread_list = []
+
+def scenario_parallel(nbUserMax):
+    init()
+    flags = load_flags()
+    for x in range(nbUserMax):
+        user  = UserSession()
+        users.append(user)
+        t = threading.Thread(target=run_user_journey, args = (user,flags, ))
+        thread_list.append(t)
+        #t.daemon = True
+    for thread in thread_list:
+        thread.start()
+
+
+
+class ServiceExit(Exception):
+    """
+    Custom exception which is used to trigger the clean exit
+    of all running threads and the main program.
+    """
+    pass
+ 
+ 
+def service_shutdown(signum, frame):
+    print('Caught signal %d' % signum)
+    raise ServiceExit
+
+
+#
+# Main
+#
+if __name__ == '__main__':
+    signal.signal(signal.SIGTERM, service_shutdown)
+    signal.signal(signal.SIGINT, service_shutdown)
+
+    # Init
+    print ("= Init")
+    
+
+    # Register users
+    nbUserMax = 5
+    #scenario_serial(nbUserMax)
+    try:
+        scenario_parallel(nbUserMax)
+        while True:
+            time.sleep(0.5)
+    except ServiceExit:
+        # Terminate the running threads.
+        # Set the shutdown flag on each thread to trigger a clean shutdown of each thread.
+        SHOULD_TERMINATE = True
+        for thread in thread_list:
+            thread.join()
+        exit()
+
+
+    
 
     
     
