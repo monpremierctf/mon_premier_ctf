@@ -280,8 +280,8 @@ func createNewChallengeBox(requestId int, box string, duration string, port stri
 			AutoRemove:      (box != "ctf-tool-xterm"),
 			PublishAllPorts: false,
 			Resources: container.Resources{
-				Memory:   3e+7, // in bytes, 30 000 000, 30Mb
-				NanoCPUs: 1e+8, // 0.1 CPU max per container
+				Memory:   100e+7, // in bytes, 100 000 000, 100Mb
+				NanoCPUs: 1e+8,   // 0.1 CPU max per container
 			},
 			//PortBindings: portBinding,
 		},
