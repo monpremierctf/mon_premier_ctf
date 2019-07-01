@@ -269,6 +269,7 @@ func createNewChallengeBox(requestId int, box string, duration string, port stri
 	// https://godoc.org/github.com/docker/docker/api/types/container#Resources
 
 	// Create
+	//storageOpt := map[string]string{"size": "2G"}
 	resp, err := dockerClient.ContainerCreate(ctx,
 		&container.Config{
 			Image:    box,
@@ -279,6 +280,9 @@ func createNewChallengeBox(requestId int, box string, duration string, port stri
 		&container.HostConfig{
 			AutoRemove:      (box != "ctf-tool-xterm"),
 			PublishAllPorts: false,
+			//--storage-opt size=120G
+			//StorageOpt: storageOpt,
+			// Error response from daemon: --storage-opt is supported only for overlay over xfs with 'pquota' mount option
 			Resources: container.Resources{
 				Memory:   100e+7, // in bytes, 100 000 000, 100Mb
 				NanoCPUs: 1e+8,   // 0.1 CPU max per container
