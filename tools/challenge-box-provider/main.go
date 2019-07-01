@@ -284,7 +284,7 @@ func createNewChallengeBox(requestId int, box string, duration string, port stri
 			//StorageOpt: storageOpt,
 			// Error response from daemon: --storage-opt is supported only for overlay over xfs with 'pquota' mount option
 			Resources: container.Resources{
-				Memory:   100e+7, // in bytes, 100 000 000, 100Mb
+				Memory:   100e+6, // in bytes, 100 000 000, 100Mb
 				NanoCPUs: 1e+8,   // 0.1 CPU max per container
 			},
 			//PortBindings: portBinding,
