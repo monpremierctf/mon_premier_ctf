@@ -51,6 +51,7 @@
 <body>
 
 <?php
+    include "ctf_challenges.php";
     include "Parsedown.php";
     $Parsedown = new Parsedown();
 ?>
@@ -60,7 +61,18 @@
 <p ><pre class="ctf-subtitle-size">Mon premier CTF</pre></p> 
 </div>
 
-  
+
+<div class="row-sm-3">
+<div class="col-sm-3">
+  <p>
+<?php
+echo "Participants connectés : ";
+echo  get_active_users();
+?>
+</p>
+</div>
+</div>
+
 <div class="row">
     <div class="col-sm-1">
       

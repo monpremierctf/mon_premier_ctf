@@ -209,6 +209,20 @@ function html_dump_cat($cat) {
 }
 
 
+function get_active_users(){
+  $sp = ini_get("session.save_path");
+  if ($sp=="") { $sp = "/tmp";}
+  $h = opendir($sp);
+  $nb_users = 0;
+  if ($h== false) return 1;
+  while (($file = readdir($h))!=false){
+      if (preg_match("/^sess/", $file)) $nb_users++;
+  }
+  //$nb_users = count(scandir($sp))-2;
+  return $nb_users;
+}
+
+
 function ctf_div_server_status($id) {
 
 //echo '</br>';

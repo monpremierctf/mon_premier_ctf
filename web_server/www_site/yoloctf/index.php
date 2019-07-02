@@ -48,6 +48,8 @@
         <div class="container">
 
         <?php
+
+
             
             $p = $_GET['p'];
             $intro = getIntro($p);
