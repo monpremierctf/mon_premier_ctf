@@ -5,6 +5,27 @@ version: '2'
 
 
 services:
+
+
+  webserver_frontdoor:
+    image: nginx:latest
+    container_name: webserver_nginx_frontdoor
+    networks:
+      - webserver_webLAN
+    volumes:
+      - ./www_site_frontdoor:/www_site
+      - ./site_frontdoor.conf:/etc/nginx/conf.d/default.conf
+    labels:
+      - "traefik.backend=webserver_frontdoor"
+      - "traefik.docker.network=webserver_webLAN"
+      - "traefik.frontend.rule=Path:/"      
+      - "traefik.frontend.entryPoints=http,https"
+      - "traefik.frontend.headers.SSLRedirect=true"
+      - "traefik.enable=true"
+      - "traefik.port=80"
+      - "traefik.default.protocol=http"
+
+
   webserver_nginx:
     image: nginx:latest
     container_name: webserver_nginx
@@ -22,14 +43,12 @@ services:
       - "traefik.backend=webserver"
       - "traefik.docker.network=webserver_webLAN"
       #- "traefik.frontend.rule=PathPrefix:/yoloctf/;ReplacePathRegex: ^/yoloctf/(.*) /$$1"  
-      - "traefik.frontend.rule=PathPrefix:/yoloctf/"      
+      - "traefik.frontend.rule=PathPrefix:/yoloctf"      
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.frontend.headers.SSLRedirect=true"
       - "traefik.enable=true"
       - "traefik.port=80"
       - "traefik.default.protocol=http"
-
-
 
 
   webserver_php:
@@ -45,6 +64,8 @@ services:
       - webserver_mysql
     labels:
       - "traefik.enable=false"
+
+
 
   webserver_mysql:
     build: ./mysql/
