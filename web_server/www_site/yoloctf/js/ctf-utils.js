@@ -10,8 +10,11 @@ function ctf_validate(id, flag_field)
             $(flag_field).css({ 'color': 'green', 'background-color': 'green' });
             $(flag_field).html(data);
         } else {
-            alert("Flag non validé...");
+            //alert("Flag non validé...");
             $(flag_field).css({ 'color': 'red' });
+            $('#myModalTitle').html("Flag pas validé du tout");
+            $('#myModalContent').html('<img src="player_02_200.png" alt="Participant">');
+            $('#myModal').modal('show');
         }
     })
 .fail(function() {
