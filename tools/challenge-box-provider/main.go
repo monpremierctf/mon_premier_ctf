@@ -507,9 +507,9 @@ func listChallengeBox(w http.ResponseWriter, r *http.Request) {
 				json += ",\n"
 			}
 			json += "{"
-			json += "\"Name\":\"" + cont.Names[0] + "\","
-			json += "\"Id\":\"" + cont.ID + "\","
-			json += "\"Uid\":\"" + uid + "\","
+			json += "\"Name\":\"" + cont.Names[0] + "\", "
+			json += "\"Id\":\"" + cont.ID + "\", "
+			json += "\"Uid\":\"" + uid + "\", "
 			fmt.Println(cont.Names)
 			fmt.Printf("Is from %s\n", uid)
 

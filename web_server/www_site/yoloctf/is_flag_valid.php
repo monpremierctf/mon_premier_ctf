@@ -21,7 +21,9 @@
         //echo $valid;
         $count = is_flag_validated($uid, $cid);
         //echo $count;
-        if (($isvalid)&&($count==0)) {
+        if (($isvalid)&&($count>0)) {
+            return;
+        }
             //echo "Valid='$valid'";
             //insert into flags (UID,CHALLID, fdate, isvalid, flag) values ('user1','chall1', NOW(), TRUE, 'flag1');
             $flag = mysqli_real_escape_string($mysqli, $flag);
@@ -34,9 +36,7 @@
                 // ko
                 echo "Error: " . $sql . "<br>" . $conn->error;
             }
-        } else {
-            //echo "dont save";
-        }
+    
 		/* close connection */
 		$mysqli->close();
     }

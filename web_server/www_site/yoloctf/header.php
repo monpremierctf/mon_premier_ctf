@@ -7,7 +7,7 @@ if (isset($_SESSION['login'] )) {
     <div class="col-md-1 float-right">
         
         <p><img class="row-md-auto float-center" src="player_02_200.png" width="80" height="80" alt="Participant" ></p>
-        <div class="row-md-auto float-center font-weight-bold">'.$_SESSION['login'].'</div>
+        <div class="row-md-auto float-center font-weight-bold">'.htmlspecialchars($_SESSION['login']).'</div>
         <button type="button" class="btn btn-default float-center btn-warning" id="Logout" value="Logout">Logout</button>
         </div>
     </div>   

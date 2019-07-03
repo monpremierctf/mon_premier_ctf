@@ -23,4 +23,12 @@
             print '<a href="index.php?p=Xterm"><pre class="ctf-menu-color">[Mon terminal]</pre></a> ';
             print '<a href="scoreboard.php" target="_blank"><pre class="ctf-menu-color">[Score board]</pre></a> ';
             //print '<a href="index.php?p=Dashboard" target="_blank"><pre>[Dashboard]</pre></a> ';
+
+
+
+            if (isset($_SESSION['login'] )) {
+                if (($_SESSION['login']=='admin' )) {
+                    print '<a href="zen.php" ><pre class="ctf-menu-color">[Admin]</pre></a> ';
+                }
+            }
             ?>

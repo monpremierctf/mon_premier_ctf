@@ -65,9 +65,9 @@ function dumpFlagDataSet(){
 		include "ctf_sql.php";
 
 		$user_query = "SELECT login, UID FROM users;";
-		if ($result = $mysqli->query($user_query)) {
+		if ($user_result = $mysqli->query($user_query)) {
 			/* fetch object array */
-			while ($row = $result->fetch_assoc()) {
+			while ($row = $user_result->fetch_assoc()) {
 				//UID,CHALLID, fdate, isvalid, flag
 				//var_dump($row);
 				$uid = $row['UID'];
@@ -126,7 +126,7 @@ echo "{
 			}
 		
 			/* free result set */
-			$result->close();
+			$user_result->close();
 		}
 
 		/* close connection */
