@@ -366,11 +366,11 @@ if __name__ == '__main__':
 
     # Init
     print ("= Init")
-    scenario_serial(150, True, True, 2)
-    exit()
+    #scenario_serial(150, True, True, 2)
+    #exit()
 
     # Register users
-    nbUserMax = 5
+    nbUserMax = 10
     #scenario_serial(nbUserMax)
     try:
         scenario_parallel(nbUserMax)

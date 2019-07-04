@@ -284,7 +284,7 @@ func createNewChallengeBox(requestId int, box string, duration string, port stri
 			//StorageOpt: storageOpt,
 			// Error response from daemon: --storage-opt is supported only for overlay over xfs with 'pquota' mount option
 			Resources: container.Resources{
-				Memory:   100e+6, // in bytes, 100 000 000, 100Mb
+				Memory:   200e+6, // in bytes, 200 000 000, 200Mb
 				NanoCPUs: 1e+8,   // 0.1 CPU max per container
 			},
 			//PortBindings: portBinding,
@@ -838,7 +838,7 @@ func statusChallengeBox(w http.ResponseWriter, r *http.Request) {
 	// find entry
 	var cindex int = -1
 	for index, chall := range challenges {
-		log.Println("Search: " + string(chall.Id))
+		//log.Println("Search: " + string(chall.Id))
 		if chall.Id == cid {
 			cindex = index
 		}
@@ -859,9 +859,11 @@ func statusChallengeBox(w http.ResponseWriter, r *http.Request) {
 	if boxID != "" {
 		sshPort, err := getHostSSHPort(string(boxID))
 		if err != nil {
+			log.Println("statusChallengeBox : Not running")
 			fmt.Fprintf(w, "Ko")
 
 		} else {
+			log.Println("statusChallengeBox : Running")
 			fmt.Fprintf(w, "{\"Name\":\"%s\", \"Port\":\"%s\"}", challenges[cindex].Image+"_"+uid, sshPort)
 		}
 		return
