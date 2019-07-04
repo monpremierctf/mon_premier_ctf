@@ -1,7 +1,7 @@
 #
 #
 #
-version: '2'
+version: '3'
 
 
 services:
@@ -55,6 +55,10 @@ services:
     #image: php:7-fpm
     build: php/.
     container_name: webserver_php
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER_PASSWORD: ${MYSQL_USER_PASSWORD}
+      PHP_ADMIN_ACCOUNT: ${PHP_ADMIN_ACCOUNT}
     volumes:
       - ./www_site:/www_site
     networks:
@@ -74,11 +78,14 @@ services:
     #ports:
     #  - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=AZ56FG78HJZE34
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER_PASSWORD: ${MYSQL_USER_PASSWORD}
     networks:
         - sqlLAN
     labels:
       - "traefik.enable=false"
+
+
       
 networks:
 #  webLAN:

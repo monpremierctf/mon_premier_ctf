@@ -5,7 +5,7 @@ services:
 
   web:
     image: nginx:latest
-    container_name: ctf-sqli_nginx
+    container_name: ctf-sqli
     #ports:
     #  - "${PORT_HTTP}:80"
     networks:
@@ -37,6 +37,8 @@ services:
       - "traefik.enable=false"
     links:
       - mysql
+    environment:
+      READUSER_PASSWD: ${READUSER_PASSWD}
 
   mysql:
     build: ./mysql/
@@ -49,7 +51,8 @@ services:
     labels:
       - "traefik.enable=false"
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      READUSER_PASSWD: ${READUSER_PASSWD}
 
 
 networks:

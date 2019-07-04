@@ -7,7 +7,7 @@ $(document).ready(function() {
       $.get("containers_cmd.php?status=1", function(data) { 
           if (data=="Ko") {
            
-            txt = "Votre terminal s\'initialise. Il créé son réseau dédié et démarre une nouvelle instance... Laissez lui "+tt+" secondes...";
+            txt = "Votre terminal s\'initialise. Il créé son réseau dédié et démarre une nouvelle instance... Ca prend du temps... Laissez lui "+tt+" secondes...";
             $("#XtermStatus").html(txt);
 
             timer = setInterval(function() {
@@ -63,11 +63,13 @@ $(document).ready(function() {
         //var_dump($yo);
         //echo '<a href="http://localhost:'.$yo['Port'].'" target="_blank"><pre>[Mon terminal]</pre></a>';
         //echo '<a href="#" onclick="goPort('.$yo['Port'].'); " ><pre>[Mon terminal]</pre></a>';
-        echo '<a href="https://'.$_SERVER['HTTP_HOST'].'/ctf-tool-xterm_'.$_SESSION['uid'].'/" target="_blank"><pre>[Mon terminal]</pre></a>';
+        echo '<a href="https://'.$_SERVER['HTTP_HOST'].'/ctf-tool-xterm_'.$_SESSION['uid'].'/" target="_blank"><pre>[Cliquer ICI pour ouvrir mon terminal dans un nouvel onglet]</pre></a>';
         echo "</br>";
-        echo "Si vous avez un 'Bad Gateway', attendez 10 secondes, et faites un Refresh de la page.</br>";
-        echo "Les copier/coller dans le teminal se font avec le menu du click droit.</br>";
+        echo "Si vous avez un '404 not found', l'instance n'est pas encore up. Atendez 60 secondes et faites un Refresh de la page.</br>";
+        echo "Si vous avez un 'Bad Gateway', l'instance est up et s'initialise. Attendez 10 secondes, et faites un Refresh de la page.</br></br>";
+        echo "Les copier/coller dans le terminal se font avec le menu du click droit.</br>";
         echo "N'hésitez pas à redimensionner le nombre de colonnes de votre terminal.</br>";
+        echo "Vous pouvez avoir autant d'onglets avec un terminal que nécessaire: clickez n fois sur le lien ci-dessus.</br>";
         //echo($yo['Name']);
         /*
         echo 'Accès avancé distant possible en : </br>';

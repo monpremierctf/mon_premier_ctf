@@ -31,10 +31,7 @@ if ($_GET['idmsg']) { $idmsg = $_GET['idmsg'];}
 
 //
 // connect to mysql
-$host = 'ctfsqli_mysql'; //'mysql';
-$user = 'readuser';
-$pass = getenv('READUSER_PASSWD')?getenv('READUSER_PASSWD'):'passwordforreaduser';
-$dbname = 'dbmccoy';
+include "my_sql.php";
 
 $conn = new mysqli($host, $user, $pass,$dbname);
 if ($conn->connect_error) {
@@ -58,7 +55,7 @@ $conn->close();
 
 
 print "</br></br><pre><code>Debug mode : ON</br>";
-print "[SQL request :".$sql."]</br>";
+print "[SQL request :".htmlspecialchars($sql)."]</br>";
 print "[num_rows=".$result->num_rows . "]</code></pre></br>";
 
 
