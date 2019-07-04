@@ -175,7 +175,7 @@ containers = [
 ]
 
 
-def scenario_serial(nbUserMax):
+def scenario_serial(nbUserMax, noxterm, nocontainer, maxsleep):
     init()
     flags = load_flags()
     print ("Registering "+str(nbUserMax)+" users : ")
@@ -214,39 +214,41 @@ def scenario_serial(nbUserMax):
                 
             #
             # xterm
-            if (not u.xterm):
-                if (randint(0, 9)>=8):    
-                    starttime = time.time()
-                    print "["+str(u.id)+"] Open Terminal"
-                    open_terminal(u)
-                    duration = time.time() - starttime
-                    u.xterm=True
-                    nb_xterm=nb_xterm+1
-                    print "["+str(u.id)+"] Opened Terminal in "+str(round(duration))
-                    #print "nb_xterm => "+str(nb_xterm) 
+            if (not noxterm):
+                if (not u.xterm):
+                    if (randint(0, 9)>=8):    
+                        starttime = time.time()
+                        print "["+str(u.id)+"] Open Terminal"
+                        open_terminal(u)
+                        duration = time.time() - starttime
+                        u.xterm=True
+                        nb_xterm=nb_xterm+1
+                        print "["+str(u.id)+"] Opened Terminal in "+str(round(duration))
+                        #print "nb_xterm => "+str(nb_xterm) 
 
             #
             # Create container
-            if (u.container_count<len(containers)):
-                if (randint(0, 9)>=8):
-                    cont_id = containers[u.container_count]
-                    u.container_count= u.container_count+1
-                    print "["+str(u.id)+"] Create container " +cont_id  
-                    starttime = time.time()    
-                    create_container(u, cont_id)
-                    duration = time.time() - starttime
-                    print "["+str(u.id)+"] Created container in "+str(round(duration))
-                    nb_containers=nb_containers+1
-                    #print "nb_containers => "+str(nb_containers)
+            if (not nocontainer):
+                if (u.container_count<len(containers)):
+                    if (randint(0, 9)>=8):
+                        cont_id = containers[u.container_count]
+                        u.container_count= u.container_count+1
+                        print "["+str(u.id)+"] Create container " +cont_id  
+                        starttime = time.time()    
+                        create_container(u, cont_id)
+                        duration = time.time() - starttime
+                        print "["+str(u.id)+"] Created container in "+str(round(duration))
+                        nb_containers=nb_containers+1
+                        #print "nb_containers => "+str(nb_containers)
 
-            #
-            # Run cmd in container
-            if (randint(0, 9)>=5):
-                print "["+str(u.id)+"] start cmd in container "
-                run_rand_cmd(u)
-                print "["+str(u.id)+"] stop cmd in container "
+                #
+                # Run cmd in container
+                if (randint(0, 9)>=5):
+                    print "["+str(u.id)+"] start cmd in container "
+                    run_rand_cmd(u)
+                    print "["+str(u.id)+"] stop cmd in container "
 
-        time.sleep(randint(2, 4))
+        time.sleep(randint(2, maxsleep))
 
 
     ## Destroy all containers
@@ -364,7 +366,8 @@ if __name__ == '__main__':
 
     # Init
     print ("= Init")
-    
+    scenario_serial(150, True, True, 2)
+    exit()
 
     # Register users
     nbUserMax = 5

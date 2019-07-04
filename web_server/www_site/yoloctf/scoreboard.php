@@ -108,8 +108,8 @@ function getNbUsers(){
 function dumpFlagDataSet($pageId){
 		include "ctf_sql.php";
 		$min = $pageId*20;
-		$max = $pageId*20+19;
-		$user_query = "SELECT login, UID FROM users LIMIT $min, $max;";
+		
+		$user_query = "SELECT login, UID FROM users LIMIT $min, 20;";
 		if ($user_result = $mysqli->query($user_query)) {
 			while ($row = $user_result->fetch_assoc()) {
 				$uid = $row['UID'];
@@ -218,9 +218,10 @@ function dumpFlagDataSet($pageId){
 			var ctx_$pageid = document.getElementById('canvas_$pageid').getContext('2d');
 			//window.myLine = new Chart(ctx, config_0);
 			l_$pageid = new Chart(ctx_$pageid, config_$pageid);
-		};
-		";
+			";
 	}
+	echo "	};";
+	
 ?>	
 
 
