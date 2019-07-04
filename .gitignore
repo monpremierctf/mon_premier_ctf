@@ -8,6 +8,7 @@ say_hello*
 myctf.zip
 myconfig.zip
 *.db
+web_server/.env
 web_server/www_site/yoloctf/db/*
 web_server/www_site/yoloctf/uploads/*
 web_server/www_site/yoloctf/intro/*

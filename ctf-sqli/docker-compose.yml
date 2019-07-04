@@ -26,6 +26,8 @@ services:
   php:
     build: ./php/ 
     container_name: ctf-sqli_php
+    env_file:
+    - .env
     networks:
       - webserver_webLAN
       - sqliLAN
@@ -47,7 +49,7 @@ services:
     labels:
       - "traefik.enable=false"
     environment:
-      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
 
 
 networks:

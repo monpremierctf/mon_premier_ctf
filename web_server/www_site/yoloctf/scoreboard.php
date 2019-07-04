@@ -13,15 +13,15 @@
   <title>Y0L0 CTF</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/yoloctf/js/bootstrap.min.css">
   <link rel="stylesheet" href="style.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="/yoloctf/js/jquery.min.js"></script>
+  <script src="/yoloctf/js/popper.min.js"></script>
+  <script src="/yoloctf/js/bootstrap.min.js"></script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
-	<script src="https://www.chartjs.org/samples/latest/scales/time/../../../../dist/2.8.0/Chart.min.js"></script>
-	<script src="https://www.chartjs.org/samples/latest/scales/time/../../utils.js"></script>
+  <script src="/yoloctf/js/moment.min.js"></script>
+	<script src="/yoloctf/js/Chart.min.js"></script>
+	<script src="/yoloctf/js/Chart_utils.js"></script>
 	<style>
 		canvas {
 			-moz-user-select: none;
@@ -39,6 +39,8 @@
     include "Parsedown.php";
     $Parsedown = new Parsedown();
 	include 'header.php'; 
+
+	
 ?>
 
 
@@ -55,26 +57,65 @@
 
 
        
-        <div>
-		<canvas id="canvas"></canvas>
-	    </div>
 
 <?php
 
-function dumpFlagDataSet(){
-		include "ctf_sql.php";
+function dumpUserFlagDataSet($uid){
+	include "ctf_sql.php";
+	$count=0;
+	$query = "SELECT UID,CHALLID, fdate, isvalid, flag FROM flags WHERE UID='$uid';";
+	if ($fresult = $mysqli->query($query)) {
+		/* fetch object array */
+		while ($frow = $fresult->fetch_assoc()) {
+			//UID,CHALLID, fdate, isvalid, flag
+			//var_dump($row);
+			//printf ("%s (%s) (%s) (%s)</br>", $frow['UID'], $frow['flag'], $frow['isvalid'], $frow['fdate']);
+			if ($frow['isvalid']) { 
+				$chall = getChallengeById($frow['CHALLID']);
+				if ($chall!=null){
+					$count+=$chall['value'];
+				} else {
+					$count++;
+				}
+			}
+			$dd = $frow['fdate'];
+			$format = '%Y-%m-%d %H:%M:%S'; // 
+			//$dd = '2019-05-18 15:32:15';
+			//$d = strptime($dd , $format);
+			$d = date_parse($dd);
+			//$jsdate = "$d[tm_mon]/$d[tm_mday]/$d[tm_year] $d[tm_hour]:$d[tm_min]";
+			$jsdate = "$d[month]/$d[day]/$d[year] $d[hour]:$d[minute]";
+			//print_r($d);
+			echo " { x: '$jsdate', y: $count},";
+		}
+		$fresult->close();
+	}
+}
 
-		$user_query = "SELECT login, UID FROM users;";
+function getNbUsers(){
+	include "ctf_sql.php";
+	
+	$user_query = "SELECT count(*) as nbusers FROM users;";
+	if ($user_result = $mysqli->query($user_query)) {
+		$row = $user_result->fetch_assoc();
+		//echo "Error: " . $mysqli->error . "<br>";
+		//echo $row['nbusers'];
+		return $row['nbusers'];
+	}
+	return 0;
+}
+
+function dumpFlagDataSet($pageId){
+		include "ctf_sql.php";
+		$min = $pageId*20;
+		$max = $pageId*20+19;
+		$user_query = "SELECT login, UID FROM users LIMIT $min, $max;";
 		if ($user_result = $mysqli->query($user_query)) {
-			/* fetch object array */
 			while ($row = $user_result->fetch_assoc()) {
-				//UID,CHALLID, fdate, isvalid, flag
-				//var_dump($row);
 				$uid = $row['UID'];
 				$login = $row['login'];
-				//printf ("[%s] </br>", $uid);
 				if ($uid!="") {
-					//rgb(255, 99, 132)
+
 					if ($_SESSION['login']===$login){
 						$r = 240;
 						$g = 20;
@@ -85,43 +126,15 @@ function dumpFlagDataSet(){
 						$b = 40+rand(0, 80);
 					}
 					
-echo "{
-	label: '$login',
-	backgroundColor: color('rgb($r, $g, $b)').alpha(0.5).rgbString(),
-	borderColor: 'rgb($r, $g, $b)',
-	fill: false,
-	data: [";					
-					$count=0;
-					$query = "SELECT UID,CHALLID, fdate, isvalid, flag FROM flags WHERE UID='$uid';";
-					if ($fresult = $mysqli->query($query)) {
-						/* fetch object array */
-						while ($frow = $fresult->fetch_assoc()) {
-							//UID,CHALLID, fdate, isvalid, flag
-							//var_dump($row);
-							//printf ("%s (%s) (%s) (%s)</br>", $frow['UID'], $frow['flag'], $frow['isvalid'], $frow['fdate']);
-							if ($frow['isvalid']) { 
-								$chall = getChallengeById($frow['CHALLID']);
-								if ($chall!=null){
-									$count+=$chall['value'];
-								} else {
-								    $count++;
-								}
-							}
-							$dd = $frow['fdate'];
-							$format = '%Y-%m-%d %H:%M:%S'; // 
-							//$dd = '2019-05-18 15:32:15';
-							//$d = strptime($dd , $format);
-							$d = date_parse($dd);
-							//$jsdate = "$d[tm_mon]/$d[tm_mday]/$d[tm_year] $d[tm_hour]:$d[tm_min]";
-							$jsdate = "$d[month]/$d[day]/$d[year] $d[hour]:$d[minute]";
-							//print_r($d);
-							echo " { x: '$jsdate', y: $count},";
-						}
-						$fresult->close();
-					}
-
+					echo "{
+						label: '$login',
+						backgroundColor: color('rgb($r, $g, $b)').alpha(0.5).rgbString(),
+						borderColor: 'rgb($r, $g, $b)',
+						fill: false,
+						data: [";					
+					dumpUserFlagDataSet($uid);
 					echo "],
-				},";
+					},";
 				}
 			}
 		
@@ -133,7 +146,21 @@ echo "{
 		$mysqli->close();
 	}
 ?>
-        <script>
+        
+
+<?php
+	$nbusers = getNbUsers();
+	$nbpages = floor($nbusers/20);
+
+	for ($pageid = 0; $pageid <= $nbpages; $pageid++) { 
+		echo "
+			<div>
+			<canvas id='canvas_$pageid'></canvas>
+			</div>
+		";
+	}
+	echo "
+	<script>
 		var timeFormat = 'MM/DD/YYYY HH:mm';
 
 		function newDate(days) {
@@ -145,78 +172,18 @@ echo "{
 		}
 
 		var color = Chart.helpers.color;
-		var config = {
+	";
+	for ($pageid = 0; $pageid <= $nbpages; $pageid++) { 
+		echo "
+		var config_$pageid = {
 			type: 'line',
 			data: {
-				labels: [ // Date Objects
-					//newDate(0),
-					//newDate(1),
-					//new Date('2019-05-18T10:20:30Z'),
-					//new Date('2019-05-18T20:20:30Z')
-				],
+				labels: [],
 				
-				datasets: [
-					/*{
-					label: 'My First dataset',
-					backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
-					borderColor: window.chartColors.red,
-					fill: false,
-					data: [
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor()
-					],
-				}, {
-					label: 'My Second dataset',
-					backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
-					borderColor: window.chartColors.blue,
-					fill: false,
-					data: [
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor()
-					],
-				}, {
-					label: 'Dataset with point data',
-					backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
-					borderColor: window.chartColors.green,
-					fill: false,
-					data: [{
-						x: newDateString(0),
-						y: randomScalingFactor()
-					}, {
-						x: newDateString(5),
-						y: randomScalingFactor()
-					}, {
-						x: newDateString(7),
-						y: randomScalingFactor()
-					}, {
-						x: newDateString(15),
-						y: randomScalingFactor()
-					}],
-				}
-			
-				,
-				*/
-				/* {
-					label: 'Dataset with point data',
-					backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
-					borderColor: window.chartColors.green,
-					fill: false,
-					data: [*/
-<?php dumpFlagDataSet(); ?>
-			/*			
-				],
-				}
-			*/]
+				datasets: [	";			
+ 		dumpFlagDataSet($pageid);
+		echo "
+				]
 			},
 			options: {
 				title: {
@@ -243,14 +210,18 @@ echo "{
 					}]
 				},
 			}
+		};";
+	}	
+	echo "window.onload = function() {";
+	for ($pageid = 0; $pageid <= $nbpages; $pageid++) { 
+		echo "
+			var ctx_$pageid = document.getElementById('canvas_$pageid').getContext('2d');
+			//window.myLine = new Chart(ctx, config_0);
+			l_$pageid = new Chart(ctx_$pageid, config_$pageid);
 		};
-
-		window.onload = function() {
-			var ctx = document.getElementById('canvas').getContext('2d');
-			window.myLine = new Chart(ctx, config);
-
-		};
-	
+		";
+	}
+?>	
 
 
 

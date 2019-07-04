@@ -37,7 +37,7 @@ if ($_POST['passwd']) { $passwd = $_POST['passwd']; }
 // connect to mysql
 $host = 'mysql';//'ctfsqli_mysql'; //'mysql';
 $user = 'readuser';
-$pass = 'passwordforreaduser';
+$pass = getenv('READUSER_PASSWD')?getenv('READUSER_PASSWD'):'passwordforreaduser';
 $dbname = 'dbmccoy';
 
 $conn = new mysqli($host, $user, $pass,$dbname);

@@ -220,8 +220,26 @@ python -c 'from gen_config import challenges_set_config; challenges_set_config()
 #
 echo "Generation des fichers de config pour CTFd"
 python ./gen_config.py
-
-
+if [ ! -f "web_server/.env" ]; then
+  cp web_server/env.default web_server/.env
+fi
+#
+# Verification de la configuration
+#
+echo "===================="
+echo "Verification de la configuration"
+echo ""
+python -c 'from gen_config import dump_challenges_env; dump_challenges_env()'
+echo ''
+echo '[web_server/.env]'
+cat web_server/.env
+while true; do
+    read -p "La config est-elle ok ? (O/n) ? : " yn
+    case $yn in
+        [Nn]* ) echo "Ok, on arrête ici."; exit;;
+        * ) echo "Ok, on continue."; break;;
+    esac
+done
 
 #
 # Copy json files to web server

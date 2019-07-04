@@ -129,7 +129,7 @@
         <div class="form-group text-left  row ">
 		  <label for="usr" class="col-2">Password (*)</label>
 		  <input type="password" class="col-6 form-control" id="password" name="password">
-          <label for="usr" class="col-2">...</label>
+          <label for="usr" class="col-2"></label>
         </div>
         <div class="form-group text-left  row ">
 		  <label for="usr" class="col-2">Mail</label>

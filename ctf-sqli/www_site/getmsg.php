@@ -33,7 +33,7 @@ if ($_GET['idmsg']) { $idmsg = $_GET['idmsg'];}
 // connect to mysql
 $host = 'ctfsqli_mysql'; //'mysql';
 $user = 'readuser';
-$pass = 'passwordforreaduser';
+$pass = getenv('READUSER_PASSWD')?getenv('READUSER_PASSWD'):'passwordforreaduser';
 $dbname = 'dbmccoy';
 
 $conn = new mysqli($host, $user, $pass,$dbname);

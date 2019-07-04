@@ -6,6 +6,8 @@ CREATE TABLE users (id INT NOT NULL AUTO_INCREMENT, login VARCHAR(45) NULL, pass
 CREATE TABLE flags (id INT NOT NULL AUTO_INCREMENT, UID VARCHAR(45) NULL, CHALLID VARCHAR(45) NULL, fdate datetime, isvalid BOOLEAN, flag VARCHAR(45) , PRIMARY KEY (id));
 -- insert into flags (UID,CHALLID, fdate, isvalid, flag) values ('user1','chall1', NOW(), FALSE, 'flagxx');
 -- insert into flags (UID,CHALLID, fdate, isvalid, flag) values ('user1','chall1', NOW(), TRUE, 'flag1');
+CREATE TABLE feedbacks (id INT NOT NULL AUTO_INCREMENT, login VARCHAR(45) NULL, name VARCHAR(45) NULL, mail VARCHAR(45) NULL, txt VARCHAR(2000) NULL, UID VARCHAR(45) NULL, PRIMARY KEY (id));
+CREATE TABLE logs (id INT NOT NULL AUTO_INCREMENT, fdate datetime, txt VARCHAR(2000) NULL, PRIMARY KEY (id));
 CREATE USER 'ctfuser'@'%' IDENTIFIED BY 'passwordforctfuser';
 GRANT SELECT, INSERT, UPDATE ON dbctf.* TO 'ctfuser'@'%';
 FLUSH PRIVILEGES;
