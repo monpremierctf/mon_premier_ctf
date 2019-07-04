@@ -13,12 +13,12 @@
  * 
  * $ ./a.out  bobaaaaaaaaaaaaaaaaaa
  * aaaaaaaaaaa bobaaaaaaaaaaaaaaaaaa
- * flag{J3_su1s_tr0p_d3b0rd3}
+ * flag{J3_su1s_b13n_tr0p_d3b0rd3}
  *
  * nom > variables+variables systèmes
  * $ ./a.out  bobaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
  * aaaaaaaaaaaaaaaaaaaaaaaaa bobaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
- * flag{J3_su1s_tr0p_d3b0rd3}
+ * flag{J3_su1s_b13n_tr0p_d3b0rd3}
  * Erreur de segmentation (core dumped)
  */
 
