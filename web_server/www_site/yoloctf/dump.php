@@ -40,9 +40,9 @@
             while($row = $result->fetch_assoc()) {
                 echo '<div class="row">';
                 echo '<div class="col-1">'. $row["id"].'</div>';
-                echo '<div class="col-2">'. $row["login"].'</div>';
-                echo '<div class="col-2">'. $row["mail"].'</div>';
-                echo '<div class="col-2">'. $row["pseudo"].'</div>';
+                echo '<div class="col-2">'. htmlspecialchars($row["login"]).'</div>'; 
+                echo '<div class="col-2">'. htmlspecialchars($row["mail"]).'</div>';
+                echo '<div class="col-2">'. htmlspecialchars($row["pseudo"]).'</div>';
                 echo '<div class="col-2">'. $row["UID"].'</div>';
                 echo '</div>';
             }

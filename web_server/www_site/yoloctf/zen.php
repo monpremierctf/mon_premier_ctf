@@ -62,7 +62,7 @@
             while ($row = $result->fetch_assoc()) {
                 $uid = $row['UID'];
                 $login = $row['login'];
-                echo "[".$login."]  ".$uid."</br>";	
+                echo "[".htmlspecialchars($login)."]  ".$uid."</br>";	
             }
             $result->close();
         }
@@ -77,7 +77,7 @@
 			while ($row = $user_result->fetch_assoc()) {
 				$uid = $row['UID'];
 				$login = $row['login'];
-                echo "</br><u>[".$login."]  ".$uid."</u></br>";	
+                echo "</br><u>[".htmlspecialchars($login)."]  ".$uid."</u></br>";	
                 $query = "SELECT UID,CHALLID, fdate, isvalid, flag FROM flags WHERE UID='$uid';";
                 if ($fresult = $mysqli->query($query)) {
                    
@@ -115,7 +115,7 @@
             while ($row = $result->fetch_assoc()) {
                 $uid = $row['UID'];
                 $login = $row['login'];
-                echo "<u>[".$login."]  ".$uid."</u></br>";	
+                echo "<u>[".htmlspecialchars($login)."]  ".$uid."</u></br>";	
                 if ($cont != null)	{
                     foreach ($cont as $c) {
                         if ('CTF_UID_'.$uid == $c->Uid) {

@@ -127,7 +127,7 @@ function dumpFlagDataSet($pageId){
 					}
 					
 					echo "{
-						label: '$login',
+						label: '".htmlspecialchars($login)."',
 						backgroundColor: color('rgb($r, $g, $b)').alpha(0.5).rgbString(),
 						borderColor: 'rgb($r, $g, $b)',
 						fill: false,

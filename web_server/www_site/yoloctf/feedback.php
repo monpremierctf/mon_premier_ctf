@@ -76,12 +76,12 @@
     <form action="feedback.php"  method="post">
         <div class="form-group text-left row">
         <label for="usr" class="col-2">Nom</label>
-        <input type="text" class="col-6 form-control" id="name" name="name" value="<?php echo isset($_SESSION['login'])?$_SESSION['login']:"Guest"; ?>">
+        <input type="text" class="col-6 form-control" id="name" name="name" value="<?php echo isset($_SESSION['login'])?htmlspecialchars($_SESSION['login']):"Guest"; ?>">
         <label for="usr" class="col-2"></label>
         </div>
         <div class="form-group text-left  row ">
         <label for="usr" class="col-2">Mail</label>
-        <input type="text" class="col-6 form-control" id="mail" name="mail" value="<?php echo isset($_SESSION['mail'])?$_SESSION['mail']:""; ?>">
+        <input type="text" class="col-6 form-control" id="mail" name="mail" value="<?php echo isset($_SESSION['mail'])?htmlspecialchars($_SESSION['mail']):""; ?>">
         <label for="usr" class="col-2"></label>
         </div>
         <div class="form-group text-left  row ">
@@ -110,8 +110,8 @@ function dumpUserList(){
             $login = htmlspecialchars($row['login']);            
             $uid = $row['UID'];
 
-            echo "[".$login."]  ".$uid."</br>";	
-            echo "$text</br></br>";	
+            echo "[".htmlspecialchars($login)."]  ".$uid."</br>";	
+            echo htmlspecialchars($text)."</br></br>";	
         }
         $result->close();
     }
