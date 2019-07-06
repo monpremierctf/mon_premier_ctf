@@ -25,9 +25,9 @@
             print '<a href="feedback.php" "><pre class="ctf-menu-color">[Feedback]</pre></a> ';
 
 
-
+            $admin = getenv('PHP_ADMIN_ACCOUNT')?getenv('PHP_ADMIN_ACCOUNT'):'admin';
             if (isset($_SESSION['login'] )) {
-                if (($_SESSION['login']=='admin' )) {
+                if (($_SESSION['login']==$admin  )) {
                     print '<a href="zen.php" ><pre class="ctf-menu-color">[Admin]</pre></a> ';
                 }
             }
