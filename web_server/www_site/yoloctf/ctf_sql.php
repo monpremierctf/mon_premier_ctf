@@ -1,5 +1,5 @@
 <?php
-    $passwd = getenv('PHP_ADMIN_ACCOUNT')?getenv('PHP_ADMIN_ACCOUNT'):'admin';
+    $passwd = getenv('MYSQL_USER_PASSWORD')?getenv('MYSQL_USER_PASSWORD'):'passwordforctfuser';
     $mysqli = new mysqli("webserver_mysql", "ctfuser", $passwd, "dbctf");
     if (mysqli_connect_errno()) {
         printf("Connect failed: %s\n", mysqli_connect_error());
