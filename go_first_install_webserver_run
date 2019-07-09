@@ -260,7 +260,7 @@ chmod -R a+r web_server/www_site/yoloctf
 #
 # Create docker netkorks
 # 
-docker network create webserver_webLAN
+docker network create --internal  webserver_webLAN
 
 
 #
