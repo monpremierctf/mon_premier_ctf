@@ -19,6 +19,7 @@ tools/xterm/ctf-tool-xterm/challenges/*
 tools/xterm/dirb/dirb222/*
 ctfd_config/tmp/*
 .vscode
+.env
 ctf-*/.env
 ctfd_config/db
 ctfd_config/uploads

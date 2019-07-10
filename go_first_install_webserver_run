@@ -2,6 +2,13 @@
 #
 #
 
+# Get .env variables
+if [ ! -f ".env" ]; then
+  cp env.default .env
+fi
+. .env
+
+
 # Set to 1 to activate ufw firewalling
 # The daemon must have sudo without password to set ufw rules
 # Add in /etc/sudoers the following line
@@ -12,7 +19,7 @@ if [ -z "$WITH_UFW" ]; then WITH_UFW=0; fi
 # For use with Let's encrypt on Internet, use web_server/traefik_acme,
 # copy your certs manualy in acme.json
 # and docker-compose up --build manually
-if [ -z "$WITH_UFW" ]; then TRAEFIK_SELF_SIGNED_CERTS=1; fi
+if [ -z "$TRAEFIK_SELF_SIGNED_CERTS" ]; then TRAEFIK_SELF_SIGNED_CERTS=1; fi
 
 #
 # python 2.xx installed
