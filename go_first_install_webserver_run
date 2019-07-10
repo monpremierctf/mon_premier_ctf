@@ -6,14 +6,13 @@
 # The daemon must have sudo without password to set ufw rules
 # Add in /etc/sudoers the following line
 # username ALL = NOPASSWD: /usr/sbin/ufw 
-WITH_UFW=0
+if [ -z "$WITH_UFW" ]; then WITH_UFW=0; fi
 
 # Set to 1 for LAN use.
 # For use with Let's encrypt on Internet, use web_server/traefik_acme,
 # copy your certs manualy in acme.json
 # and docker-compose up --build manually
-TRAEFIK_SELF_SIGNED_CERTS=1
-
+if [ -z "$WITH_UFW" ]; then TRAEFIK_SELF_SIGNED_CERTS=1; fi
 
 #
 # python 2.xx installed
