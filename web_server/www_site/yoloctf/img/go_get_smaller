@@ -1,0 +1,15 @@
+mkdir small240
+for f in ori/*.gif; do echo $f; gifsicle -i $f -O3 --colors 256 --resize-width 240 -o small240/$(basename $f); done
+
+
+for f in ori/*.gif; do 
+    bn=$(basename $f)
+    size_ori=$(wc -c <"$f")
+    size_small=$(wc -c <"small240/$bn")
+    echo "$bn $size_ori $size_small"
+    if [ $size_small -ge $size_ori ]; then 
+        cp $f .
+    else 
+        cp small240/$bn .
+    fi
+done

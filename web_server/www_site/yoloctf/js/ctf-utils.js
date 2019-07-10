@@ -1,7 +1,7 @@
 function ctf_validate(id, flag_field)
 {
     var flag_raw = $(flag_field).val();
-    var flag = encodeURIComponent(flag_raw);
+    var flag = encodeURIComponent(flag_raw); 
     var use_animated_gif = true;
 
     //alert("flag [" + flag_raw + "] encoded [" + flag+"]");
@@ -10,8 +10,8 @@ function ctf_validate(id, flag_field)
         if (data=='ok') {
                 $('#myModalTitle').html("Flag validé");
                 if (use_animated_gif){
-                    id = Math.floor(Math.random() * 50) + 1 ;
-                    if (id>50) id=50;
+                    id = Math.floor(Math.random() * 46) + 1 ;
+                    if (id>46) id=46;
                     filename='img/yes/'+id.toString()+'.gif';
                 } else {
                     filename='player_02_200.png';
@@ -29,8 +29,8 @@ function ctf_validate(id, flag_field)
             $(flag_field).css({ 'color': 'red' });
             $('#myModalTitle').html("Flag pas validé du tout");
             if (use_animated_gif){
-                id = Math.floor(Math.random() * 32) + 1 ;
-                if (id>32) id=32;
+                id = Math.floor(Math.random() * 26) + 1 ;
+                if (id>26) id=26;
                 filename='img/no/'+id.toString()+'.gif';
             } else {
                 filename='admin_02_200.png';
