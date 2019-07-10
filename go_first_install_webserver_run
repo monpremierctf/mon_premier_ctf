@@ -303,6 +303,7 @@ python -c 'from gen_config import build_challenges; build_challenges()'
 #
 # Generate self-signed certificates
 #
+echo "TRAEFIK_SELF_SIGNED_CERTS =$TRAEFIK_SELF_SIGNED_CERTS"
 if [ $TRAEFIK_SELF_SIGNED_CERTS == 1 ] 
 then
   cd web_server/traefik
