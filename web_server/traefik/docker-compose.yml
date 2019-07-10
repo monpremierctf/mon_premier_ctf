@@ -11,6 +11,7 @@ services:
       - "127.0.0.1:8000:8000"
     networks:
       - webserver_webLAN
+      - default
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.toml:/traefik.toml

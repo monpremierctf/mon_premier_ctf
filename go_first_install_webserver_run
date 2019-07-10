@@ -310,7 +310,7 @@ then
   ./go_gen_certs
   cd - > /dev/null
 else
-  if [ ! -f web_server/traefik_acme/acme.json]
+  if [ ! -f web_server/traefik_acme/acme.json ]
   then
     cp web_server/traefik_acme/acme.json.default web_server/traefik_acme/acme.json
   fi
