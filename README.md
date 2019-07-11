@@ -10,7 +10,7 @@ Un jeu de slide à destination des participants est disponible en https://github
 </br>
 
 </br>
-Un serveur de test est disponible sur http://yoloctf. Vous pouvez vous créer un compte avec le code 'yolo'. Il est régulièrement clean complètement et réinstallé. 
+Un serveur de test est disponible sur http://yoloctf.org. Vous pouvez vous créer un compte avec le code 'yolo'. Il est régulièrement clean complètement et réinstallé. 
 </br>
 
 ## Prerequis
