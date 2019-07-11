@@ -9,6 +9,10 @@ Vous trouverez ici, une série de challenges destinés à permettre aux particip
 Un jeu de slide à destination des participants est disponible en https://github.com/monpremierctf/mon_premier_ctf/blob/master/doc/Introduction_au_CTF.pdf
 </br>
 
+</br>
+Un serveur de test est disponible sur http://yoloctf. Vous pouvez vous créer un compte avec le code 'yolo'. Il est régulièrement clean complètement et réinstallé. 
+</br>
+
 ## Prerequis
 
 Prévoir une VM Ubuntu 18 vierge avec 3G de mémoire.</br>
