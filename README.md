@@ -44,6 +44,11 @@ Eventuellement installer git
 ```bash
 $ sudo apt-get install git
 ```
+
+Eventuellement installer zip
+```bash
+$ sudo apt-get install zip
+```
 </br>
 
 ## Démarrage rapide 
