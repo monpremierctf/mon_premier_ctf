@@ -10,7 +10,7 @@ Un jeu de slide à destination des participants est disponible en https://github
 </br>
 
 </br>
-Un serveur de test est disponible sur http://yoloctf.org. Vous pouvez vous créer un compte avec le code 'yolo'. Il est régulièrement clean complètement et réinstallé. 
+Un serveur de test est disponible sur http://yoloctf.org. Vous pouvez vous créer un compte avec le code 'yolo'. Il est régulièrement effaçé et réinstallé. La durée de vie d'un profil est de 3h... Idéal pour un atelier de 2h. Ensuite le terminal ne se lance plus. 
 </br>
 
 ## Prerequis
