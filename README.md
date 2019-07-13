@@ -55,7 +55,7 @@ $ git clone https://github.com/monpremierctf/mon_premier_ctf.git
 $ cd mon_premier_ctf
 ```
 
-Lancer l'installation initiale.
+Lancer l'installation initiale. Elle va prendre environ 15 minutes avec une liaison fibre. Dont 8 minutes sur la seule commande Step 9/13 : RUN chown -R yolo:yolo /usr/src/app/. Faites une pause yoga. Il faut télécharger toutes les images docker, et recompiler tous les programmes de zéro.
 ```
 $ cd mon_premier_ctrf
 $ ./go_first_install_webserver_run 
