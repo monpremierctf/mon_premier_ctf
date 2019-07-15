@@ -54,13 +54,15 @@ $ sudo apt-get install zip
 ## Démarrage rapide 
 
 
-Cloner mon_premier_ctf sur github.
+Récupérer la dernière release de mon_premier_ctf sur github.
 ```bash
-$ git clone https://github.com/monpremierctf/mon_premier_ctf.git
+$ wget https://github.com/monpremierctf/mon_premier_ctf/archive/v0.1.0.tar.gz
+$ tar xvf v0.1.0.tar.gz
 $ cd mon_premier_ctf
 ```
 
-Lancer l'installation initiale. Elle va prendre environ 15 minutes avec une liaison fibre. Dont 8 minutes sur la seule commande Step 9/13 : RUN chown -R yolo:yolo /usr/src/app/. Faites une pause yoga. Il faut télécharger toutes les images docker, et recompiler tous les programmes de zéro.
+Lancer l'installation initiale. Il faut télécharger toutes les images docker, et recompiler tous les programmes de zéro.
+Ca va prendre environ 15 minutes avec une liaison fibre. Dont 8 minutes sur la seule commande Step 9/13 : RUN chown -R yolo:yolo /usr/src/app/. Faites une pause yoga. 
 ```
 $ cd mon_premier_ctrf
 $ ./go_first_install_webserver_run 
