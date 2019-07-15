@@ -51,6 +51,12 @@ $ sudo apt-get install zip
 ```
 </br>
 
+Eventuellement installer wget
+```bash
+$ sudo apt-get install wget
+```
+</br>
+
 ## Démarrage rapide 
 
 
