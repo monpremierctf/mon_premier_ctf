@@ -94,8 +94,8 @@ Python 2.7.15rc1
 Server Version: 18.09.2
 Verification du système terminée
 ```
-Le script vérifie que docker et docker-compose sont installés et lancés...</br>
-Si nécessaire il propose une commande.</br></br>
+Le script vérifie que docker, docker-compose et tous les outils nécessaires sont installés et lancés...</br>
+Si nécessaire, la commande d'installation est suggérée.</br></br>
 
 La configuration, et le build des images docker des challenges se fait grace aux fichier ctf-xxx/.env et ctf-xxx/docker-compose
 ```
