@@ -268,42 +268,49 @@ func createNewChallengeBox(requestId int, box string, duration string, port stri
 	// Resources: container.Resources{ Memory:3e+7 }
 	// https://godoc.org/github.com/docker/docker/api/types/container#Resources
 
+	// Existe and is stopped ??
+	challID := getAllChallengeBox(box, uid)
+
 	// Create
 	//storageOpt := map[string]string{"size": "2G"}
-	resp, err := dockerClient.ContainerCreate(ctx,
-		&container.Config{
-			Image:    box,
-			Labels:   labels,
-			Hostname: box,
-			Env:      env,
-		},
-		&container.HostConfig{
-			AutoRemove:      (box != "ctf-tool-xterm"),
-			PublishAllPorts: false,
-			//--storage-opt size=120G
-			//StorageOpt: storageOpt,
-			// Error response from daemon: --storage-opt is supported only for overlay over xfs with 'pquota' mount option
-			Resources: container.Resources{
-				Memory:   200e+6, // in bytes, 200 000 000, 200Mb
-				NanoCPUs: 1e+8,   // 0.1 CPU max per container
+	if (challID != "") {
+			
+		resp, err := dockerClient.ContainerCreate(ctx,
+			&container.Config{
+				Image:    box,
+				Labels:   labels,
+				Hostname: box,
+				Env:      env,
 			},
-			//PortBindings: portBinding,
-		},
-		nil,
-		/*
-			&container.NetworkingConfig{
-				EndpointsConfig ep,
-			},*/
+			&container.HostConfig{
+				AutoRemove:      (box != "ctf-tool-xterm"),
+				PublishAllPorts: false,
+				//--storage-opt size=120G
+				//StorageOpt: storageOpt,
+				// Error response from daemon: --storage-opt is supported only for overlay over xfs with 'pquota' mount option
+				Resources: container.Resources{
+					Memory:   200e+6, // in bytes, 200 000 000, 200Mb
+					NanoCPUs: 1e+8,   // 0.1 CPU max per container
+				},
+				//PortBindings: portBinding,
+			},
+			nil,
+			/*
+				&container.NetworkingConfig{
+					EndpointsConfig ep,
+				},*/
 
-		fmt.Sprintf("%s_%s", box, uid))
-	if err != nil {
-		panic(err)
+			fmt.Sprintf("%s_%s", box, uid))
+		if err != nil {
+			panic(err)
+		}
+		challID = resp.ID
 	}
 
 	// If xterm, add webLAN
 	if box == "ctf-tool-xterm" {
 		nidweb := getNetworkId("webserver_webLAN")
-		if err := dockerClient.NetworkConnect(ctx, nidweb, resp.ID, nil); err != nil {
+		if err := dockerClient.NetworkConnect(ctx, nidweb, challID, nil); err != nil {
 			panic(err)
 		}
 	}
@@ -318,20 +325,20 @@ func createNewChallengeBox(requestId int, box string, duration string, port stri
 		log.Printf("[%d][%s] createNewChallengeBox User network creation took %d s", requestId, string(uid), duration)
 
 	}
-	if err := dockerClient.NetworkConnect(ctx, nid, resp.ID, nil); err != nil {
+	if err := dockerClient.NetworkConnect(ctx, nid, challID, nil); err != nil {
 		panic(err)
 	}
 
 	// Remove default network : bridge
 	nid = getNetworkId("bridge")
-	if err := dockerClient.NetworkDisconnect(ctx, nid, resp.ID, true); err != nil {
+	if err := dockerClient.NetworkDisconnect(ctx, nid, challID, true); err != nil {
 		panic(err)
 	}
 
 	// Start container
 	start2 := time.Now().Unix()
 	log.Printf("[%d][%s] createNewChallengeBox Calling ContainerStart", requestId, string(uid))
-	err = dockerClient.ContainerStart(ctx, resp.ID, types.ContainerStartOptions{})
+	err = dockerClient.ContainerStart(ctx, challID, types.ContainerStartOptions{})
 	duration2 := time.Now().Unix() - start2
 	log.Printf("[%d][%s] createNewChallengeBox ContainerStart took %d s", requestId, string(uid), duration2)
 	if err != nil {
@@ -339,7 +346,7 @@ func createNewChallengeBox(requestId int, box string, duration string, port stri
 	}
 
 	//fmt.Println(resp.ID)
-	containerID = resp.ID
+	containerID = challID
 
 	// Open firewall
 	if ufwProxyPort > 0 {
@@ -469,6 +476,29 @@ func terminateContainer(containerID string) error {
 func getChallengeBox(box string, uid string) (containerID string) {
 	containerID = ""
 	containers, err := dockerClient.ContainerList(ctx, types.ContainerListOptions{})
+	if err != nil {
+		return
+	}
+
+	findName := fmt.Sprintf("/%s_%s", box, uid)
+	for _, cont := range containers {
+		_, prs := cont.Labels["ctf-uid"]
+		if prs {
+			//fmt.Printf("[%s][%s]", cont.Names[0], findName)
+			//fmt.Println()
+			if cont.Names[0] == findName {
+				containerID = cont.ID
+				return
+			}
+		}
+	}
+	return
+}
+
+
+func getAllChallengeBox(box string, uid string) (containerID string) {
+	containerID = ""
+	containers, err := dockerClient.ContainerList(ctx, types.ContainerListOptions{All: true})
 	if err != nil {
 		return
 	}
