@@ -7,12 +7,14 @@ a.out
 say_hello*
 myctf.zip
 myconfig.zip
+ctf-sqli/mysql/init_db_mccoy.sql
 *.db
 web_server/.env
 web_server/www_site/yoloctf/db/*
 web_server/www_site/yoloctf/uploads/*
 web_server/www_site/yoloctf/intro/*
 web_server/traefik/certs/*
+web_server/mysql/init_db_ctf.sql
 tools/xterm/xterm.js-3.13.0/*
 tools/xterm/challenges/*
 tools/xterm/ctf-tool-xterm/challenges/*
