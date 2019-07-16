@@ -33,6 +33,7 @@
 
 <!--- Page Header  -->
 <?php
+    include 'ctf_env.php'; 
     include "Parsedown.php";
     $Parsedown = new Parsedown();
 	include 'header.php'; 
@@ -150,7 +151,7 @@
 
 
     if (isset($_SESSION['login'] )) {
-        $admin = getenv('PHP_ADMIN_ACCOUNT')?getenv('PHP_ADMIN_ACCOUNT'):'admin';
+        // $admin from ctf_env.php
         if (($_SESSION['login']=== $admin )) {
             // Actions
             if (isset($_GET['clearFlags'])){
