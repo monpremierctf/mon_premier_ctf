@@ -105,7 +105,20 @@ function getNbUsers(){
 	return 0;
 }
 
-function dumpFlagDataSet($pageId){
+function dumpFlagDataSetCurrentUser() {
+	$r = 240; $g = 20;	$b = 80;
+	echo "{
+		label: '".htmlspecialchars($_SESSION['login'])."',
+		backgroundColor: color('rgb($r, $g, $b)').alpha(0.5).rgbString(),
+		borderColor: 'rgb($r, $g, $b)',
+		fill: false,
+		data: [";					
+	dumpUserFlagDataSet($_SESSION['uid']);
+	echo "],
+	},";
+}
+
+function dumpFlagDataSet($pageId) {
 		include "ctf_sql.php";
 		$min = $pageId*20;
 		
@@ -149,9 +162,13 @@ function dumpFlagDataSet($pageId){
         
 
 <?php
-	$nbusers = getNbUsers();
-	$nbpages = floor($nbusers/20);
-
+	if ($scoreboard_aff=='user_only') {
+		$nbusers = 1;
+		$nbpages = 0;
+	} else {
+		$nbusers = getNbUsers();
+		$nbpages = floor($nbusers/20);
+	}
 	for ($pageid = 0; $pageid <= $nbpages; $pageid++) { 
 		echo "
 			<div>
@@ -180,8 +197,12 @@ function dumpFlagDataSet($pageId){
 			data: {
 				labels: [],
 				
-				datasets: [	";			
- 		dumpFlagDataSet($pageid);
+				datasets: [	";	
+		if ($scoreboard_aff=='user_only')		{
+			dumpFlagDataSetCurrentUser();
+		} else {
+		 	dumpFlagDataSet($pageid);
+		}		 
 		echo "
 				]
 			},
