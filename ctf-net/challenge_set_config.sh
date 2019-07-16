@@ -14,5 +14,5 @@ sed -i -e "s/CTFNET_FTP_PASV_ADDRESS/$CTFNET_FTP_PASV_ADDRESS/g" ftp/vsftpd.conf
 cp smtp/main.cf.ori smtp/main.cf
 sed -i -e "s|CTFNET_SMTP_MYNETWORK|$CTFNET_SMTP_MYNETWORK|g" smtp/main.cf
 
-
+ 
 

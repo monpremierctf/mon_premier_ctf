@@ -11,6 +11,8 @@ import os
 import sys
 import textwrap
 from subprocess import Popen, PIPE
+import random
+import string
 
 #
 # Read challenges list from file : challenges_list.cfg
@@ -264,17 +266,35 @@ def copy_intro_to_webserver(challenge_dir):
     if os.path.isfile(challenge_dir+"/challenges_intro.md"):
         copy_file("web_server/www_site/yoloctf/intro/", challenge_dir, "challenges_intro.md")
 
-def parse_dir(challenge_dir):   
-    # .env
+def randomString(stringLength=16):
+    letters = string.ascii_lowercase
+    return ''.join(random.choice(letters) for i in range(stringLength))
+
+def gen_env_file(challenge_dir):
     try:
         if os.path.isfile(challenge_dir+"/.env"):
             print("- .env exists")
         else:
             if os.path.isfile(challenge_dir+"/env.default"):
                 print("- Create default .env")
-                shutil.copy2(challenge_dir+"/env.default", challenge_dir+"/.env")
+                src = open(challenge_dir+"/env.default", "r") 
+                dst = open(challenge_dir+"/.env","w") 
+                srctxt = src.readlines()
+                for line in srctxt:
+                    if (line.find("_RANDOM16_")>0):
+                        line = line.replace("_RANDOM16_", randomString(16))
+                    dst.write(line)
+                dst.close()
+
     except:
         print("- Pb with .env")
+        
+
+
+def parse_dir(challenge_dir):   
+    # .env
+    gen_env_file(challenge_dir)
+
 
     config = ConfigParser.ConfigParser()
     config.read(challenge_dir+"/challenges.cfg")
@@ -326,6 +346,7 @@ if __name__ == '__main__':
     for challenge_dir in challenges_dir_list:
         print "Enter ["+challenge_dir+"]"
         parse_dir(challenge_dir)
+        
         #copy_intro_to_webserver(challenge_dir)
 
     out_dir = "ctfd_config/tmp/db/"

@@ -2,24 +2,18 @@
 #
 #
 
-# Get .env variables
-if [ ! -f ".env" ]; then
-  cp env.default .env
-fi
-. .env
-
-
 # Set to 1 to activate ufw firewalling
 # The daemon must have sudo without password to set ufw rules
 # Add in /etc/sudoers the following line
 # username ALL = NOPASSWD: /usr/sbin/ufw 
-if [ -z "$WITH_UFW" ]; then WITH_UFW=0; fi
+WITH_UFW=0
 
 # Set to 1 for LAN use.
 # For use with Let's encrypt on Internet, use web_server/traefik_acme,
 # copy your certs manualy in acme.json
 # and docker-compose up --build manually
-if [ -z "$TRAEFIK_SELF_SIGNED_CERTS" ]; then TRAEFIK_SELF_SIGNED_CERTS=1; fi
+TRAEFIK_SELF_SIGNED_CERTS=1
+
 
 #
 # python 2.xx installed
@@ -215,20 +209,24 @@ unzip -q -d ctfd_config/tmp ctfd_config/empty_conf.zip
 
 
 
-#
-# Update config in each challenge directory
-#
-echo "Mise à jour des fichiers de config propres à chaque challenge"
-python -c 'from gen_config import challenges_set_config; challenges_set_config()'
+
 
 #
 # Generate config from challenge directories
 #
-echo "Generation des fichers de config pour CTFd"
+echo "Generation des fichers de config"
 python ./gen_config.py
+
 if [ ! -f "web_server/.env" ]; then
   cp web_server/env.default web_server/.env
 fi
+
+#
+# Update config in each challenge directory
+#
+echo "Mise à jour des fichiers de config propres à chaque challenge"
+python -c 'from gen_config import challenges_set_config; '
+
 #
 # Verification de la configuration
 #
@@ -266,7 +264,7 @@ chmod -R a+r web_server/www_site/yoloctf
 #
 # Create docker netkorks
 # 
-docker network create --internal  webserver_webLAN
+docker network create webserver_webLAN
 
 
 #
@@ -303,14 +301,13 @@ python -c 'from gen_config import build_challenges; build_challenges()'
 #
 # Generate self-signed certificates
 #
-echo "TRAEFIK_SELF_SIGNED_CERTS =$TRAEFIK_SELF_SIGNED_CERTS"
 if [ $TRAEFIK_SELF_SIGNED_CERTS == 1 ] 
 then
   cd web_server/traefik
   ./go_gen_certs
   cd - > /dev/null
 else
-  if [ ! -f web_server/traefik_acme/acme.json ]
+  if [ ! -f web_server/traefik_acme/acme.json]
   then
     cp web_server/traefik_acme/acme.json.default web_server/traefik_acme/acme.json
   fi
