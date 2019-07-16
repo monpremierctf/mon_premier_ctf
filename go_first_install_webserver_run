@@ -217,15 +217,23 @@ unzip -q -d ctfd_config/tmp ctfd_config/empty_conf.zip
 echo "Generation des fichers de config"
 python ./gen_config.py
 
-if [ ! -f "web_server/.env" ]; then
-  cp web_server/env.default web_server/.env
-fi
+#if [ ! -f "web_server/.env" ]; then
+#  cp web_server/env.default web_server/.env
+#fi
 
 #
 # Update config in each challenge directory
 #
 echo "Mise à jour des fichiers de config propres à chaque challenge"
-python -c 'from gen_config import challenges_set_config; '
+python -c 'from gen_config import challenges_set_config; challenges_set_config()'
+
+#
+# Update webserver config
+#
+python -c 'from gen_config import gen_env_file; gen_env_file("web_server")'
+cd web_server
+./challenge_set_config.sh
+cd -
 
 #
 # Verification de la configuration
@@ -238,6 +246,7 @@ echo ''
 echo '[web_server/.env]'
 cat web_server/.env
 while true; do
+    echo "";echo ""
     read -p "La config est-elle ok ? (O/n) ? : " yn
     case $yn in
         [Nn]* ) echo "Ok, on arrête ici."; exit;;

@@ -57,7 +57,7 @@ services:
     container_name: webserver_php
     environment:
       MYSQL_USER_PASSWORD: ${MYSQL_USER_PASSWORD}
-      PHP_ADMIN_ACCOUNT: ${PHP_ADMIN_ACCOUNT}
+      CTF_ADMIN_ACCOUNT: ${CTF_ADMIN_ACCOUNT}
     volumes:
       - ./www_site:/www_site
     networks:
