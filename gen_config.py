@@ -174,7 +174,7 @@ def add_hint(hint_desc):
     if hint_desc=='':
         return
     hint_id+=1
-    hint_desc = replace_crlf_by_br(hint_desc)
+    #hint_desc = replace_crlf_by_br(hint_desc)
     hints.append({
         "id": int(hint_id), 
         "type": "standard", 
@@ -187,7 +187,7 @@ def add_hint(hint_desc):
 
 def add_intro(challenge_dir, label, desc, category, docker):
     global intros
-    desc = replace_crlf_by_br(desc)
+    #desc = replace_crlf_by_br(desc)
     intros.append({
         "dir": str(challenge_dir), 
         "label": str(label), 
@@ -389,7 +389,7 @@ if __name__ == '__main__':
 
     if not os.path.exists('web_server/www_site/yoloctf/db/'):
         os.makedirs('web_server/www_site/yoloctf/db/')
-    #print (intros)
+    print (intros)
     with io.open('web_server/www_site/yoloctf/db/intros.json', 'w', encoding='utf8') as outfile:
         outfile.write(unicode('{"count": '+str(len(intros))+', "results": '))
         #print(intros)

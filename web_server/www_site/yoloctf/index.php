@@ -74,6 +74,7 @@
             $intro = getIntro($p);
             if ($intro!=null) {
                 $string = $intro['description'];
+                $string = pre_process_desc_for_md($string);
                 print $Parsedown->text($string);
                 print "<p class='chall-spacer'><p>";
                 if ($intro['docker']!=null){

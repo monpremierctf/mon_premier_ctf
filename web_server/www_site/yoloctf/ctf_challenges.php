@@ -113,6 +113,37 @@ function getChallengeFileLocation($challengeId) {
   return "";
 }
 
+
+function pre_process_desc_for_md($desc)
+{
+  // Remplacer \r\n et \r par \n et mettre des espaces autour de ```
+  $desc =  str_replace ("\r\n", "\n", $desc);
+  $desc =  str_replace ("\r", "\n", $desc);
+  $desc =  str_replace ("\n\n", "\n \n", $desc);
+  $desc =  str_replace ("\n```\n", "\n ``` \n", $desc);
+  $desc_out="";
+
+  $is_in_code=false; // Ne pas mettre de </br> dans un bloc de code ```
+  foreach(preg_split('~[\n]~', $desc) as $line) {
+    if (trim($line)=='.') { $line=" ";}
+    if (strpos($line, "```") !== false) {
+      $desc_out = $desc_out.$line." \n ";
+      $is_in_code = ! $is_in_code;
+    } else {
+      if ( $is_in_code) {
+        $desc_out = $desc_out.$line." \n "; 
+      } else {
+        if (! ($desc_out=="" and $line=='')) {  // Si la première ligne est vide, on ne met pas de </br>
+          $desc_out = $desc_out.$line."</br>\n "; 
+        }
+      }
+    }
+  } 
+  return $desc_out;
+}
+
+
+
 function html_dump_cat($cat) {
   global $challenges;
   global $files;
@@ -132,6 +163,8 @@ function html_dump_cat($cat) {
           print ($c['value']);
           print "</div>";
         print "</div>";
+
+
         // Description
         print '<div class="container chall-desc">';
         $desc = $c['description'];
@@ -157,16 +190,21 @@ function html_dump_cat($cat) {
         if (isset($_SERVER['HTTP_HOST'])) {
           $desc = str_replace("{IP_SERVER}", $_SERVER['HTTP_HOST'], $desc);
         }
-        print $Parsedown->text($desc);
+
+        
+        $desc_out = pre_process_desc_for_md($desc);
+        //print $desc_out;
+        print $Parsedown->text($desc_out);
         print "</div>";
 
         // Hints
         
         foreach ($hints['results'] as $h) {
           if ($h['challenge_id']===$c['id']) {
+            $desc = pre_process_desc_for_md($h['content']);
             print '<div class="row chall-desc bg-light">';
             print '<div class="col-md-auto text-left">  <label for="usr">Indice:</label>  </div>
-            <div class="col text-left"><label id="hint_'.$h['id'].'"  style="display: none;" >'.$h['content'].'</label></div>
+            <div class="col text-left"><label id="hint_'.$h['id'].'"  style="display: none;" >'.$desc.'</label></div>
             <div class="col-2 text-right"><button type="Button" class="btn btn-primary" onclick="ctf_toggle_hide(\'#hint_'.$h['id'].'\')">Afficher</button></div>';
             print "</div>";
             
