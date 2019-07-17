@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 #
+TIME_START=$(date +%s);
 
 # Set to 1 to activate ufw firewalling
 # The daemon must have sudo without password to set ufw rules
@@ -362,6 +363,11 @@ cd ctf-passwd
 docker-compose up -d
 cd - > /dev/null
 
+#
+# Print config overall duration
+#
+TIME_END=$(date +%s);
+echo $((TIME_END-TIME_START)) | awk '{print "Configuration réalisée en "int($1/60)" minutes "int($1%60)" secondes"}'
 
 #
 # Logs
@@ -374,7 +380,9 @@ echo ""
 echo "S'il n'y a pas eu de message d'erreur, vous pouvez à présent vous connecter à l'interface web:"
 echo "http://localhost/yoloctf/"
 echo ""
-echo "Commandes utiles:"
-echo "docker stats"
-echo "docker-compose logs"
+
+. ./web_server/.env
+echo ""
+echo "compte admin   : $CTF_ADMIN_ACCOUNT"
+echo "password admin : $CTF_ADMIN_PASSWORD"
 
