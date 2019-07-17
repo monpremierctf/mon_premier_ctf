@@ -273,7 +273,7 @@ func createNewChallengeBox(requestId int, box string, duration string, port stri
 
 	// Create
 	//storageOpt := map[string]string{"size": "2G"}
-	if (challID != "") {
+	if (challID == "") {
 			
 		resp, err := dockerClient.ContainerCreate(ctx,
 			&container.Config{
@@ -305,36 +305,39 @@ func createNewChallengeBox(requestId int, box string, duration string, port stri
 			panic(err)
 		}
 		challID = resp.ID
-	}
 
-	// If xterm, add webLAN
-	if box == "ctf-tool-xterm" {
-		nidweb := getNetworkId("webserver_webLAN")
-		if err := dockerClient.NetworkConnect(ctx, nidweb, challID, nil); err != nil {
+
+		// If xterm, add webLAN
+		if box == "ctf-tool-xterm" {
+			nidweb := getNetworkId("webserver_webLAN")
+			if err := dockerClient.NetworkConnect(ctx, nidweb, challID, nil); err != nil {
+				panic(err)
+			}
+		}
+	
+
+
+		// Add user network
+		nid := getNetworkIdFromUID(uid)
+		if nid == "" {
+			log.Printf("[%d][%s] createNewChallengeBox No User network found. Creating...", requestId, string(uid))
+			start := time.Now().Unix()
+			nid, _ = createNewUserNet(uid, 3600)
+			duration := time.Now().Unix() - start
+			log.Printf("[%d][%s] createNewChallengeBox User network creation took %d s", requestId, string(uid), duration)
+
+		}
+		if err := dockerClient.NetworkConnect(ctx, nid, challID, nil); err != nil {
+			panic(err)
+		}
+
+		// Remove default network : bridge
+		nid = getNetworkId("bridge")
+		if err := dockerClient.NetworkDisconnect(ctx, nid, challID, true); err != nil {
 			panic(err)
 		}
 	}
-
-	// Add user network
-	nid := getNetworkIdFromUID(uid)
-	if nid == "" {
-		log.Printf("[%d][%s] createNewChallengeBox No User network found. Creating...", requestId, string(uid))
-		start := time.Now().Unix()
-		nid, _ = createNewUserNet(uid, 3600)
-		duration := time.Now().Unix() - start
-		log.Printf("[%d][%s] createNewChallengeBox User network creation took %d s", requestId, string(uid), duration)
-
-	}
-	if err := dockerClient.NetworkConnect(ctx, nid, challID, nil); err != nil {
-		panic(err)
-	}
-
-	// Remove default network : bridge
-	nid = getNetworkId("bridge")
-	if err := dockerClient.NetworkDisconnect(ctx, nid, challID, true); err != nil {
-		panic(err)
-	}
-
+	
 	// Start container
 	start2 := time.Now().Unix()
 	log.Printf("[%d][%s] createNewChallengeBox Calling ContainerStart", requestId, string(uid))
