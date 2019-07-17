@@ -202,6 +202,7 @@ function html_dump_cat($cat) {
         foreach ($hints['results'] as $h) {
           if ($h['challenge_id']===$c['id']) {
             $desc = pre_process_desc_for_md($h['content']);
+            $desc = $Parsedown->text($desc);
             print '<div class="row chall-desc bg-light">';
             print '<div class="col-md-auto text-left">  <label for="usr">Indice:</label>  </div>
             <div class="col text-left"><label id="hint_'.$h['id'].'"  style="display: none;" >'.$desc.'</label></div>
