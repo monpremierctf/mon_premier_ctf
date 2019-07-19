@@ -5,7 +5,7 @@ if [ ! -f ./certs/yolo.key ]; then
     chmod 755 .
     chmod 750 ./certs
 
-    openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ./certs/yolo.key -out ./certs/yolo.crt  -subj "/C=FR/ST=Toulouse/L=Toulouse/O=YoloCTF/OU=YoloCTF/CN="
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ./certs/yolo.key -out ./certs/yolo.crt  -subj "/C=FR/ST=Toulouse/L=Toulouse/O=YoloCTF/OU=YoloCTF/CN=YoloCTF"
 
     chmod 644 ./certs/yolo.crt
     chmod 600 ./certs/yolo.key 
