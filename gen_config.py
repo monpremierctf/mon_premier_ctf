@@ -389,7 +389,7 @@ if __name__ == '__main__':
 
     if not os.path.exists('web_server/www_site/yoloctf/db/'):
         os.makedirs('web_server/www_site/yoloctf/db/')
-    print (intros)
+    #print (intros)
     with io.open('web_server/www_site/yoloctf/db/intros.json', 'w', encoding='utf8') as outfile:
         outfile.write(unicode('{"count": '+str(len(intros))+', "results": '))
         #print(intros)
