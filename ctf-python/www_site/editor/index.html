@@ -20,6 +20,11 @@
         height: 100%;
         position: relative;
     }
+    #editor2 {
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
   </style>
   <link rel="stylesheet" href="/yoloctf/js/bootstrap.min.css">
   <link rel="stylesheet" href="/yoloctf/style.css">
@@ -65,16 +70,22 @@
         </div>
         <div class="form-group text-left row-sm-9">
             <button type="button" class="btn btn-default btn-warning" id="Go" value="Go">Go</button>
+            <button type="button" class="btn btn-default btn-warning" id="Clear" value="Clear">Clear</button>
         </div>
+        <!--
         <div class="form-group text-left row-sm-6">
             <textarea class="form-control" rows="8" id="comment" name="text"></textarea>
+        </div>
+        -->
+        <div class="form-group text-left row-sm-9">
+            <div id="editor2" class="form-group text-left row"></div>
         </div>
     </div>
 </div>
 
 
 <script>
-     var editor1 = ace.edit("editor", {
+    var editor1 = ace.edit("editor", {
             theme: "ace/theme/tomorrow_night_eighties",
             mode: "ace/mode/python",
             minLines: 20,
@@ -83,10 +94,29 @@
             width: '100%',
             autoScrollEditorIntoView: true
         });
-        editor1.setValue('import sys\nprint("Hello")');
+        editor1.setValue('import os\n\nprint("Hello yolo")\nos.system("ls -al")');
         editor1.setFontSize("18px");
+
+        var editor2 = ace.edit("editor2", {
+            theme: "ace/theme/terminal",
+            //theme: "ace/theme/tomorrow_night_blue",
+            //theme: "ace/theme/tomorrow",
+            mode: "ace/mode/sh_highlight_rules.js",
+            minLines: 20,
+            maxLines: 30,
+            wrap: true,
+            width: '100%',
+            autoScrollEditorIntoView: true
+        });
+        editor2.setValue('');
+        editor2.setFontSize("18px");
+        editor2.setOption('showLineNumbers', false);
+
     function get_text() {
         return editor1.getValue();
+    }
+    function set_text(txt) {
+        return editor2.setValue(txt);
     }
 
     $(document).ready(function() {
@@ -96,12 +126,19 @@
             var serializedData = btoa(get_text());
             $.post("editor_go.php", { "code": serializedData}, function(data) { 
                 console.log("Response: "+data);
-                var d =  $('#comment').val();
-                $("#comment").val(d+"\n"+data);
-                //$('#comment').scrollTop = $('#comment').scrollHeight;
-                var $textarea = $('#comment');
-        $textarea.scrollTop($textarea[0].scrollHeight);
+                //var d =  $('#comment').val();
+                //$("#comment").val(d+"\n"+data);
+                //var $textarea = $('#comment');
+                //$textarea.scrollTop($textarea[0].scrollHeight);
+
+                var dd = editor2.getValue();
+                set_text(dd+"\n"+data);
+                editor2.clearSelection()
             });
+        }); 
+        $("#Clear").click(function(){
+            set_text('');
+        
         }); 
     });
 </script>
