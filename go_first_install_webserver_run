@@ -287,6 +287,19 @@ cd - > /dev/null
 
 
 #
+# Build ctf-python-editor
+#
+echo "Building ctf-php-nginx image"
+cd tools/ctf-php-nginx
+docker build -t ctf-php-nginx .
+cd - > /dev/null
+echo "Building ctf-php-nginx image"
+cd tools/ctf-python-editor
+docker build -t ctf-python-editor .
+cd - > /dev/null
+
+
+#
 # Build xtermjs
 #
 echo "Building ctf-tools-xtermjs image"
