@@ -1,11 +1,18 @@
 <?php
 if (isset($_POST['code'])) {
 
- 
-    $json = '[{"val":"1","flag":"flag1"},{"val":"2","flag":"flag2"}]';
-    if (isset($_ENV['FLAGS'])) { 
-        $json =  $_ENV['FLAGS']; 
+   
+    // php is not allowed to read env variables
+    $json = shell_exec('echo $FLAGS');
+    //echo "Flag=$json";
+
+    if ($json==null) {
+        $json = '[{"val":"1","flag":"flag1"},{"val":"2","flag":"flag2"}]';
     }
+
+    //if (isset($_ENV['FLAGS'])) { 
+    //    $json =  $_ENV['FLAGS']; 
+    //}
     $array = json_decode($json, true);
     //var_dump($array);
     //foreach ($array as $item) {

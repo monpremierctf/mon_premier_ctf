@@ -135,7 +135,6 @@
                 if (dd.length>0) { dd = dd +"\n";}
                 set_text(dd+data);
                 editor2.clearSelection()
-                var lines = editor2.session.doc.getAllLines();
 
                 editor2.scrollToLine(lines.length, true, true, function () {});
                 editor2.gotoLine(lines.length, 0, true);

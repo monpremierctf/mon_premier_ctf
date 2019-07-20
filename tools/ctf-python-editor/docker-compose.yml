@@ -1,0 +1,33 @@
+#
+#
+#
+version: '3'
+
+
+services:
+
+
+  webserver_python_editor:
+    image: ctf-python-editor
+    container_name: webserver_python_editor
+    environment:
+      FLAGS: '[{"val":"1","flag":"flag11"},{"val":"2","flag":"flag22"}]'
+    networks:
+      - webserver_webLAN
+    labels:
+      - "traefik.backend=webserver_python_editor"
+      - "traefik.docker.network=webserver_webLAN"
+      - "traefik.frontend.rule=PathPrefix:/editor_22/"  
+      - "traefik.frontend.rule=PathPrefixStrip:/editor_22/"    
+      - "traefik.frontend.entryPoints=http,https"
+      - "traefik.frontend.headers.SSLRedirect=true"
+      - "traefik.enable=true"
+      - "traefik.port=8080"
+      - "traefik.default.protocol=http"
+
+
+      
+networks:
+  webserver_webLAN:
+    external: true
+

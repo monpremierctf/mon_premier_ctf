@@ -30,6 +30,8 @@ services:
     #image: php:7-fpm
     build: php/.
     container_name: webserver_editor_php
+    environment:
+      FLAGS: ${FLAGS}
     volumes:
       - ./www_site:/www_site
     networks:
