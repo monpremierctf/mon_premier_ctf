@@ -236,7 +236,7 @@ def copy_file(dest_dir, challenge_dir, filename):
     print("- Copy ["+src+"]  => "+dst_tmp)
     if os.path.isfile(src):
         shutil.copy2(src, dst_tmp)
-    else
+    else:
         print("- Copy KO : can t find ["+src+"]")
     return dst
 
