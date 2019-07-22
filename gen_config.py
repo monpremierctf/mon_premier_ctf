@@ -234,7 +234,10 @@ def copy_file(dest_dir, challenge_dir, filename):
     if not os.path.exists(directory):
         os.makedirs(directory)
     print("- Copy ["+src+"]  => "+dst_tmp)
-    shutil.copy2(src, dst_tmp)
+    if os.path.isfile(src):
+        shutil.copy2(src, dst_tmp)
+    else
+        print("- Copy KO : can t find ["+src+"]")
     return dst
 
 def add_file(challenge_dir, filename):
