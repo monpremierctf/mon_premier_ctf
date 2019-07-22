@@ -1,0 +1,22 @@
+#
+# L'adresse IP du serveur sur lequel tourne les challenges est entre []
+# Cette IP sera insérée dans le texte de description des challenges
+# Un répertoire de challenges par ligne
+# Commentaires avec #
+# 
+#
+
+[IPSERVER]
+ctf-flag
+ctf-xterm
+ctf-shell
+ctf-passwd
+ctf-escalation
+ctf-net
+ctf-sqli
+ctf-buffer
+ctf-decode
+ctf-transfert
+ctf-exploit
+ctf-python
+

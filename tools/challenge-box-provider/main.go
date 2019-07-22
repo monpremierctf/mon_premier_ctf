@@ -29,6 +29,7 @@ type Challenge struct {
 	Id       string
 	Image    string
 	Port     string
+	TraefikPort string
 	Duration string
 }
 
@@ -233,7 +234,7 @@ func getNetworkIdFromUID(uid string) (networkID string) {
 //
 // Create New Challenge Container
 //
-func createNewChallengeBox(requestId int, box string, duration string, port string, uid string) (containerID string, err error) {
+func createNewChallengeBox(requestId int, box string, duration string, port string, traefik_port string, uid string) (containerID string, err error) {
 	ctx := context.Background()
 
 	// Labels
@@ -243,7 +244,7 @@ func createNewChallengeBox(requestId int, box string, duration string, port stri
 		"ctf-duration":          duration,
 		"traefik.enable":        "true",                                      //traefik.enable=true
 		"traefik.frontend.rule": fmt.Sprintf("PathPrefix:/%s_%s/", box, uid), //traefik.frontend.rule=Path:/yoloboard
-		"traefik.port":          fmt.Sprintf("%s", port),
+		"traefik.port":          fmt.Sprintf("%s", traefik_port),
 	}
 	env := []string{}
 
@@ -252,6 +253,13 @@ func createNewChallengeBox(requestId int, box string, duration string, port stri
 		env = append(env, fmt.Sprintf("URLPREFIX=/%s_%s", box, uid))
 		labels["traefik.docker.network"] = "webserver_webLAN"
 	}
+	if box == "ctf-python" {
+		log.Printf("[%d][%s] createNewChallengeBox ctf-python : add webserver_webLAN", requestId, string(uid))
+		//env = append(env, fmt.Sprintf("URLPREFIX=/%s_%s", box, uid))
+		labels["traefik.docker.network"] = "webserver_webLAN"
+
+	}
+
 	// Port binding
 	/*
 		hostBinding := nat.PortBinding{
@@ -308,13 +316,20 @@ func createNewChallengeBox(requestId int, box string, duration string, port stri
 
 
 		// If xterm, add webLAN
-		if box == "ctf-tool-xterm" {
+		if (box == "ctf-tool-xterm" ) {
 			nidweb := getNetworkId("webserver_webLAN")
 			if err := dockerClient.NetworkConnect(ctx, nidweb, challID, nil); err != nil {
 				panic(err)
 			}
 		}
-	
+		// If xterm, add webLAN
+		if (box == "ctf-python" ) {
+			nidweb := getNetworkId("webserver_webLAN")
+			if err := dockerClient.NetworkConnect(ctx, nidweb, challID, nil); err != nil {
+				panic(err)
+			}
+		}
+
 
 
 		// Add user network
@@ -631,6 +646,7 @@ func createChallengeBox(w http.ResponseWriter, r *http.Request) {
 		challenges[cindex].Image,
 		challenges[cindex].Duration,
 		challenges[cindex].Port,
+		challenges[cindex].TraefikPort,
 		uid,
 	)
 	duration := time.Now().Unix() - start

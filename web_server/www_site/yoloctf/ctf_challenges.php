@@ -177,6 +177,7 @@ function html_dump_cat($cat) {
         if ($cat==="Buffer overflows") {$server="ctf-buffer"."_".$_SESSION['uid'];}
         if ($cat==="File Upload") {$server="ctf-transfert"."_".$_SESSION['uid'];}
         if ($cat==="Exploit") {$server="ctf-exploit"."_".$_SESSION['uid'];}
+        if ($cat==="Python") {$server="ctf-python"."_".$_SESSION['uid'];}
 
         if (isset($c['docker'])){
           if (($c['docker'])!="") {

@@ -1,14 +1,29 @@
 <?php
 if (isset($_POST['code'])) {
 
-   
+    // Read flags from ENV
     // php is not allowed to read env variables
-    $json = shell_exec('echo $FLAGS');
-    //echo "Flag=$json";
+    //$json = shell_exec('echo $FLAGS');
+    //echo "Flag env =$json";
+    //var_dump($json);
 
-    if ($json==null) {
-        $json = '[{"val":"1","flag":"flag1"},{"val":"2","flag":"flag2"}]';
+    // Read flags from File
+    //if ($json=="") {
+        if (file_exists("./flags.txt")) {
+            $json = file_get_contents("./flags.txt");
+        }
+    //}
+    //echo "Flag file =[$json]";
+    //var_dump($json);
+
+
+    // Default Flags
+    if ($json=="") {
+        $json = '[{"val":"1","flag":""},{"val":"2","flag":""}]';
     }
+    //echo "Flag default =$json";
+    //var_dump($json);
+
 
     //if (isset($_ENV['FLAGS'])) { 
     //    $json =  $_ENV['FLAGS']; 

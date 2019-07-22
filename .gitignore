@@ -25,6 +25,7 @@ ctfd_config/tmp/*
 ctf-*/.env
 ctfd_config/db
 ctfd_config/uploads
+install.log
 
 
 

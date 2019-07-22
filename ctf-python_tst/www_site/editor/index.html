@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Editor</title>
+  <style type="text/css" media="screen">
+	.ace_editor {
+		border: 1px solid lightgray;
+		margin: auto;
+		height: 200px;
+		width: 80%;
+	}
+	.scrollmargin {
+		height: 80px;
+        text-align: center;
+	}
+    #editor {
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+    #editor2 {
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+  </style>
+  <link rel="stylesheet" href="/yoloctf/js/bootstrap.min.css">
+  <link rel="stylesheet" href="/yoloctf/style.css">
+  <script src="/yoloctf/js/jquery.min.js"></script>
+  <!-- load ace -->
+  <script src="/yoloctf/ace/src-min-noconflict/ace.js"></script>
+  <script>
+    
+
+
+
+    /*
+    var editor2 = ace.edit("editor2", {
+        theme: "ace/theme/tomorrow_night_blue",
+        mode: "ace/mode/html",
+        autoScrollEditorIntoView: true,
+        maxLines: 30,
+        minLines: 2
+    });
+
+    var editor = ace.edit("editor3");
+    editor.setOptions({
+        autoScrollEditorIntoView: true,
+        maxLines: 8
+    });
+    editor.renderer.setScrollMargin(10, 10, 10, 10);
+    
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/tomorrow");
+    editor.session.setMode("ace/mode/html");
+    editor.setAutoScrollEditorIntoView(true);
+    editor.setOption("maxLines", 100);
+    */
+  
+  </script>
+</head>
+<body>
+<div class="row">
+    <div class="col-sm-1 text-center"></div>
+    <div class="col-sm-10 text-center">
+        <div class="form-group text-left row-sm-9">
+            <div id="editor" class="form-group text-left row"></div>
+        </div>
+        <div class="form-group text-left row-sm-9">
+            <button type="button" class="btn btn-default btn-warning" id="Go" value="Go">Go</button>
+            <button type="button" class="btn btn-default btn-warning" id="Clear" value="Clear">Clear</button>
+        </div>
+        <!--
+        <div class="form-group text-left row-sm-6">
+            <textarea class="form-control" rows="8" id="comment" name="text"></textarea>
+        </div>
+        -->
+        <div class="form-group text-left row-sm-9">
+            <div id="editor2" class="form-group text-left row"></div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var editor1 = ace.edit("editor", {
+            theme: "ace/theme/tomorrow_night_eighties",
+            mode: "ace/mode/python",
+            minLines: 20,
+            maxLines: 30,
+            wrap: true,
+            width: '100%',
+            autoScrollEditorIntoView: true
+        });
+        editor1.setValue('import os\n\nprint("Hello yolo")\nos.system("ls -al")');
+        editor1.setFontSize("18px");
+
+        var editor2 = ace.edit("editor2", {
+            theme: "ace/theme/terminal",
+            //theme: "ace/theme/tomorrow_night_blue",
+            //theme: "ace/theme/tomorrow",
+            mode: "ace/mode/sh_highlight_rules.js",
+            minLines: 20,
+            maxLines: 30,
+            wrap: true,
+            width: '100%',
+            autoScrollEditorIntoView: true
+        });
+        editor2.setValue('');
+        editor2.setFontSize("18px");
+        editor2.setOption('showLineNumbers', false);
+
+    function get_text() {
+        return editor1.getValue();
+    }
+    function set_text(txt) {
+        return editor2.setValue(txt);
+    }
+
+    $(document).ready(function() {
+       
+
+        $("#Go").click(function(){
+            var serializedData = btoa(get_text());
+            $.post("editor_go.php", { "code": serializedData}, function(data) { 
+                console.log("Response: "+data);
+                //var d =  $('#comment').val();
+                //$("#comment").val(d+"\n"+data);
+                //var $textarea = $('#comment');
+                //$textarea.scrollTop($textarea[0].scrollHeight);
+
+                var dd = editor2.getValue();
+                if (dd.length>0) { dd = dd +"\n";}
+                set_text(dd+data);
+                editor2.clearSelection()
+                var lines = editor2.session.doc.getAllLines();
+
+                editor2.scrollToLine(lines.length, true, true, function () {});
+                editor2.gotoLine(lines.length, 0, true);
+            });
+        }); 
+        $("#Clear").click(function(){
+            set_text('');
+        
+        }); 
+    });
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+#
+#
+#
+version: '3'
+
+
+services:
+
+
+  webserver_editor:
+    image: nginx:latest
+    container_name: webserver_nginx_editor
+    networks:
+      - webserver_webLAN
+    volumes:
+      - ./www_site:/www_site
+      - ./site.conf:/etc/nginx/conf.d/default.conf
+    labels:
+      - "traefik.backend=webserver_editor"
+      - "traefik.docker.network=webserver_webLAN"
+      - "traefik.frontend.rule=PathPrefix:/editor/"      
+      - "traefik.frontend.entryPoints=http,https"
+      - "traefik.frontend.headers.SSLRedirect=true"
+      - "traefik.enable=true"
+      - "traefik.port=80"
+      - "traefik.default.protocol=http"
+
+
+  webserver_editor_php:
+    #image: php:7-fpm
+    build: php/.
+    container_name: webserver_editor_php
+    environment:
+      FLAGS: ${FLAGS}
+    volumes:
+      - ./www_site:/www_site
+    networks:
+      - webserver_webLAN
+    labels:
+      - "traefik.enable=false"
+
+
+
+
+      
+networks:
+  webserver_webLAN:
+    external: true
+

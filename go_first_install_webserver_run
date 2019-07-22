@@ -1,5 +1,7 @@
 #!/bin/bash
 #
+
+ctf_install() {
 #
 TIME_START=$(date +%s);
 
@@ -16,19 +18,6 @@ WITH_UFW=0
 TRAEFIK_SELF_SIGNED_CERTS=1
 
 
-#
-# python 2.xx installed
-printf "=> Verification : python 2.7 installé : "
-if [[ $(which python) ]]; then
-    echo "Ok"
-    printf "$(python --version)"
-  else
-    echo "Ko"
-    echo "Pour installer python rapidement:"
-    echo "sudo apt-get update"
-    echo "sudo apt-get install python-minimal"
-    exit;
-fi
 
 
 
@@ -81,6 +70,8 @@ echo "
 # System checks
 #
 echo "= Verification du système..."
+RED='\033[0;31m'
+NC='\033[0m' # No Color
 
 #
 # system Ubuntu
@@ -90,7 +81,7 @@ if uname -a |grep -qw Ubuntu; then
     echo "Ok"; 
     echo $(uname -v)
 else 
-    echo "Ko"; 
+    printf "${RED}Ko${NC}\n"; 
     echo uname -v
     echo "Les scripts n'ont été testé que sous Ubuntu 18. Ca peut marcher .. ou pas. Bonne chance."
 fi
@@ -99,7 +90,7 @@ fi
 # Please avoid running as root or with sudo
 printf "=> Verification : Utilisateur non root : "
 if [ $(id -u) -eq 0 ]; then 
-    echo "Ko"
+    printf "${RED}Ko${NC}\n"
     echo "Il est recommandé de lancer le script avec un compte utilisateur non root appartenant au groupe Docker."
     echo "Vous etes actuellement root ou dans un sudo."
     echo "Des fichiers ou répertoires risquent d'être créés par root et ne seront plus lisibles/effacables par un utilisateur lambda."
@@ -116,13 +107,28 @@ fi
 
 
 #
+# python 2.xx installed
+printf "=> Verification : python 2.7 installé : "
+if [[ $(which python) ]]; then
+    echo "Ok"
+    printf "$(python --version)"
+  else
+    printf "${RED}Ko${NC}\n"
+    echo "Pour installer python rapidement:"
+    echo "sudo apt-get update"
+    echo "sudo apt-get install python-minimal"
+    exit;
+fi
+
+
+#
 # docker-compose installed
 printf "=> Verification : docker-compose installé : "
 if [[ $(which docker-compose) && $(docker-compose --version) ]]; then
     echo "Ok"
     printf "$(docker-compose --version)\n"
   else
-    echo "Ko"
+    printf "${RED}Ko${NC}\n"
     echo "Pour installer docker-compose rapidement:"
     echo "sudo apt-get update"
     echo "sudo apt-get install docker-compose"
@@ -137,7 +143,7 @@ if [[ $(which docker) && $(docker --version) ]]; then
     echo "Ok"
     printf "$(docker --version)\n"
   else
-    echo "Ko"
+    printf "${RED}Ko${NC}\n"
     echo "Pour installer docker proprement consultez la documentation de votre distribution."
     exit;
 fi
@@ -152,7 +158,7 @@ printf "=> Verification : zip installé : "
 if [[ $(which zip) ]]; then
     echo "Ok"
   else
-    echo "Ko"
+    printf "${RED}Ko${NC}\n"
     echo "Pour installer zip rapidement:"
     echo "sudo apt-get update"
     echo "sudo apt install zip"
@@ -166,7 +172,7 @@ if [ $(id -u) -ne 0 ]; then
     if id -nG $USER | grep -qw "docker"; then
         echo "Ok"
     else
-        echo "Ko"
+        printf "${RED}Ko${NC}\n"
         echo "Si l'utilisateur n'est pas root, il doit appartenir au groupe Docker."
         echo "Utilisez la commande suivant pour ajouter l'utilisateur courant au groupe Docker"
         echo "Ensuite deconnectez et reconnectez vous. Personnellement, je reboote le serveur..."
@@ -183,7 +189,7 @@ fi
 # Is docker running ?
 printf "=> Verification : Docker démarré : "
 if docker info 2>&1 | grep -qw "Cannot connect to the Docker daemon"; then 
-    echo "Ko"
+    printf "${RED}Ko${NC}\n"
     echo "Vous devriez pouvoir démarrer le service docker avec la commande:"
     echo "sudo service docker start"
     exit;
@@ -196,6 +202,11 @@ fi
 #
 # Setup
 #
+
+if [ ! -f challenges_list.cfg ]; then
+  cp challenges_list.cfg.default challenges_list.config
+fi
+
 
 
 #
@@ -399,3 +410,6 @@ echo ""
 echo "compte admin   : $CTF_ADMIN_ACCOUNT"
 echo "password admin : $CTF_ADMIN_PASSWORD"
 
+}
+
+ctf_install 2>&1 | tee ./install.log
