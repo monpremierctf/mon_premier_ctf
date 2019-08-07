@@ -185,24 +185,28 @@ def add_hint(hint_desc):
     })
 
 
-def add_intro(challenge_dir, label, desc, category, docker):
+def add_intro(challenge_dir, label, label_en, desc, desc_en, category, docker):
     global intros
     #desc = replace_crlf_by_br(desc)
     intros.append({
         "dir": str(challenge_dir), 
         "label": str(label), 
+        "label_en": str(label_en), 
         "category": str(category), 
         "docker": str(docker),
-        "description": desc.decode('utf-8')
+        "description": desc.decode('utf-8'),
+        "description_en": desc_en.decode('utf-8')
     })
 
-def add_challenge(name, desc, value, category, docker):
+def add_challenge(name, name_en, desc, desc_en, value, category, docker):
     global challenge_id
     challenge_id+=1
     challenges.append({
         "id": int(challenge_id), 
         "name": str(name), 
+        "name_en": str(name_en), 
         "description": str(desc), 
+        "description_en": str(desc_en), 
         "max_attempts": 0, 
         "value": int (value), 
         "category": str(category), 
@@ -310,14 +314,20 @@ def parse_dir(challenge_dir):
             category = config.get(challenge, 'category')
             docker = getParam(config, challenge, 'docker')
             label = getParam(config, challenge, 'label')
+            label_en = getParam(config, challenge, 'label_en')
             desc = config.get(challenge, 'description')
             desc = desc.replace("IPSERVER", IPSERVER)
-            add_intro(challenge_dir, label, desc, category, docker)
+            desc_en = getParam(config, challenge, 'description_en')
+            desc_en = desc_en.replace("IPSERVER", IPSERVER)
+            add_intro(challenge_dir, label, label_en, desc, desc_en, category, docker)
         else:
             name = config.get(challenge, 'name')
+            name_en = getParam(config, challenge, 'name_en')
             #name = name.encode('string-escape')
             desc = config.get(challenge, 'description')
-            desc = desc.replace("IPSERVER", IPSERVER)           
+            desc = desc.replace("IPSERVER", IPSERVER)     
+            desc_en = getParam(config, challenge, 'description_en')
+            desc_en = desc_en.replace("IPSERVER", IPSERVER)             
             #print(desc)
             #desc_enc = desc.encode('string-escape') #unicode-escape
             #print(desc_enc)
@@ -328,14 +338,18 @@ def parse_dir(challenge_dir):
             filename1 = getParam(config, challenge, 'file1')
             filename2 = getParam(config, challenge, 'file2')
             flag = getParam(config, challenge, 'flag')
+            flag2 = getParam(config, challenge, 'flag2')
+            flag3 = getParam(config, challenge, 'flag3')
             docker = getParam(config, challenge, 'docker')
             hint = getParam(config, challenge, 'hint')
             hint1 = getParam(config, challenge, 'hint1')
             hint2 = getParam(config, challenge, 'hint2')
             #print(name)
             #print (description)
-            add_challenge(name, desc, value, category, docker)
+            add_challenge(name, name_en, desc, desc_en, value, category, docker)
             add_flag(flag)
+            add_flag(flag2)
+            add_flag(flag3)
             add_file(challenge_dir, filename) 
             add_file(challenge_dir, filename1) 
             add_file(challenge_dir, filename2) 

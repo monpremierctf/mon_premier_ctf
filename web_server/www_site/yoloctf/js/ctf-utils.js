@@ -1,3 +1,6 @@
+
+
+
 function ctf_validate(id, flag_field)
 {
     var flag_raw = $(flag_field).val();
