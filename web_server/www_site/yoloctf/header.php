@@ -1,18 +1,18 @@
 
 
 <?php
+require_once('ctf_challenges.php');
 if (isset($_SESSION['login'] )) {
-    require_once('ctf_chalenges.php');
         echo '
     <div class="container-fluid">
     <div class="col-md-1 float-right">
         <div class="dropdown">
-            <button onclick="myFunction()" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonLang" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Langue: Fr
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonLang" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            '.getLangage().'
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonLang" id="MyLangList">
                 <a class="dropdown-item" href="#" id="lang-fr">Français</a>
-                <a class="dropdown-item" href="#" id="lang-en">English action</a>
+                <a class="dropdown-item" href="#" id="lang-en">English</a>
             </div>
         </div>
         <p><img class="row-md-auto float-center" src="player_02_200.png" width="80" height="80" alt="Participant" ></p>
@@ -40,12 +40,12 @@ if (isset($_SESSION['login'] )) {
         <div class="container-fluid">
     <div class="row float-right">
         <div class="dropdown">
-            <button onclick="myFunction()" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonLang" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Langue: Fr
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonLang" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            '.getLangage().'
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonLang"  id="MyLangList">
                 <a class="dropdown-item" href="#" id="lang-fr">Français</a>
-                <a class="dropdown-item" href="#" id="lang-en">English action</a>
+                <a class="dropdown-item" href="#" id="lang-en">English</a>
             </div>
         </div>
         <div class="col-md-auto float-right">anonymous</div>
@@ -58,11 +58,19 @@ if (isset($_SESSION['login'] )) {
             window.location.href = "login.php";
         }); 
         $("#lang-fr").click(function(e){
-            alert("fr");
+            $("#dropdownMenuButtonLang").html("fr");
+            $.get( "ctf_lang.php?cmd=setLang&lang=fr", function( data, status ) {
+                if (data=="fr") { window.location.reload(); }
+            });
+        
         });
         $("#lang-en").click(function(e){
-            alert("en");
+            $("#dropdownMenuButtonLang").html("en");
+            $.get( "ctf_lang.php?cmd=setLang&lang=en", function( data, status ) {
+                if (data=="en") { window.location.reload(); }
+            });
         });
+        
     });
     </script>';
     }

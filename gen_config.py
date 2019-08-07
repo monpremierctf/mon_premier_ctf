@@ -169,7 +169,7 @@ hint_id=0
 intros=[]
 
 
-def add_hint(hint_desc):
+def add_hint(hint_desc, hint_desc_en):
     global hint_id
     if hint_desc=='':
         return
@@ -180,6 +180,7 @@ def add_hint(hint_desc):
         "type": "standard", 
         "challenge_id": challenge_id, 
         "content": hint_desc.decode('utf-8'), 
+        "content_en": hint_desc_en.decode('utf-8'), 
         "cost": int (1),
         "requirements": "null"
     })
@@ -344,6 +345,9 @@ def parse_dir(challenge_dir):
             hint = getParam(config, challenge, 'hint')
             hint1 = getParam(config, challenge, 'hint1')
             hint2 = getParam(config, challenge, 'hint2')
+            hint_en = getParam(config, challenge, 'hint_en')
+            hint1_en = getParam(config, challenge, 'hint1_en')
+            hint2_en = getParam(config, challenge, 'hint2_en')
             #print(name)
             #print (description)
             add_challenge(name, name_en, desc, desc_en, value, category, docker)
@@ -353,9 +357,9 @@ def parse_dir(challenge_dir):
             add_file(challenge_dir, filename) 
             add_file(challenge_dir, filename1) 
             add_file(challenge_dir, filename2) 
-            add_hint(hint) 
-            add_hint(hint1) 
-            add_hint(hint2) 
+            add_hint(hint, hint_en) 
+            add_hint(hint1, hint1_en) 
+            add_hint(hint2, hint2_en) 
 
 
 if __name__ == '__main__':

@@ -36,19 +36,18 @@ function get_lang_from_http(){
   return $langs;
 }
 
-function getLangage(){
+
+function getLangage() {
   // current Session
-  if (isset($_SESSION['login'] )) {
-    if (isset($_SESSION['lang'] )) { 
+  if (isset($_SESSION['lang'] )) { 
       return $_SESSION['lang'];
-    }
   }
   // Stored in User profile
 
 
-  // HTTP request
+  // From HTTP request
   $langs = get_lang_from_http();
-  $l= 'fr';
+  $l= 'fr'; // Default french
   foreach ($langs as $lang => $val) {
     if (strpos($lang, 'fr') === 0) {
       $l= 'fr'; break;
@@ -58,9 +57,7 @@ function getLangage(){
     } 
   }
    
-  if (isset($_SESSION['login'] )) {
-    $_SESSION['lang']=$l;
-  }
+  $_SESSION['lang']=$l;
   return $l;
 }
 
@@ -120,6 +117,19 @@ function isFlagValid($id, $flag){
   return false;
 }
 
+function getCategoryLabel($cat){
+  $label="";
+  $intro = getIntro($cat);
+
+  if ($intro!=null) {
+      if ((getLangage()=='en')&&(strlen($intro['label_en'])>0)) {
+          $label = $intro['label_en'];
+      } else {
+          $label = $intro['label'];
+      }
+  }
+  return $label;
+}
 
 function getCategories(){
   global $challenges;
@@ -209,7 +219,12 @@ function html_dump_cat($cat) {
         // titre
         print '<div class="row chall-titre bg-secondary text-white">';
           print '<div class="col-sm text-left">';
-          print ($c['name']);
+          if ((getLangage()=='en')&&(strlen($c['name_en'])>0)) {
+            print ($c['name_en']);
+          } else {
+            print ($c['name']);
+          }
+          
           print "</div>";
           print '<div class="col-sm text-right">';
           print ($c['value']);
@@ -219,7 +234,12 @@ function html_dump_cat($cat) {
 
         // Description
         print '<div class="container chall-desc">';
-        $desc = $c['description'];
+        if ((getLangage()=='en')&&(strlen($c['description_en'])>0)) {
+          $desc = $c['description_en'];
+        } else {
+          $desc = $c['description'];
+        }
+        
         $server="";
         // YOP : FIX : Get from Intro
         if ($cat==="Terminal") {$server="ctf-shell"."_".$_SESSION['uid'];}
@@ -254,7 +274,12 @@ function html_dump_cat($cat) {
         
         foreach ($hints['results'] as $h) {
           if ($h['challenge_id']===$c['id']) {
-            $desc = pre_process_desc_for_md($h['content']);
+            if ((getLangage()=='en')&&(strlen($h['content_en'])>0)) {
+              $desc = pre_process_desc_for_md($h['content_en']);
+            } else {
+              $desc = pre_process_desc_for_md($h['content']);
+            }
+            
             $desc = $Parsedown->text($desc);
             print '<div class="row chall-desc bg-light">';
             print '<div class="col-md-auto text-left">  <label for="usr">Indice:</label>  </div>

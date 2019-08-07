@@ -1,11 +1,11 @@
 
             <?php
-            include ("ctf_challenges.php");
+            require_once('ctf_challenges.php');
 
             function print_toc_entry($cat){
                 print '<a href="index.php?p='.$cat.'">';
                 print "<pre class='ctf-menu-color'>";
-                print ($cat);
+                print getCategoryLabel($cat);
                 print "</pre>";
                 print '</a> ';
             }
