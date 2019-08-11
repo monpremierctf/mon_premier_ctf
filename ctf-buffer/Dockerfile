@@ -1,7 +1,7 @@
 FROM ubuntu:16.04
 RUN apt-get update 
 RUN apt-get install -y make
-RUN apt-get install -y gcc
+RUN apt-get install -y gcc gcc-multilib
 RUN apt-get install -y libpam0g-dev
 
 COPY buffer_01.c /tmp/buffer_01.c
@@ -14,22 +14,25 @@ COPY buffer_03.c /tmp/buffer_03.c
 COPY flag_03.c /tmp/flag_03.c
 
 WORKDIR /tmp
-RUN gcc  -fno-stack-protector  buffer_01.c -c
-RUN gcc  flag_01.c -c
-RUN gcc  buffer_01.o flag_01.o -o say_hello
+RUN gcc  -g -m32 -fno-stack-protector  buffer_01.c -c
+RUN gcc  -g -m32 flag_01.c -c
+RUN gcc  -g -m32 buffer_01.o flag_01.o -o say_hello
 
-RUN gcc  -fno-stack-protector  buffer_02.c -c
-RUN gcc  flag_02.c -c
-RUN gcc  buffer_02.o flag_02.o -o say_hello2
+RUN gcc  -g -m32 -fno-stack-protector  buffer_02.c -c
+RUN gcc  -g -m32 flag_02.c -c
+RUN gcc  -g -m32 buffer_02.o flag_02.o -o say_hello2
 
-RUN gcc  -fno-stack-protector  buffer_03.c -c
-RUN gcc  flag_03.c -c
-RUN gcc  buffer_03.o flag_03.o -o say_hello3
+RUN gcc  -g -m32 -fno-stack-protector  buffer_03.c -c
+RUN gcc  -g -m32 flag_03.c -c
+RUN gcc  -g -m32 buffer_03.o flag_03.o -o say_hello3
 
 
 FROM ctf-sshd:latest
+RUN dpkg --add-architecture i386
 RUN apt-get update 
-RUN apt-get install -y python
+RUN apt-get install -y python binutils gdb 
+RUN apt-get install -y python libc6-dbg libc6-dbg:i386 lib32stdc++6
+
 RUN useradd grandmaster
 RUN useradd -d /home/bender -s /bin/bash bender
 RUN echo 'bender:leelu' | chpasswd 
