@@ -13,6 +13,8 @@ COPY flag_02.c /tmp/flag_02.c
 COPY buffer_03.c /tmp/buffer_03.c
 COPY flag_03.c /tmp/flag_03.c
 
+COPY buffer_04.c /tmp/buffer_04.c
+
 WORKDIR /tmp
 RUN gcc  -g -m32 -fno-stack-protector  buffer_01.c -c
 RUN gcc  -g -m32 flag_01.c -c
@@ -26,14 +28,18 @@ RUN gcc  -g -m32 -fno-stack-protector  buffer_03.c -c
 RUN gcc  -g -m32 flag_03.c -c
 RUN gcc  -g -m32 buffer_03.o flag_03.o -o say_hello3
 
+RUN gcc  -g -m32 -fno-stack-protector -z execstack buffer_04.c -o say_hello4
+
 
 FROM ctf-sshd:latest
 RUN dpkg --add-architecture i386
 RUN apt-get update 
 RUN apt-get install -y python binutils gdb 
-RUN apt-get install -y python libc6-dbg libc6-dbg:i386 lib32stdc++6
+RUN apt-get install -y python libc6-dbg libc6-dbg:i386 lib32stdc++6 
+RUN apt-get install -y vim
 
-RUN useradd grandmaster
+RUN useradd -d /home/grandmaster -s /bin/dash grandmaster
+
 RUN useradd -d /home/bender -s /bin/bash bender
 RUN echo 'bender:leelu' | chpasswd 
 COPY --from=0  --chown=grandmaster /tmp/say_hello /home/bender/say_hello
@@ -54,5 +60,13 @@ COPY --from=0  --chown=grandmaster /tmp/say_hello3 /home/philip/say_hello3
 COPY --from=0  --chown=grandmaster /tmp/buffer_03.c /home/philip/buffer_03.c
 RUN chmod 555 /home/philip/say_hello3
 RUN chmod 444 /home/philip/buffer_03.c
+
+RUN useradd -d /home/fry -s /bin/bash fry
+RUN echo 'fry:futur' | chpasswd 
+COPY --from=0  --chown=grandmaster /tmp/say_hello4 /home/fry/say_hello4
+COPY --from=0  --chown=grandmaster /tmp/buffer_04.c /home/fry/buffer_04.c
+RUN chmod 555 /home/fry/say_hello4
+RUN chmod u+s /home/fry/say_hello4
+RUN chmod 444 /home/fry/buffer_04.c
 
 EXPOSE 22 

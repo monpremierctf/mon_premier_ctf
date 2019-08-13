@@ -260,6 +260,14 @@ func createNewChallengeBox(requestId int, box string, duration string, port stri
 
 	}
 
+	// Disable security for ctf-buffer
+	// --security-opt seccomp=unconfined
+	// docker run -it  --security-opt seccomp=unconfined ctf-buffer:latest /bin/bash
+	secopt := []string{}
+	if box == "ctf-buffer" {
+		secopt = []string{ "seccomp=unconfined"}
+	}
+
 	// Port binding
 	/*
 		hostBinding := nat.PortBinding{
@@ -301,6 +309,10 @@ func createNewChallengeBox(requestId int, box string, duration string, port stri
 					NanoCPUs: 1e+8,   // 0.1 CPU max per container
 				},
 				//PortBindings: portBinding,
+
+				//"SecurityOpt": [],
+				//SecurityOpt: []string{ "apparmor:unconfined", "seccomp=unconfined"},
+				SecurityOpt: secopt,
 			},
 			nil,
 			/*
