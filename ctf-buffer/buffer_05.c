@@ -1,7 +1,7 @@
 /*
  *
  *
- *  gcc -m32 -g -fno-stack-protector -z execstack  buffer_04.c -o buffer_04
+ *  gcc -m32 -g -fno-stack-protector -z execstack  buffer_05.c -o buffer_05
  *  echo 0 > /proc/sys/kernel/randomize_va_space
  */
 
@@ -11,12 +11,13 @@
 #include <string.h>
 
 
+
 void print_flag();
 
 
 void say_hello(char *arg)
 {
-    char buffer[1000];
+    char buffer[200];
     strcpy(buffer,arg);
     printf("Hello %s\n", buffer);
 }

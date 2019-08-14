@@ -14,21 +14,28 @@ COPY buffer_03.c /tmp/buffer_03.c
 COPY flag_03.c /tmp/flag_03.c
 
 COPY buffer_04.c /tmp/buffer_04.c
+COPY flag_04.c /tmp/flag_04.c
+
+COPY buffer_05.c /tmp/buffer_05.c
+COPY flag_05.c /tmp/flag_05.c
 
 WORKDIR /tmp
-RUN gcc  -g -m32 -fno-stack-protector  buffer_01.c -c
-RUN gcc  -g -m32 flag_01.c -c
-RUN gcc  -g -m32 buffer_01.o flag_01.o -o say_hello
+RUN gcc  -g -m32 -fno-stack-protector -z execstack buffer_01.c -c
+RUN gcc  -g -m32 -fno-stack-protector -z execstack flag_01.c -c
+RUN gcc  -g -m32 -fno-stack-protector -z execstack buffer_01.o flag_01.o -o say_hello
 
-RUN gcc  -g -m32 -fno-stack-protector  buffer_02.c -c
-RUN gcc  -g -m32 flag_02.c -c
-RUN gcc  -g -m32 buffer_02.o flag_02.o -o say_hello2
+RUN gcc  -g -m32 -fno-stack-protector -z execstack buffer_02.c -c
+RUN gcc  -g -m32 -fno-stack-protector -z execstack flag_02.c -c
+RUN gcc  -g -m32 -fno-stack-protector -z execstack buffer_02.o flag_02.o -o say_hello2
 
-RUN gcc  -g -m32 -fno-stack-protector  buffer_03.c -c
-RUN gcc  -g -m32 flag_03.c -c
-RUN gcc  -g -m32 buffer_03.o flag_03.o -o say_hello3
+RUN gcc  -g -m32 -fno-stack-protector -z execstack buffer_03.c -c
+RUN gcc  -g -m32 -fno-stack-protector -z execstack flag_03.c -c
+RUN gcc  -g -m32 -fno-stack-protector -z execstack buffer_03.o flag_03.o -o say_hello3
 
-RUN gcc  -g -m32 -fno-stack-protector -z execstack buffer_04.c -o say_hello4
+RUN gcc  -g -m32 -fno-stack-protector -z execstack buffer_04.c flag_04.c -o say_hello4
+
+
+RUN gcc  -g -m32 -fno-stack-protector -z execstack buffer_05.c flag_05.c -o say_hello5
 
 
 FROM ctf-sshd:latest
@@ -63,10 +70,24 @@ RUN chmod 444 /home/philip/buffer_03.c
 
 RUN useradd -d /home/fry -s /bin/bash fry
 RUN echo 'fry:futur' | chpasswd 
-COPY --from=0  --chown=grandmaster /tmp/say_hello4 /home/fry/say_hello4
+COPY --from=0  --chown=root /tmp/say_hello4 /home/fry/say_hello4
 COPY --from=0  --chown=grandmaster /tmp/buffer_04.c /home/fry/buffer_04.c
 RUN chmod 555 /home/fry/say_hello4
 RUN chmod u+s /home/fry/say_hello4
 RUN chmod 444 /home/fry/buffer_04.c
+COPY --chown=fry profile04 /home/fry/.profile
+RUN chmod 644 /home/fry/.profile
+COPY --chown=root flag04.txt /home/fry/flag04.txt
+RUN chmod 700 /home/fry/flag04.txt
+COPY --chown=fry pattern.py /home/fry/pattern.py
+
+RUN useradd -d /home/zapp -s /bin/bash zapp
+RUN echo 'zapp:kif' | chpasswd 
+COPY --from=0  --chown=grandmaster /tmp/say_hello5 /home/zapp/say_hello5
+COPY --from=0  --chown=grandmaster /tmp/buffer_05.c /home/zapp/buffer_05.c
+RUN chmod 555 /home/zapp/say_hello5
+RUN chmod 444 /home/zapp/buffer_05.c
+
+
 
 EXPOSE 22 
