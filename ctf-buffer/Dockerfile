@@ -87,7 +87,7 @@ COPY --from=0  --chown=grandmaster /tmp/say_hello5 /home/zapp/say_hello5
 COPY --from=0  --chown=grandmaster /tmp/buffer_05.c /home/zapp/buffer_05.c
 RUN chmod 555 /home/zapp/say_hello5
 RUN chmod 444 /home/zapp/buffer_05.c
-
+COPY --chown=zapp pattern.py /home/zapp/pattern.py
 
 
 EXPOSE 22 

@@ -14,12 +14,17 @@
 
 void print_flag();
 
+void jmp_esp()
+{
+    __asm__("jmp *%esp");
+}
+
 
 void say_hello(char *arg)
 {
     char buffer[200];
-    strcpy(buffer,arg);
-    printf("Hello %s\n", buffer);
+    printf("Hello %s\n", arg);
+    strcpy(buffer,arg);    
 }
 
 int main(int argc, char *argv[])
