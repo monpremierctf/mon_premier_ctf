@@ -2,6 +2,7 @@ FROM ubuntu:16.04
 RUN apt-get update 
 RUN apt-get install -y make
 RUN apt-get install -y gcc gcc-multilib
+RUN apt-get install -y clang
 RUN apt-get install -y libpam0g-dev
 
 COPY buffer_01.c /tmp/buffer_01.c
@@ -19,6 +20,10 @@ COPY flag_04.c /tmp/flag_04.c
 COPY buffer_05.c /tmp/buffer_05.c
 COPY flag_05.c /tmp/flag_05.c
 
+COPY buffer_rop.c /tmp/buffer_rop.c
+COPY flag_rop.c /tmp/flag_rop.c
+
+
 WORKDIR /tmp
 RUN gcc  -g -m32 -fno-stack-protector -z execstack buffer_01.c -c
 RUN gcc  -g -m32 -fno-stack-protector -z execstack flag_01.c -c
@@ -34,16 +39,28 @@ RUN gcc  -g -m32 -fno-stack-protector -z execstack buffer_03.o flag_03.o -o say_
 
 RUN gcc  -g -m32 -fno-stack-protector -z execstack buffer_04.c flag_04.c -o say_hello4
 
-
 RUN gcc  -g -m32 -fno-stack-protector -z execstack buffer_05.c flag_05.c -o say_hello5
+
+RUN clang  -o rop buffer_rop.c -m32 -fno-stack-protector  -Wl,-z,relro,-z,now,-z,noexecstack -static
+
+
 
 
 FROM ctf-sshd:latest
 RUN dpkg --add-architecture i386
 RUN apt-get update 
 RUN apt-get install -y python binutils gdb 
-RUN apt-get install -y python libc6-dbg libc6-dbg:i386 lib32stdc++6 
-RUN apt-get install -y vim
+RUN apt-get install -y libc6-dbg libc6-dbg:i386 lib32stdc++6 
+RUN apt-get install -y vim strace ltrace
+
+# ROPgadget : https://github.com/JonathanSalwan/ROPgadget
+# pwntools  : http://docs.pwntools.com/en/stable/install.html
+
+RUN apt-get install -y python2.7 python-pip python-dev git libssl-dev libffi-dev build-essential
+RUN pip install --upgrade pip
+RUN pip install capstone 
+RUN pip install ropgadget 
+RUN pip install --upgrade pwntools
 
 RUN useradd -d /home/grandmaster -s /bin/dash grandmaster
 
@@ -89,5 +106,9 @@ RUN chmod 555 /home/zapp/say_hello5
 RUN chmod 444 /home/zapp/buffer_05.c
 COPY --chown=zapp pattern.py /home/zapp/pattern.py
 
+COPY --from=0  --chown=grandmaster /tmp/rop /home/zapp/rop
+COPY --from=0  --chown=grandmaster /tmp/buffer_rop.c /home/zapp/buffer_rop.c
+RUN chmod 555 /home/zapp/rop
+RUN chmod 444 /home/zapp/buffer_rop.c
 
 EXPOSE 22 

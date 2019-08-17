@@ -2,9 +2,7 @@
 #include <string.h>
 
 
-
-
 void print_flag()
 {
-    printf("flag{J3_su1s_tr0p_d3b0rd3}\n");
+    printf("flag{tr0p_b13n_c4ch3}\n");
 }

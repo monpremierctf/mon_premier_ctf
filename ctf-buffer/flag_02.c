@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
-void print_flag();
+
+
 
 void print_flag()
 {
