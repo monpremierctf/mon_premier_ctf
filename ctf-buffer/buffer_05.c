@@ -9,7 +9,7 @@
 
 #include <stdio.h>
 #include <string.h>
-
+#include <stdlib.h>  // system
 
 
 void print_flag();
@@ -19,6 +19,10 @@ void jmp_esp()
     __asm__("jmp *%esp");
 }
 
+void fct_system()
+{
+    system("id");
+}
 
 void say_hello(char *arg)
 {
