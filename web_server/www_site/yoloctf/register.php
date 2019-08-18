@@ -148,9 +148,22 @@
 		  <input type="text" class="col-6 form-control" id="code" name="code">
           <label for="usr" class="col-2"></label>
 		</div>
-		<button type="submit" class="btn btn-primary">Register</button>
+		<button type="submit" class="btn btn-primary" onclick="return checkRegisterForm()">Register</button>
 	  </form>
     </div>
+
+
+    <script>
+        function checkRegisterForm()
+        {
+            // Check name is available
+
+            // Check fields are filled
+            
+            //alert("checkRegisterForm");
+            return true;
+        }
+    </script>
 
 
         </div>

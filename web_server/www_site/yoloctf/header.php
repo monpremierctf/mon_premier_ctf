@@ -1,14 +1,17 @@
 
-
+<!---- Includes ---->
 <?php
 require_once('ctf_challenges.php');
-if (isset($_SESSION['login'] )) {
-        echo '
+?>
+
+<!---- Is Logged ---->
+<?php if (isset($_SESSION['login'] )) { ?>
+    
     <div class="container-fluid">
     <div class="col-md-1 float-right">
         <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonLang" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            '.getLangage().'
+            <?php print getLangage() ?>
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonLang" id="MyLangList">
                 <a class="dropdown-item" href="#" id="lang-fr">Français</a>
@@ -16,7 +19,9 @@ if (isset($_SESSION['login'] )) {
             </div>
         </div>
         <p><img class="row-md-auto float-center" src="player_02_200.png" width="80" height="80" alt="Participant" ></p>
-        <div class="row-md-auto float-center font-weight-bold">'.htmlspecialchars($_SESSION['login']).'</div>
+        <div class="row-md-auto float-center font-weight-bold">
+        <?php print  htmlspecialchars($_SESSION['login']) ?>
+        </div>
         <button type="button" class="btn btn-default float-center btn-warning" id="Logout" value="Logout">Logout</button>
         </div>
     </div>   
@@ -26,22 +31,17 @@ if (isset($_SESSION['login'] )) {
             alert("Deconnection");
             window.location.href = "logout.php";
         }); 
-        $("#lang-fr").click(function(e){
-            //
-        });
-        $("#lang-en").click(function(e){
-            //
-        });
     });
     </script>
-    '; 
-    } else {
-        echo '
+
+<!---- Is NOT Logged ---->
+<?php } else { ?>
+        
         <div class="container-fluid">
     <div class="row float-right">
         <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonLang" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            '.getLangage().'
+            <?php getLangage() ?>
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonLang"  id="MyLangList">
                 <a class="dropdown-item" href="#" id="lang-fr">Français</a>
@@ -57,6 +57,19 @@ if (isset($_SESSION['login'] )) {
         $("#Login").click(function(){
             window.location.href = "login.php";
         }); 
+        
+    });
+    </script>
+ <?php } ?>   
+
+<div class="jumbotron ctf-title text-center">
+<h1 class="ctf-title-size">Y0L0 CTF</h1>
+<p ><pre class="ctf-subtitle-size">Mon premier CTF</pre></p> 
+</div>
+
+<script>
+    $(document).ready(function() {
+       
         $("#lang-fr").click(function(e){
             $("#dropdownMenuButtonLang").html("fr");
             $.get( "ctf_lang.php?cmd=setLang&lang=fr", function( data, status ) {
@@ -70,16 +83,5 @@ if (isset($_SESSION['login'] )) {
                 if (data=="en") { window.location.reload(); }
             });
         });
-        
     });
-    </script>';
-    }
-    echo'
-    ';
-
-?>
-
-<div class="jumbotron ctf-title text-center">
-<h1 class="ctf-title-size">Y0L0 CTF</h1>
-<p ><pre class="ctf-subtitle-size">Mon premier CTF</pre></p> 
-</div>
+</script>

@@ -72,12 +72,14 @@
             $p = $_GET['p'];
             $intro = getIntro($p);
             if ($intro!=null) {
+              /*
                 if ((getLangage()=='en')&&(strlen($intro['description_en'])>0)) {
                    $string = $intro['description_en'];
                 } else {
                    $string = $intro['description'];
                 }
-                
+                */
+                $string = getLocalizedIndex($intro, 'description');
                 $string = pre_process_desc_for_md($string);
                 print $Parsedown->text($string);
                 print "<p class='chall-spacer'><p>";

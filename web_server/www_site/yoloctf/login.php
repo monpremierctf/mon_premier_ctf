@@ -1,5 +1,5 @@
 <?php
-
+    
     ini_set('session.cookie_httponly', 1);
     ini_set('session.cookie_secure', 1);
     header_remove("X-Powered-By");
@@ -7,6 +7,7 @@
     header('X-Frame-Options: SAMEORIGIN'); 
     session_start ();
 
+    require_once('ctf_locale.php');
     if (isset($_POST['login']) && isset($_POST['password'])) {
 
         include "ctf_sql.php";
@@ -30,7 +31,7 @@
         }
         else {
             // Le visiteur n'a pas été reconnu comme étant membre de notre site. On utilise alors un petit javascript lui signalant ce fait
-            echo '<body onLoad="alert(\'Login/password non valides...\')">';
+            echo '<body onLoad="alert(\''.getLocalizedLabel("login_invalid_credentials").'\')">';
             // puis on le redirige vers la page de login
             echo '<meta http-equiv="refresh" content="0;URL=login.php">';
         }
@@ -78,7 +79,7 @@ echo  get_active_users();
       
     </div>
     <div class="col-sm-4 text-center">
-      <h3>Participant</h3>
+      <h3><?php print getLocalizedLabel("login_with_account") ?></h3>
       <p><img src="player_02_200.png" alt="Participant"></p>
       <form action="login.php"  method="post">
 		<div class="form-group text-left">
@@ -93,11 +94,11 @@ echo  get_active_users();
 	  </form>
     </div>
     <div class="col-sm-4 text-center">
-      <h3>Pas encore de compte ?</h3>        
+      <h3><?php print getLocalizedLabel("login_without_account") ?></h3>        
       <p><img src="admin_02_200.png" alt="Anonymous"></p>
       <form action="register.php"  method="post">
 		<div class="form-group text-center">
-		  Créer un compte
+    <?php print getLocalizedLabel("login_create_account") ?>
 		</div>
 		<button type="submit" class="btn btn-primary">Register</button>
 	  </form>
