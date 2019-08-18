@@ -64,8 +64,8 @@
         </div>
 
         <!--- Page Content  -->
-        <div class="col">
-        <div class="container">
+        <div class="col-10">
+        <div class="row-md-auto">
 
         <?php
         
