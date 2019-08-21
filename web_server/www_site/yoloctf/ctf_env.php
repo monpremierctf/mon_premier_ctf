@@ -4,4 +4,13 @@
     $scoreboard_aff = getenv('CTF_SCOREBOARD_AFF')?getenv('CTF_SCOREBOARD_AFF'):'all';
     $use_mail = getenv('CTF_USE_MAIL')?getenv('CTF_USE_MAIL'):'false';
     
+    // mail
+    $ctf_mail_enabled  = getenv('CTF_MAIL_ENABLED')?getenv('CTF_MAIL_ENABLED'):'false';
+    $ctf_mail_username = getenv('CTF_MAIL_USERNAME')?getenv('CTF_MAIL_USERNAME'):'yoloctf';
+    $ctf_mail_passwd   = getenv('CTF_MAIL_PASSWD')?getenv('CTF_MAIL_PASSWD'):'passwdnotset';
+    $ctf_mail_frommail = getenv('CTF_MAIL_FROMMAIL')?getenv('CTF_MAIL_FROMMAIL'):'yoloctf@gmail.com';
+    $ctf_mail_fromname = getenv('CTF_MAIL_FROMNAME')?getenv('CTF_MAIL_FROMNAME'):'YoloCTF';
+    
 ?>
+
+

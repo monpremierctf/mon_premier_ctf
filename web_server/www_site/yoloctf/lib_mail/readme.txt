@@ -1,0 +1,1 @@
+wget https://github.com/PHPMailer/PHPMailer/archive/5.2-stable.zip
