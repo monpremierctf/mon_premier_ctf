@@ -21,6 +21,22 @@
     }
 
 
+    if (isset($_GET['validate'])) {
+        $_SESSION['status'] = 'enabled';
+        $uid = $_SESSION['status'];
+        header ('location: index.php?p=Welcome_1');
+        $request = "UPDATE `users` SET `status` = `enabled' WHERE 'UID'='$uid' AND 'status'='waiting_email_validation' ";
+        $result = $mysqli->query($request);
+        $count  = $result->affected_rows;
+        if ($result) {
+            header ('location: index.php?p=Welcome_1');
+        } else {
+            echo $request;
+            printf("Insert failed: %s\n", $mysqli->error);
+            exit();
+        }
+        exit();
+    }
 
     if (isset($_POST['login']) && isset($_POST['password']) && isset($_POST['code'])) {
 
@@ -57,25 +73,44 @@
             echo '<meta http-equiv="refresh" content="0;URL=register.php">';
         }
         else {
+            // On sauve tout ça dans la base
+            $uid = uniqid ("");
             $status = 'enabled';
             // Send mail ?
-            if ($ctf_require_email_validation ==='true'){
+            if ($ctf_require_email_validation =='true'){
                 $status = 'waiting_email_validation';
-                $url = $_SERVER['HTTP_HOST']."/yoloctf/register.php?validate=".$uid;
+                $url = "https://".$_SERVER['HTTP_HOST']."/yoloctf/register.php?validate=".$uid;
                 $to = $_POST['mail'];
                 $subject = "[Yolo CTF] Account validation";
-                $htmlbody = file_get_contents('mail_contents.html');
+                $html = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+                <html>
+                <head>
+                  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+                  <title>[Yolo CTF] Activation de compte</title>
+                </head>
+                <body>
+                <div style="font-family: Arial, Helvetica, sans-serif; font-size: 11px;">
+                  <h1>Activation de compte.</h1>
+                  
+                  <p>Pour activer votre compte sur Yolo CTF, veuillez cliquer sur ce lien : <a href="{{URL}}">{{URL}}</a></p>
+                </div>
+                </body>
+                </html>';
+
+                $htmlbody = $html; //file_get_contents('mail_contents.html');
                 $htmlbody = str_replace("{{URL}}", $url, $htmlbody);
                 $altbody = "Pour activer votre compte sur Yolo CTF, veuillez cliquer sur le lien ci-dessous : ".$url;
-                ctf_send_gmail($to, $subject, $htmlfile, $altbody);
+                //echo "ctf_send_gmail($to, $subject, $htmlbody, $altbody);";
+                ctf_send_gmail($to, $subject, $htmlbody, "");
+    
+                
             }
-
-            // On sauve tout ça
-            $uid = uniqid ("");
+            $_SESSION['status'] = $status;
+            
             $request = "INSERT into users (login, passwd, mail, pseudo, UID, status) VALUES ('$login', '$passwd', '$mail','$pseudo', '$uid', '$status')";
             $result = $mysqli->query($request);
             $count  = $result->affected_rows;
-            if($result) {
+            if ($result) {
                 // on enregistre les paramètres de notre visiteur comme variables de session 
                 $_SESSION['login'] = $login;
                 $_SESSION['uid'] = $uid;
@@ -86,12 +121,10 @@
                 printf("Insert failed: %s\n", $mysqli->error);
                 exit();
             }
-
             // create user Network
             //$dummy = file_get_poke('http://challenge-box-provider:8080/createChallengeBox/?uid='.$_SESSION['uid'].'&cid=1');
         }
     }
-    
 ?>
 
 <!DOCTYPE html>

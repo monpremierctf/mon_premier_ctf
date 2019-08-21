@@ -41,7 +41,7 @@ require_once('ctf_challenges.php');
     <div class="row float-right">
         <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonLang" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <?php getLangage() ?>
+            <?php print getLangage() ?>
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonLang"  id="MyLangList">
                 <a class="dropdown-item" href="#" id="lang-fr">Français</a>

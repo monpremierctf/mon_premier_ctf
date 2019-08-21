@@ -30,7 +30,7 @@ function ctf_send_gmail($to, $subject, $htmlbody, $altbody)
 }
 
 
-function send_gmail($username, $passwd, $frommail, $fromname, $to, $subject, $htmlbody, $altbody)
+function send_gmail($username, $passwd, $frommail, $fromname, $to, $subject, $htmlbody, $altbody='')
 {
     global $ctf_mail_enabled;
 
@@ -52,7 +52,7 @@ function send_gmail($username, $passwd, $frommail, $fromname, $to, $subject, $ht
     // 0 = off (for production use)
     // 1 = client messages
     // 2 = client and server messages
-    $mail->SMTPDebug = 2;
+    $mail->SMTPDebug = 0;
     //Ask for HTML-friendly debug output
     $mail->Debugoutput = 'html';
     //Set the hostname of the mail server
@@ -79,16 +79,19 @@ function send_gmail($username, $passwd, $frommail, $fromname, $to, $subject, $ht
     //convert HTML into a basic plain-text alternative body
     $mail->msgHTML($htmlbody, dirname(__FILE__));
     //Replace the plain text body with one created manually
-    $mail->AltBody = $altbody;
+    if (strlen($altbody) >0 ) 
+    {
+        $mail->AltBody = $altbody;
+    }
     //Attach an image file
     //$mail->addAttachment('./player_02_200.png');
 
     //send the message, check for errors
     if (!$mail->send()) {
-        echo "Mailer Error: " . $mail->ErrorInfo;
+        //echo "Mailer Error: " . $mail->ErrorInfo;
         return false;
     } else {
-        echo "Message sent!";
+        //echo "Message sent!";
         return true;
     }
 }
