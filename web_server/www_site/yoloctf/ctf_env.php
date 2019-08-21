@@ -9,6 +9,7 @@
     $ctf_mail_passwd   = getenv('CTF_MAIL_PASSWD')?getenv('CTF_MAIL_PASSWD'):'passwdnotset';
     $ctf_mail_frommail = getenv('CTF_MAIL_FROMMAIL')?getenv('CTF_MAIL_FROMMAIL'):'yoloctf@gmail.com';
     $ctf_mail_fromname = getenv('CTF_MAIL_FROMNAME')?getenv('CTF_MAIL_FROMNAME'):'YoloCTF';
+    $ctf_require_email_validation = getenv('CTF_REQUIRE_EMAIL_VALIDATION')?getenv('CTF_REQUIRE_EMAIL_VALIDATION'):'false';
     
 ?>
 

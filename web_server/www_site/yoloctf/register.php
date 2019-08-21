@@ -24,55 +24,62 @@
 
     if (isset($_POST['login']) && isset($_POST['password']) && isset($_POST['code'])) {
 
+        // Login, passwd too short ??
         if ((strlen($_POST['login'])<2) or (strlen($_POST['password'])<2)) {
-            // 
             echo '<body onLoad="alert(\'Login ou mot de passe un peu court...\')">';
-            // puis on le redirige vers la page de login
             echo '<meta http-equiv="refresh" content="0;URL=register.php">';
-           
             exit();
         }
 
+        // Code Yolo ??
         if(strtoupper($_POST['code'])!=="YOLO") {
-            // Le visiteur n'a pas été reconnu comme étant membre de notre site. On utilise alors un petit javascript lui signalant ce fait
             echo '<body onLoad="alert(\'Code Invitation invalide\')">';
-            // puis on le redirige vers la page de login
             echo '<meta http-equiv="refresh" content="0;URL=register.php">';
            
             exit();
         }
 
         include "ctf_sql.php";
+        include "ctf_mailer.php";
 
         $login = mysqli_real_escape_string($mysqli, $_POST['login']);
         $passwd = md5($_POST['password']);
         $mail = mysqli_real_escape_string($mysqli, $_POST['mail']);
         $pseudo = mysqli_real_escape_string($mysqli, $_POST['pseudo']);
 
+
+        // Login already exist ?
         $request = "SELECT * FROM users WHERE login='" . $login . "'";
         $result = $mysqli->query($request);
         $count  = $result->num_rows;
         if($count>0) {
-            // Le visiteur n'a pas été reconnu comme étant membre de notre site. On utilise alors un petit javascript lui signalant ce fait
             echo '<body onLoad="alert(\'Ce login est déjà existant\')">';
-            // puis on le redirige vers la page de login
             echo '<meta http-equiv="refresh" content="0;URL=register.php">';
-            
-           
         }
         else {
-            
-            
+            $status = 'enabled';
+            // Send mail ?
+            if ($ctf_require_email_validation ==='true'){
+                $status = 'waiting_email_validation';
+                $url = $_SERVER['HTTP_HOST']."/yoloctf/register.php?validate=".$uid;
+                $to = $_POST['mail'];
+                $subject = "[Yolo CTF] Account validation";
+                $htmlbody = file_get_contents('mail_contents.html');
+                $htmlbody = str_replace("{{URL}}", $url, $htmlbody);
+                $altbody = "Pour activer votre compte sur Yolo CTF, veuillez cliquer sur le lien ci-dessous : ".$url;
+                ctf_send_gmail($to, $subject, $htmlfile, $altbody);
+            }
+
             // On sauve tout ça
             $uid = uniqid ("");
-            $request = "INSERT into users (login, passwd, mail, pseudo, UID) VALUES ('$login', '$passwd', '$mail','$pseudo', '$uid')";
+            $request = "INSERT into users (login, passwd, mail, pseudo, UID, status) VALUES ('$login', '$passwd', '$mail','$pseudo', '$uid', '$status')";
             $result = $mysqli->query($request);
             $count  = $result->affected_rows;
             if($result) {
-                // on enregistre les paramètres de notre visiteur comme variables de session ($login et $pwd) (notez bien que l'on utilise pas le $ pour enregistrer ces variables)
+                // on enregistre les paramètres de notre visiteur comme variables de session 
                 $_SESSION['login'] = $login;
                 $_SESSION['uid'] = $uid;
-                // on redirige notre visiteur vers une page de notre section membre
+                // on redirige notre visiteur vers une page de bienvenue
                 header ('location: index.php?p=Welcome_1');
             } else {
                 echo $request;

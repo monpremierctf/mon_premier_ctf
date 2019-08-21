@@ -1,6 +1,6 @@
 <?php
 
-require_once('ctf_local.php');
+require_once('ctf_locale.php');
 
 $string = file_get_contents("./db/challenges.json");
 $challenges = json_decode($string, true);

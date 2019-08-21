@@ -9,30 +9,28 @@ include 'ctf_env.php';
 require (dirname(__FILE__).'/lib_mail/PHPMailer-5.2/class.phpmailer.php');
 require (dirname(__FILE__).'/lib_mail/PHPMailer-5.2/class.smtp.php');
 
-test_send_gmail();
-
 
 function test_send_gmail()
 {
     ctf_send_gmail(
         'sebastien.josset@gmail.com', 
         'PHPMailer SMTP test', 
-        'mail_contents.html', 
+        file_get_contents('mail_contents.html'), 
         'This is a plain-text message body');
 
 }
 
 
-function ctf_send_gmail($to, $subject, $htmlfile, $altbody)
+function ctf_send_gmail($to, $subject, $htmlbody, $altbody)
 {
     global $ctf_mail_username, $ctf_mail_passwd, $ctf_mail_frommail, $ctf_mail_fromname;
     send_gmail($ctf_mail_username, $ctf_mail_passwd, $ctf_mail_frommail, $ctf_mail_fromname, 
-        $to, $subject, $htmlfile, $altbody);
+        $to, $subject, $htmlbody, $altbody);
 
 }
 
 
-function send_gmail($username, $passwd, $frommail, $fromname, $to, $subject, $htmlfile, $altbody)
+function send_gmail($username, $passwd, $frommail, $fromname, $to, $subject, $htmlbody, $altbody)
 {
     global $ctf_mail_enabled;
 
@@ -79,11 +77,11 @@ function send_gmail($username, $passwd, $frommail, $fromname, $to, $subject, $ht
     $mail->Subject = $subject;
     //Read an HTML message body from an external file, convert referenced images to embedded,
     //convert HTML into a basic plain-text alternative body
-    $mail->msgHTML(file_get_contents($htmlfile), dirname(__FILE__));
+    $mail->msgHTML($htmlbody, dirname(__FILE__));
     //Replace the plain text body with one created manually
     $mail->AltBody = $altbody;
     //Attach an image file
-    $mail->addAttachment('./player_02_200.png');
+    //$mail->addAttachment('./player_02_200.png');
 
     //send the message, check for errors
     if (!$mail->send()) {
