@@ -3,6 +3,17 @@
     src: url("Prisma.otf") format("opentype");
 }
 
+
+.ctf-background {
+    padding: 1rem 0.5rem;
+    padding-top: 1rem;
+    padding-right: 0.5rem;
+    padding-bottom: 0.1rem;
+    padding-left: 0.5rem;
+    background-color: #e9ecef;
+}
+
+
 .ctf-title {
     font-family: Prisma;
     padding: 1rem 0.5rem;

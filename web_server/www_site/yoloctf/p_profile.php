@@ -3,6 +3,8 @@
 <div class="col text-center"> 
 
 <!---- UID, login, mail  --->
+
+    <div class="ctf-background">
         <div class="form-group text-left row">
 		  <label for="usr" class="col-2">Id</label>
 		  <label for="usr" class="col-6" id="id" name="id">
@@ -26,11 +28,15 @@
           <button type="submit" class="btn btn-primary" onclick="return onProfileSave()">Save</button>      
         </div> 
 
-        <div class="form-group text-left  row ">
-        <hr>
-        </div>
+
+    </div>
+
+<div class="form-group text-left  row ">
+<hr>
+</div>
 
 <!---- status  --->
+<div class="ctf-background">
         <div class="form-group text-left  row ">
 		  <label for="usr" class="col-2">Status</label>
 		  <label for="usr" class="col-6" id="status" name="status">
@@ -45,12 +51,16 @@
           <button type="submit" class="btn btn-primary" onclick="return onResendValidationMail()">Resend mail</button>      
         </div> 
 
-        <div class="form-group text-left  row ">
-        <hr>
-        </div>
+
 <?php } ?>
+</div>
+
+<div class="form-group text-left  row ">
+<hr>
+</div>
 
 <!---- Password  --->
+<div class="ctf-background">
         <div class="form-group text-left  row ">
 		  <label for="usr" class="col-2">Password</label>
 		  <input type="password" class="col-6 form-control" id="password" name="password">
@@ -65,11 +75,14 @@
           <label for="usr" class="col-2"></label>
           <button type="submit" class="btn btn-primary" onclick="return onProfilePasswordChange()">Change</button>      
         </div> 
+</div>
 
-
-
+<div class="form-group text-left  row ">
+<hr>
+</div>
 
 <!---- Join CTF  --->
+<div class="ctf-background">
         <div class="form-group text-left  row ">
 		  <label for="usr" class="col-2">CTF</label>
 		  <input type="text" class="col-6 form-control" id="ctf" name="ctf" value="<?php echo isset($_SESSION['ctf'])?htmlspecialchars($_SESSION['ctf']):"Guest"; ?>">
@@ -82,9 +95,12 @@
         </div> 
 
       </div>
-
+      </div>
 </div>
 
+<div class="form-group text-left  row ">
+<hr>
+</div>
 
 <script>
         function onProfileSave()
