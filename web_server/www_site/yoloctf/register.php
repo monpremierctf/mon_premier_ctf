@@ -25,7 +25,7 @@
         $_SESSION['status'] = 'enabled';
         $uid = $_SESSION['status'];
         header ('location: index.php?p=Welcome_1');
-        $request = "UPDATE `users` SET `status` = `enabled' WHERE 'UID'='$uid' AND 'status'='waiting_email_validation' ";
+        $request = "UPDATE 'users' SET 'status' = 'enabled' WHERE 'UID'='$uid' AND 'status'='waiting_email_validation' ";
         $result = $mysqli->query($request);
         $count  = $result->affected_rows;
         if ($result) {

@@ -55,7 +55,7 @@
   </div>
 </div>
 
-
+<!-- Page -->
 <div class="container-fluid">
     <div class="row">
         <!--- Page TOC  -->
@@ -90,6 +90,9 @@
             }
             elseif ($p==="Dashboard") {
                 include "containers.php";
+            }
+            elseif ($p==="Profile") {
+              include "p_profile.php";
             }
             elseif ($p==="Xterm") {
                 include "my_term.php";
