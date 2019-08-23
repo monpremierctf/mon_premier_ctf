@@ -116,9 +116,24 @@
 <!---- Organiser un CTF  --->
 <div class="">
       <div class="row chall-titre bg-secondary text-white"><div class="col-sm text-left">Créer un CTF</div></div>
+
+      <?php   
+      require_once('ctf_sql.php');
+      $request = "SELECT * FROM ctfs WHERE UIDADMIN='$uid'";
+      $result = $mysqli->query($request);
+      $count  = $result->num_rows;
+      if($count>0) {
+          $row = $result->fetch_array();
+          // id , creation_date datetime, UIDCTF VARCHAR(45) NULL, ctfname VARCHAR(200) NULL, UIDADMIN 
+          $ctfname =  $row['ctfname'];
+          $creation_date =  $row['creation_date'];
+          $d = DateTime ($creation_date);
+      }
+      ?>
+
       <div class="form-group text-left  row ">
 		    <label for="usr" class="col-2">CTF</label>
-		    <input type="text" class="col-6 form-control" id="ctf" name="ctf" value="<?php echo isset($_SESSION['ctf'])?htmlspecialchars($_SESSION['ctf']):"Guest"; ?>">
+		    <input type="text" class="col-6 form-control" id="createctf_name" name="createctf_name" value="<?php echo $ctfname; ?>">
         <label for="usr" class="col-2"></label>
       </div>
        
@@ -177,12 +192,14 @@
         }
         function onCreateCTF()
         {
-            // Check name is available
-
-            // Check fields are filled
+          var ctfname_raw = $("#createctf_name").val();
+          var ctfname = encodeURIComponent(ctfname_raw); 
+           $.get( "cmd_ctf.php?create="+ctfname+"&content="+ctfname, function( data, status ) {
+                alert(data);              
+              })
+            .fail(function() {
+            });
             
-            //alert("onProfileSave");
-            // reload page from server
             return false;
         }
     </script>

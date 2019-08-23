@@ -50,7 +50,7 @@
             exit();
         } else {
             echo $request;
-            printf("Insert failed: %s\n", $mysqli->error);
+            printf("Update failed: %s\n", $mysqli->error);
             exit();
         }
 /*
