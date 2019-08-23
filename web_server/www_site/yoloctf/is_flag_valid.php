@@ -41,14 +41,35 @@
 		$mysqli->close();
     }
 
+
+
+    //
+    // Handle request
+    //
     session_start ();
+    include ("ctf_challenges.php");
+
+    // if, flag
+    $cid =  $_GET['id'];
+    $flag = trim($_GET['flag']);
+    if (isset($flag)) {
+        $flag = urldecode($flag);
+    }
+
     if (isset($_SESSION['uid'] )) {
-        include ("ctf_challenges.php");
         $uid = $_SESSION['uid'];
-        $cid =  $_GET['id'];
+
+        // Status != enabled
+        if ($_SESSION['status'] !== 'enabled') {
+            if (isFlagValid($cid,$flag)){
+                print "ok_not_enabled";
+            } else {
+                echo "ko_not_enabled";
+            }
+            return;
+        }
+        
         if (isset($_GET['flag'])) {
-            $flag = trim($_GET['flag']);
-            $flag = urldecode($flag);
             if (isFlagValid($cid,$flag)){
                 print "ok";
                 save_flag_submission($_SESSION['uid'], $cid, $flag, true);
@@ -58,7 +79,7 @@
             }   
         } else {
             $count = is_flag_validated($uid, $cid);
-        //echo $count;
+            //echo $count;
             if (($count>0)) {
                 echo 'ok';
             } else {
@@ -66,7 +87,13 @@
             }
         }
     } else {
-        echo "ko";
+        // User not logged
+        if (isFlagValid($cid,$flag)){
+            echo "ok_not_logged";
+        } else {
+            echo "ko_not_logged";
+        }
+        
     }
   
 ?>

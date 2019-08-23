@@ -1,5 +1,5 @@
 <div class="col text-center">
-<div class="col text-left"><h2>My Profile</h2><br><br></div>
+<div class="col text-left"><h2>Mon Profile</h2><br><br></div>
 <div class="col text-center"> 
 
 <!---- UID, login, mail  --->
@@ -106,8 +106,27 @@
           <button type="submit" class="btn btn-primary" onclick="return onJoinCTF()">Join CTF</button>      
         </div> 
 
+    
+</div>
+
+<div class="form-group text-left  row ">
+<hr>
+</div>
+
+<!---- Organiser un CTF  --->
+<div class="">
+      <div class="row chall-titre bg-secondary text-white"><div class="col-sm text-left">Créer un CTF</div></div>
+      <div class="form-group text-left  row ">
+		    <label for="usr" class="col-2">CTF</label>
+		    <input type="text" class="col-6 form-control" id="ctf" name="ctf" value="<?php echo isset($_SESSION['ctf'])?htmlspecialchars($_SESSION['ctf']):"Guest"; ?>">
+        <label for="usr" class="col-2"></label>
       </div>
-      </div>
+       
+      <div class="form-group text-right row ">
+        <label for="usr" class="col-2"></label>
+        <button type="submit" class="btn btn-primary" onclick="return onCreateCTF()">Créer CTF</button>      
+      </div> 
+
 </div>
 
 <div class="form-group text-left  row ">
@@ -147,6 +166,16 @@
             return false;
         }
         function onJoinCTF()
+        {
+            // Check name is available
+
+            // Check fields are filled
+            
+            //alert("onProfileSave");
+            // reload page from server
+            return false;
+        }
+        function onCreateCTF()
         {
             // Check name is available
 

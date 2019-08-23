@@ -1,4 +1,10 @@
-Votre compte est créé, soyez le bienvenu sur ce serveur.
+<h2>Bienvenu sur ce serveur</h2>
+
+
+
+<br>
+<br>
+Votre compte est créé.
 Nous avons fait notre maximum pour vous simplifier la vie.
 
 Sur la gauche: le menu des Challenges 

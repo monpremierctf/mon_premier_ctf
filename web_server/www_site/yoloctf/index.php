@@ -98,8 +98,13 @@
             elseif ($p==="Xterm") {
                 include "my_term.php";
             }
-            elseif ($p==="Welcome_1") {
-                $string = file_get_contents("welcome_1.md");
+            
+            elseif ($p==="Welcome_validated") {
+              $string = file_get_contents("p_welcome_validated.md");
+              print $Parsedown->text($string);
+          }
+            elseif ($p==="Welcome_waiting_validation") {
+                $string = file_get_contents("p_welcome_waiting_validation.md");
                 print $Parsedown->text($string);
             }
             else {

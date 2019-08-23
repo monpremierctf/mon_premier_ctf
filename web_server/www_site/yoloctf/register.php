@@ -21,21 +21,50 @@
     }
 
 
+
+
+
+    include "ctf_sql.php";
     if (isset($_GET['validate'])) {
-        $_SESSION['status'] = 'enabled';
-        $uid = $_SESSION['status'];
-        header ('location: index.php?p=Welcome_1');
-        $request = "UPDATE 'users' SET 'status' = 'enabled' WHERE 'UID'='$uid' AND 'status'='waiting_email_validation' ";
+        
+        $uid = $_SESSION['uid'];
+        $arg_uid = $_GET['validate'];
+
+        // Validate only the loggued profile ?
+        /*
+        if ($_GET['validate'] !== $uid){
+            echo 'You re not alowed to validate this ID';
+            exit();
+        }
+        */
+        
+        $request = "UPDATE users SET status = 'enabled' WHERE UID='$arg_uid' AND status='waiting_email_validation'; ";
+        //$request = "UPDATE users SET status = 'enabled' WHERE UID='$arg_uid' ; ";
+        //echo $request;
+   
         $result = $mysqli->query($request);
         $count  = $result->affected_rows;
         if ($result) {
-            header ('location: index.php?p=Welcome_1');
+            header ('location: index.php?p=Welcome_validated');
+            $_SESSION['status'] = 'enabled';
+            exit();
         } else {
             echo $request;
             printf("Insert failed: %s\n", $mysqli->error);
             exit();
         }
+/*
+        $user_query = "SELECT login, UID, status FROM users;";
+        if ($result = $mysqli->query($user_query)) {
+            while ($row = $result->fetch_assoc()) {
+                echo "</br>".$row['UID']." - ".$row['login']." - ".$row['status'];	
+
+            }
+            $result->close();
+        }
+
         exit();
+        */
     }
 
     if (isset($_POST['login']) && isset($_POST['password']) && isset($_POST['code'])) {
@@ -55,7 +84,7 @@
             exit();
         }
 
-        include "ctf_sql.php";
+        
         include "ctf_mailer.php";
 
         $login = mysqli_real_escape_string($mysqli, $_POST['login']);
@@ -115,7 +144,11 @@
                 $_SESSION['login'] = $login;
                 $_SESSION['uid'] = $uid;
                 // on redirige notre visiteur vers une page de bienvenue
-                header ('location: index.php?p=Welcome_1');
+                if ($ctf_require_email_validation =='true'){
+                    header ('location: index.php?p=Welcome_waiting_validation');
+                } else {
+                    header ('location: index.php?p=Welcome_validated');
+                }
             } else {
                 echo $request;
                 printf("Insert failed: %s\n", $mysqli->error);
