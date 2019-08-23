@@ -1,1 +1,1 @@
-. .env; docker-compose exec webserver_mysql mysql -u root -p$MYSQL_ROOT_PASSWORD -e "USE dbctf; show tables;"
+. .env; docker-compose exec webserver_mysql mysql -u root -p$MYSQL_ROOT_PASSWORD -e "USE dbctf; show tables; select * from users; select * from flags; select * from ctfs; select *from logs; select * from feedbacks;"

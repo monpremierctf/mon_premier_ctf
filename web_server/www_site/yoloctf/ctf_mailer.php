@@ -24,7 +24,7 @@ function test_send_gmail()
 function ctf_send_gmail($to, $subject, $htmlbody, $altbody)
 {
     global $ctf_mail_username, $ctf_mail_passwd, $ctf_mail_frommail, $ctf_mail_fromname;
-    send_gmail($ctf_mail_username, $ctf_mail_passwd, $ctf_mail_frommail, $ctf_mail_fromname, 
+    return send_gmail($ctf_mail_username, $ctf_mail_passwd, $ctf_mail_frommail, $ctf_mail_fromname, 
         $to, $subject, $htmlbody, $altbody);
 
 }

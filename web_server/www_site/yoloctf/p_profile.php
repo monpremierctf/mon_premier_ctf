@@ -42,23 +42,21 @@
 <div class="">
     <div class="row chall-titre bg-secondary text-white">
         <div class="col-sm text-left">Status du compte</div>
-      </div>
-        <div class="form-group text-left  row ">
+    </div>
+    <div class="form-group text-left  row ">
 		  <label for="usr" class="col-2">Status</label>
 		  <label for="usr" class="col-6" id="status" name="status">
-              <?php echo isset($_SESSION['status'])?htmlspecialchars($_SESSION['status']):""; ?>
-          </label>
-          <label for="usr" class="col-2"></label>
-        </div>
+          <?php echo isset($_SESSION['status'])?htmlspecialchars($_SESSION['status']):"XXX"; ?>
+      </label>
+       <label for="usr" class="col-2"></label>
+    </div>
         
-<?php if (isset($_SESSION['status']) and ($_SESSION['status']==='waiting_email_validation')) { ?>
+      <?php if (isset($_SESSION['status']) and ($_SESSION['status']==='waiting_email_validation')) { ?>
         <div class="form-group text-right row ">
           <label for="usr" class="col-2"></label>
           <button type="submit" class="btn btn-primary" onclick="return onResendValidationMail()">Resend mail</button>      
         </div> 
-
-
-<?php } ?>
+      <?php } ?>
 </div>
 
 <div class="form-group text-left  row ">
@@ -117,6 +115,7 @@
 <div class="">
       <div class="row chall-titre bg-secondary text-white"><div class="col-sm text-left">Créer un CTF</div></div>
 
+      <div class="form-group text-left  row ">
       <?php   
       require_once('ctf_sql.php');
       $request = "SELECT * FROM ctfs WHERE UIDADMIN='$uid'";
@@ -128,9 +127,11 @@
           $ctfname =  $row['ctfname'];
           $creation_date =  $row['creation_date'];
           $d = DateTime ($creation_date);
+          echo "<label for='usr' class='col-2'>$ctfname</label>";
+          echo "<label for='usr' class='col-2'>$creation_date</label>";
       }
       ?>
-
+      </div>
       <div class="form-group text-left  row ">
 		    <label for="usr" class="col-2">CTF</label>
 		    <input type="text" class="col-6 form-control" id="createctf_name" name="createctf_name" value="<?php echo $ctfname; ?>">
@@ -172,12 +173,12 @@
         }
         function onResendValidationMail()
         {
-            // Check name is available
-
-            // Check fields are filled
+            $.get( "cmd_ctf.php?resendValidationMail", function( data, status ) {
+                alert(data);              
+              })
+            .fail(function() {
+            });
             
-            //alert("onProfileSave");
-            // reload page from server
             return false;
         }
         function onJoinCTF()

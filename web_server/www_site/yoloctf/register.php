@@ -22,8 +22,6 @@
 
 
 
-
-
     include "ctf_sql.php";
     if (isset($_GET['validate'])) {
         
@@ -108,30 +106,8 @@
             // Send mail ?
             if ($ctf_require_email_validation =='true'){
                 $status = 'waiting_email_validation';
-                $url = "https://".$_SERVER['HTTP_HOST']."/yoloctf/register.php?validate=".$uid;
                 $to = $_POST['mail'];
-                $subject = "[Yolo CTF] Account validation";
-                $html = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-                <html>
-                <head>
-                  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-                  <title>[Yolo CTF] Activation de compte</title>
-                </head>
-                <body>
-                <div style="font-family: Arial, Helvetica, sans-serif; font-size: 11px;">
-                  <h1>Activation de compte.</h1>
-                  
-                  <p>Pour activer votre compte sur Yolo CTF, veuillez cliquer sur ce lien : <a href="{{URL}}">{{URL}}</a></p>
-                </div>
-                </body>
-                </html>';
-
-                $htmlbody = $html; //file_get_contents('mail_contents.html');
-                $htmlbody = str_replace("{{URL}}", $url, $htmlbody);
-                $altbody = "Pour activer votre compte sur Yolo CTF, veuillez cliquer sur le lien ci-dessous : ".$url;
-                //echo "ctf_send_gmail($to, $subject, $htmlbody, $altbody);";
-                ctf_send_gmail($to, $subject, $htmlbody, "");
-    
+                ctf_send_validation_mail($uid, $to);  
                 
             }
             $_SESSION['status'] = $status;

@@ -18,7 +18,7 @@ require_once('ctf_challenges.php');
                 <a class="dropdown-item" href="#" id="lang-en">English</a>
             </div>
         </div>
-        <p><img class="row-md-auto float-center" src="player_02_200.png" width="80" height="80" alt="Participant" ></p>
+        <p><img class="row-md-auto float-center" src="img/player_02_200.png" width="80" height="80" alt="Participant" ></p>
         <div class="row-md-auto float-center font-weight-bold">
         <?php print  htmlspecialchars($_SESSION['login']) ?>
         </div>

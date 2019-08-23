@@ -25,6 +25,8 @@
             // on enregistre les paramètres de notre visiteur comme variables de session ($login et $pwd) (notez bien que l'on utilise pas le $ pour enregistrer ces variables)
             $_SESSION['login'] = $login;
             $_SESSION['uid'] = $row['UID'];
+            $_SESSION['status'] = $row['status'];
+            $_SESSION['mail']= $row['mail'];
 
             // on redirige notre visiteur vers une page de notre section membre
             header ('location: index.php');
@@ -67,8 +69,8 @@
 <div class="col-sm-3">
   <p>
 <?php
-echo "Participants connectés : ";
-echo  get_active_users();
+//echo "Participants connectés : ";
+//echo  get_active_users();
 ?>
 </p>
 </div>
@@ -80,7 +82,7 @@ echo  get_active_users();
     </div>
     <div class="col-sm-4 text-center">
       <h3><?php print getLocalizedLabel("login_with_account") ?></h3>
-      <p><img src="player_02_200.png" alt="Participant"></p>
+      <p><img src="img/player_02_200.png" alt="Participant"></p>
       <form action="login.php"  method="post">
 		<div class="form-group text-left">
 		  <label for="usr">Login</label>
@@ -95,7 +97,7 @@ echo  get_active_users();
     </div>
     <div class="col-sm-4 text-center">
       <h3><?php print getLocalizedLabel("login_without_account") ?></h3>        
-      <p><img src="admin_02_200.png" alt="Anonymous"></p>
+      <p><img src="img/admin_02_200.png" alt="Anonymous"></p>
       <form action="register.php"  method="post">
 		<div class="form-group text-center">
     <?php print getLocalizedLabel("login_create_account") ?>
