@@ -3,6 +3,13 @@
     src: url("Prisma.otf") format("opentype");
 }
 
+.ctf-chall-container {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: 15px;
+}
 
 .ctf-background {
     padding: 1rem 0.5rem;
