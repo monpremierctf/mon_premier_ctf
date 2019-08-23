@@ -163,7 +163,7 @@ function html_dump_cat($cat) {
 
   foreach ($challenges['results'] as $c) {
     if ($c['category']==$cat) {
-      print '<div class="container">';
+      print '<div class="ctf-chall-container">';
         
         // titre
         print '<div class="row chall-titre bg-secondary text-white">';
@@ -177,7 +177,7 @@ function html_dump_cat($cat) {
 
 
         // Description
-        print '<div class="container chall-desc">';
+        print '<div class="ctf-chall-container chall-desc">';
         $desc = getLocalizedIndex($c, 'description');
       
         

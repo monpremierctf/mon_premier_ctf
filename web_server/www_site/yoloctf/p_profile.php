@@ -4,7 +4,10 @@
 
 <!---- UID, login, mail  --->
 
-    <div class="ctf-background">
+    <div class="">
+      <div class="row chall-titre bg-secondary text-white">
+        <div class="col-sm text-left">Identifiant</div>
+      </div>
         <div class="form-group text-left row">
 		  <label for="usr" class="col-2">Id</label>
 		  <label for="usr" class="col-6" id="id" name="id">
@@ -36,7 +39,10 @@
 </div>
 
 <!---- status  --->
-<div class="ctf-background">
+<div class="">
+    <div class="row chall-titre bg-secondary text-white">
+        <div class="col-sm text-left">Status du compte</div>
+      </div>
         <div class="form-group text-left  row ">
 		  <label for="usr" class="col-2">Status</label>
 		  <label for="usr" class="col-6" id="status" name="status">
@@ -60,7 +66,10 @@
 </div>
 
 <!---- Password  --->
-<div class="ctf-background">
+<div class="">
+      <div class="row chall-titre bg-secondary text-white">
+        <div class="col-sm text-left">Mot de passe</div>
+      </div>
         <div class="form-group text-left  row ">
 		  <label for="usr" class="col-2">Password</label>
 		  <input type="password" class="col-6 form-control" id="password" name="password">
@@ -82,7 +91,10 @@
 </div>
 
 <!---- Join CTF  --->
-<div class="ctf-background">
+<div class="">
+      <div class="row chall-titre bg-secondary text-white">
+        <div class="col-sm text-left">Rejoindre un CTF</div>
+      </div>
         <div class="form-group text-left  row ">
 		  <label for="usr" class="col-2">CTF</label>
 		  <input type="text" class="col-6 form-control" id="ctf" name="ctf" value="<?php echo isset($_SESSION['ctf'])?htmlspecialchars($_SESSION['ctf']):"Guest"; ?>">
