@@ -16,12 +16,14 @@
           <label for="usr" class="col-2"></label>
         </div>
 		<div class="form-group text-left row">
-		  <label for="usr" class="col-2">Login</label>
+          <label for="usr" class="col-2">Login</label>
+          <input type="hidden" id="name_current" name="name_current" value="<?php echo isset($_SESSION['login'])?htmlspecialchars($_SESSION['login']):"Guest"; ?>">
 		  <input type="text" class="col-6 form-control" id="name" name="name" value="<?php echo isset($_SESSION['login'])?htmlspecialchars($_SESSION['login']):"Guest"; ?>">
           <label for="usr" class="col-2"></label>
         </div>
         <div class="form-group text-left  row ">
 		  <label for="usr" class="col-2">Mail</label>
+          <input type="hidden" id="mail_current" name="mail_current" value="<?php echo isset($_SESSION['mail'])?htmlspecialchars($_SESSION['mail']):""; ?>">
 		  <input type="text" class="col-6 form-control" id="mail" name="mail" value="<?php echo isset($_SESSION['mail'])?htmlspecialchars($_SESSION['mail']):""; ?>">
           <label for="usr" class="col-2"></label>
         </div>
@@ -73,11 +75,7 @@
 		  <input type="password" class="col-6 form-control" id="password" name="password">
           <label for="usr" class="col-2"></label>
         </div>
-        <div class="form-group text-left  row ">
-		  <label for="usr" class="col-2">Confirm Password</label>
-		  <input type="password" class="col-6 form-control" id="confirm_password" name="confirm_password">
-          <label for="usr" class="col-2"></label>
-        </div>
+
         <div class="form-group text-right row ">
           <label for="usr" class="col-2"></label>
           <button type="submit" class="btn btn-primary" onclick="return onProfilePasswordChange()">Change</button>      
@@ -152,26 +150,53 @@
 <script>
         function onProfileSave()
         {
-            // Check name is available
+            // Name
+            var currentlogin_raw = $("#name_current").val();
+            var newlogin_raw = $("#name").val();
+            if (currentlogin_raw != newlogin_raw) {
+                var newlogin = encodeURIComponent(newlogin_raw); 
+                $.get( "cmd_ctf.php?setLogin="+newlogin, function( data, status ) {
+                    $("#name_current").val(newlogin_raw);  
+                    var ret = $.parseJSON(data);
+                    alert(ret.message); 
+                   
+                })
+                .fail(function(XMLHttpRequest, textStatus, errorThrown) {
+                    var ret = JSON.parse(XMLHttpRequest.responseText);
+                    alert(ret.message);
+                });
+            }
 
-            // Check fields are filled
+            // eMail
+            
+            var currentmail_raw = $("#mail_current").val();
             var newmail_raw = $("#mail").val();
-            var newmail = encodeURIComponent(newmail_raw); 
-            $.get( "cmd_ctf.php?setEmail="+newmail, function( data, status ) {
-                alert(data);              
-              })
-            .fail(function() {
-            });
-            //alert("onProfileSave");
+            if (currentmail_raw != newmail_raw) {
+                var newmail = encodeURIComponent(newmail_raw); 
+                $.get( "cmd_ctf.php?setEmail="+newmail, function( data, status ) {
+                    $("#mail_current").val(newmail_raw);  
+                    var ret = JSON.parse(data);
+                    alert(ret.message);          
+                })
+                .fail(function(XMLHttpRequest, textStatus, errorThrown) {
+                    var ret = JSON.parse(XMLHttpRequest.responseText);
+                    alert(ret.message);
+                });
+            }
             // reload page from server
             //window.location.reload(true); 
             return false;
         }
         function onProfilePasswordChange()
         {
-            // Check name is available
-
-            // Check fields are filled
+            var newpassword_raw = $("#password").val();
+            var newpassword = encodeURIComponent(newpassword_raw); 
+            $.get( "cmd_ctf.php?setPassword="+newpassword, function( data, status ) {
+                alert(data);              
+              })
+            .fail(function() {
+                alert('Invalid password');      
+            });
             
             //alert("onProfileSave");
             // reload page from server
