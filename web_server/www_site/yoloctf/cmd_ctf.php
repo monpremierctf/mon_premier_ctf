@@ -163,30 +163,40 @@
     //
     // Create CTF
     //
-    if (isset($_GET['create'])){
-        // Get ctf ?
-        $request = "SELECT * FROM ctfs WHERE UIDADMIN='$uid'";
+    if (isset($_GET['createCTF'])){
+        // Already exist ?
+        $desiredname = $_GET['createCTF'];
+        if(strlen($desiredname)<2) {
+            // 400 Bad Request
+            http_response_code(400);
+            echo json_encode(array("message" => "Too short CTF name.".$name));
+            exit();
+        }
+        $desiredname = str_replace("'", "", $desiredname);
+        $name = mysqli_real_escape_string($mysqli, $desiredname);
+
+        // Already exist ?
+        $request = "SELECT * FROM ctfs WHERE ctfname='$name'";
         $result = $mysqli->query($request);
         $count  = $result->num_rows;
         if($count>0) {
-            $row = $result->fetch_array();
-            // id , creation_date datetime, UIDCTF VARCHAR(45) NULL, ctfname VARCHAR(200) NULL, UIDADMIN 
-            $ctfname =  $row['ctfname'];
-            $creation_date =  $row['creation_date'];
-            $d = DateTime ($creation_date);
-        }
-
-        $creation_date = DateTime("now");
-        $name = $_GET['create'];
-        $request = "INSERT into ctfs (creation_date, UIDCTF, ctfname, UIDADMIN) VALUES ('$creation_date', 'AAZZEE', '$name','$pseudo', '".$_SESSION['uid']."');";
-        $result = $mysqli->query($request);
-        $count  = $result->affected_rows;
-        if($result) {
-            echo "CTF created"        ;
-        } else {
-            echo $request;
-            printf("Insert failed: %s\n", $mysqli->error);
+            // 400 Bad Request
+            http_response_code(400);
+            echo json_encode(array("message" => "Existing CTF name.".$name));
             exit();
+        }
+        
+        $uid = $_SESSION['uid'];
+        $creation_date = date("Y-m-d H:i:s");
+        $request = "INSERT into ctfs (creation_date, UIDCTF, ctfname, UIDADMIN) VALUES (now(), 'AAZZEE', '$name','$uid');";
+        $result = $mysqli->query($request);
+        if ($result) {
+            http_response_code(200);
+            echo json_encode(array("message" => "CTF created."));
+        } else {
+            // 500 Internal Server Error
+            http_response_code(500);
+            echo json_encode(array("message" => "Erreur sql [".$request."] ".$mysqli->error));
         }
     }
 

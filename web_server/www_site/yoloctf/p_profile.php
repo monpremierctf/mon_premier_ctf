@@ -111,34 +111,40 @@
 
 <!---- Organiser un CTF  --->
 <div class="">
-      <div class="row chall-titre bg-secondary text-white"><div class="col-sm text-left">Créer un CTF</div></div>
+      <div class="row chall-titre bg-secondary text-white"><div class="col-sm text-left">Mes CTFs</div></div>
 
-      <div class="form-group text-left  row ">
+      
       <?php   
       require_once('ctf_sql.php');
+      $uid = $_SESSION['uid'];
       $request = "SELECT * FROM ctfs WHERE UIDADMIN='$uid'";
       $result = $mysqli->query($request);
       $count  = $result->num_rows;
       if($count>0) {
-          $row = $result->fetch_array();
-          // id , creation_date datetime, UIDCTF VARCHAR(45) NULL, ctfname VARCHAR(200) NULL, UIDADMIN 
+          while ($row = $result->fetch_array()) {
           $ctfname =  $row['ctfname'];
           $creation_date =  $row['creation_date'];
-          $d = DateTime ($creation_date);
-          echo "<label for='usr' class='col-2'>$ctfname</label>";
-          echo "<label for='usr' class='col-2'>$creation_date</label>";
+          $uidctf =  $row['UIDCTF'];
+          echo "<div class='form-group text-left  row '>";
+          echo "<label for='usr' class='col-2'></label>";
+          echo "<label for='usr' class='col-2'>".htmlspecialchars($ctfname)."</label>";
+          echo "<label for='usr' class='col-4'>$creation_date</label>";
+          echo "<button type='submit' class='btn btn-primary' onclick='return onStopCTF()'>Stop CTF</button>";
+          echo "</div>";
+          }
       }
       ?>
-      </div>
+      
       <div class="form-group text-left  row ">
-		    <label for="usr" class="col-2">CTF</label>
-		    <input type="text" class="col-6 form-control" id="createctf_name" name="createctf_name" value="<?php echo $ctfname; ?>">
+		    <label for="usr" class="col-2">New CTF</label>
+            <input type="text" class="col-6 form-control" id="createctf_name" name="createctf_name" value="<?php echo $ctfname; ?>">
+            <button type="submit" class="btn btn-primary" onclick="return onCreateCTF()">Créer CTF</button>      
         <label for="usr" class="col-2"></label>
       </div>
        
       <div class="form-group text-right row ">
         <label for="usr" class="col-2"></label>
-        <button type="submit" class="btn btn-primary" onclick="return onCreateCTF()">Créer CTF</button>      
+        
       </div> 
 
 </div>
@@ -226,10 +232,15 @@
         {
           var ctfname_raw = $("#createctf_name").val();
           var ctfname = encodeURIComponent(ctfname_raw); 
-           $.get( "cmd_ctf.php?create="+ctfname+"&content="+ctfname, function( data, status ) {
-                alert(data);              
+           $.get( "cmd_ctf.php?createCTF="+ctfname+"&content="+ctfname, function( data, status ) {
+                var ret = JSON.parse(data);
+                //alert(ret.message); 
+                // reload page from server
+                window.location.reload(true);          
               })
-            .fail(function() {
+            .fail(function(XMLHttpRequest, textStatus, errorThrown) {
+                var ret = JSON.parse(XMLHttpRequest.responseText);
+                alert(ret.message);   
             });
             
             return false;
