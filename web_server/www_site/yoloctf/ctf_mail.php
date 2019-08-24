@@ -31,14 +31,15 @@ function is_allowed_to_send_validation_mail() {
     $now = new DateTime("now");
     $interval = $d->diff($now);
     $sec = datetime_get_seconds($interval);
-    echo "$request_date [$sec] ";
+    $sec_val = (int)$sec;
+    //echo "request_date=$request_date sec=$sec ";
     
     // 1 code par 10s max
-    if ($sec>10) {
+    if (($sec_val>10)||(! isset($_SESSION['last_validation_mail_sent_date']))) {
         $_SESSION['last_validation_mail_sent_date'] = date('Y-m-d H:i:s');;
-        return True;
+        return true;
     }
-    return False;   
+    return false;   
 
 }
 

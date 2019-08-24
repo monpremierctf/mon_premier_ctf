@@ -1,7 +1,7 @@
 <?php
     session_start ();
     require_once('ctf_mail.php');
-
+    require_once('ctf_sql.php');
 
     // Allowed to interact ?
     if ( ! isset($_SESSION['uid'] )) {
@@ -10,7 +10,7 @@
     }
 
     //
-    // vaidation mail
+    // validation mail
     //
     if (isset($_GET['resendValidationMail'])){
         if ($_SESSION['status']!=='waiting_email_validation') {
@@ -27,10 +27,33 @@
         exit();
     }
 
+    //
+    // change mail
+    //
+    if (isset($_GET['setEmail'])){
+        $newmail = $_GET['setEmail'];
+        $uid = $_SESSION['uid'];
+        $request = "UPDATE users SET mail='$newmail' WHERE UID='$uid';";
+        $result = $mysqli->query($request);
+        if($result===true) {
+            echo "ok";
+            $_SESSION['mail']=$newmail;
+        } else {
+            echo $request;
+            printf("Update failed: %s %s\n", $mysqli->error, $result);
+        }
+        exit();
+    }
+
+    //
+    // Account must be in state Enabled
+    //
     if ( ($_SESSION['status']!=='enabled')) {
         echo "Ko, Mail non validé ou Compte bloqué.";
         exit();
     }
+
+
 
     // Create CTF
     if (isset($_GET['create'])){
@@ -68,7 +91,7 @@
         $oldpwd = $_GET['oldpwd'];
 
 
- ===>>> tBC       
+ //===>>> tBC       
         $request = "UPDATE users SET passwd WHERE UID='$uid' FROM ctfs WHERE UIDADMIN='$uid'";
         $result = $mysqli->query($request);
         $count  = $result->num_rows;

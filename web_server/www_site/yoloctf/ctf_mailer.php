@@ -88,7 +88,7 @@ function send_gmail($username, $passwd, $frommail, $fromname, $to, $subject, $ht
 
     //send the message, check for errors
     if (!$mail->send()) {
-        //echo "Mailer Error: " . $mail->ErrorInfo;
+        echo "Mailer Error: " . $mail->ErrorInfo;
         return false;
     } else {
         //echo "Message sent!";

@@ -83,7 +83,7 @@
         }
 
         
-        include "ctf_mailer.php";
+        include "ctf_mail.php";
 
         $login = mysqli_real_escape_string($mysqli, $_POST['login']);
         $passwd = md5($_POST['password']);

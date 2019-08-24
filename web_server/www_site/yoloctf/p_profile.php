@@ -95,7 +95,7 @@
       </div>
         <div class="form-group text-left  row ">
 		  <label for="usr" class="col-2">CTF</label>
-		  <input type="text" class="col-6 form-control" id="ctf" name="ctf" value="<?php echo isset($_SESSION['ctf'])?htmlspecialchars($_SESSION['ctf']):"Guest"; ?>">
+		  <input type="text" class="col-6 form-control" id="ctf" name="ctf" value="<?php echo isset($_SESSION['ctf'])?htmlspecialchars($_SESSION['ctf']):""; ?>">
           <label for="usr" class="col-2"></label>
         </div>
        
@@ -155,10 +155,16 @@
             // Check name is available
 
             // Check fields are filled
-            
+            var newmail_raw = $("#mail").val();
+            var newmail = encodeURIComponent(newmail_raw); 
+            $.get( "cmd_ctf.php?setEmail="+newmail, function( data, status ) {
+                alert(data);              
+              })
+            .fail(function() {
+            });
             //alert("onProfileSave");
             // reload page from server
-            window.location.reload(true); 
+            //window.location.reload(true); 
             return false;
         }
         function onProfilePasswordChange()
