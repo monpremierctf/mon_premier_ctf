@@ -82,8 +82,15 @@
     // Set name
     //
     if (isset($_GET['setLogin'])){
-        $newname = mysqli_real_escape_string($mysqli, $_GET['setLogin']);
+        $desiredname = $_GET['setLogin'];
+        // Whorst waf ever :)
+        // Remove some char
+        $desiredname = str_replace("'", "", $desiredname);
 
+        // Escape string
+        $newname = mysqli_real_escape_string($mysqli, $desiredname);
+
+        
         // Check exist ?
         if (username_exist($newname)) {
             // 400 Bad Request
@@ -114,36 +121,31 @@
     //
     // change Passwd
     //
-    if ((isset($_GET['newpwd'])) and (isset($_GET['oldpwd']))){
-        // Get ctf ?
-        $newpwd = $_GET['newpwd'];
-        $oldpwd = $_GET['oldpwd'];
+    if (isset($_GET['setPassword'])) { 
+        $desired_passwd = $_GET['setPassword'];
 
-
-     
-        $request = "UPDATE users SET passwd WHERE UID='$uid' FROM ctfs WHERE UIDADMIN='$uid'";
-        $result = $mysqli->query($request);
-        $count  = $result->num_rows;
-        if($count>0) {
-            $row = $result->fetch_array();
-            // id , creation_date datetime, UIDCTF VARCHAR(45) NULL, ctfname VARCHAR(200) NULL, UIDADMIN 
-            $ctfname =  $row['ctfname'];
-            $creation_date =  $row['creation_date'];
-            $d = DateTime ($creation_date);
-        }
-
-        $creation_date = DateTime("now");
-        $name = $_GET['create'];
-        $request = "INSERT into ctfs (creation_date, UIDCTF, ctfname, UIDADMIN) VALUES ('$creation_date', 'AAZZEE', '$name','$pseudo', '".$_SESSION['uid']."');";
-        $result = $mysqli->query($request);
-        $count  = $result->affected_rows;
-        if($result) {
-            echo "CTF created"        ;
-        } else {
-            echo $request;
-            printf("Insert failed: %s\n", $mysqli->error);
+        // Check email format
+        if (strlen($desired_passwd)<3) {
+            // 400 Bad Request
+            http_response_code(400);
+            echo json_encode(array("message" => "Too short."));
             exit();
         }
+
+        $newpwd = md5($desired_passwd);
+
+        $uid = $_SESSION['uid'];
+        $request = "UPDATE users SET passwd='$newpwd' WHERE UID='$uid';";
+        $result = $mysqli->query($request);
+        if($result===true) {
+            http_response_code(200);
+            echo json_encode(array("message" => "Password mis à jour."));
+        } else {
+            // 500 Internal Server Error
+            http_response_code(500);
+            echo json_encode(array("message" => "Erreur sql [".$request."] ".$mysqli->error));
+        }
+        exit();
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////

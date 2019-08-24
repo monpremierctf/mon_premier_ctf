@@ -192,14 +192,14 @@
             var newpassword_raw = $("#password").val();
             var newpassword = encodeURIComponent(newpassword_raw); 
             $.get( "cmd_ctf.php?setPassword="+newpassword, function( data, status ) {
-                alert(data);              
+                var ret = JSON.parse(data);
+                alert(ret.message);          
               })
-            .fail(function() {
-                alert('Invalid password');      
+            .fail(function(XMLHttpRequest, textStatus, errorThrown) {
+                var ret = JSON.parse(XMLHttpRequest.responseText);
+                alert(ret.message);   
             });
             
-            //alert("onProfileSave");
-            // reload page from server
             return false;
         }
         function onResendValidationMail()
