@@ -93,7 +93,8 @@
       </div>
       <div class="form-group text-left  row ">
 		  <label for="usr" class="col-2">CTF</label>
-		  <label for="usr" class="col-6 " id="ctf_current" name="ctf_current"><?php echo isset($_SESSION['ctfname'])?htmlspecialchars($_SESSION['ctfname'], ENT_QUOTES| ENT_HTML401):""; ?></label>
+          <label for="usr" class="col-2 " id="ctf_currentuid" name="ctf_currentuid"><?php echo isset($_SESSION['ctfuid'])?htmlspecialchars($_SESSION['ctfuid'], ENT_QUOTES| ENT_HTML401):""; ?></label>
+          <label for="usr" class="col-6 " id="ctf_current" name="ctf_current"><?php echo isset($_SESSION['ctfname'])?htmlspecialchars($_SESSION['ctfname'], ENT_QUOTES| ENT_HTML401):""; ?></label>
           <label for="usr" class="col-2"></label>  
         </div>
         <div class="form-group text-left  row ">
@@ -230,7 +231,8 @@
           var ctfname = encodeURIComponent(ctfname_raw); 
            $.get( "cmd_ctf.php?joinCTF="+ctfname, function( data, status ) {
                 //var ret = JSON.parse(data);
-                //$("#ctf_current").val(ctfname_raw); 
+                //$("#ctf_current").html(ctfname_raw); 
+                //$("#ctf_current").html(ctfname_raw); 
                 window.location.reload(true);          
               })
             .fail(function(XMLHttpRequest, textStatus, errorThrown) {

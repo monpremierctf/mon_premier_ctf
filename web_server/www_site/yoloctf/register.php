@@ -23,48 +23,40 @@
 
 
     include "ctf_sql.php";
-    if (isset($_GET['validate'])) {
-        
-        $uid = $_SESSION['uid'];
-        $arg_uid = $_GET['validate'];
+    $uid = $_SESSION['uid'];
 
-        // Validate only the loggued profile ?
-        /*
-        if ($_GET['validate'] !== $uid){
-            echo 'You re not alowed to validate this ID';
-            exit();
+    //
+    // Validate account
+    // Url received by mail
+    // https://localhost/yoloctf/register.php?validate=5d60eb2b3bbd4
+    // status : waiting_email_validation -> enabled
+    //
+    if (isset($_GET['validate'])) {
+          $arg_uid = $_GET['validate'];
+
+        // Validate the loggued profile ?
+        if ($_GET['validate'] === $uid){
+            $_SESSION['status'] = 'enabled';
         }
-        */
         
         $request = "UPDATE users SET status = 'enabled' WHERE UID='$arg_uid' AND status='waiting_email_validation'; ";
-        //$request = "UPDATE users SET status = 'enabled' WHERE UID='$arg_uid' ; ";
-        //echo $request;
-   
         $result = $mysqli->query($request);
         $count  = $result->affected_rows;
         if ($result) {
             header ('location: index.php?p=Welcome_validated');
-            $_SESSION['status'] = 'enabled';
+            // yop
+            // redirect : acount xx validated
             exit();
         } else {
             echo $request;
             printf("Update failed: %s\n", $mysqli->error);
             exit();
         }
-/*
-        $user_query = "SELECT login, UID, status FROM users;";
-        if ($result = $mysqli->query($user_query)) {
-            while ($row = $result->fetch_assoc()) {
-                echo "</br>".$row['UID']." - ".$row['login']." - ".$row['status'];	
-
-            }
-            $result->close();
-        }
-
-        exit();
-        */
     }
 
+    //
+    // Register a new account
+    //
     if (isset($_POST['login']) && isset($_POST['password']) && isset($_POST['code'])) {
 
         // Login, passwd too short ??
@@ -74,14 +66,19 @@
             exit();
         }
 
-        // Code Yolo ??
-        if(strtoupper($_POST['code'])!=="YOLO") {
-            echo '<body onLoad="alert(\'Code Invitation invalide\')">';
-            echo '<meta http-equiv="refresh" content="0;URL=register.php">';
-           
-            exit();
+        // Invitation Code ??
+        if (isset($ctf_register_code)&&($ctf_register_code!='')) {
+            if(strtoupper($_POST['code'])!==strtoupper($ctf_register_code)) {
+                echo '<body onLoad="alert(\'Code Invitation invalide\')">';
+                echo '<meta http-equiv="refresh" content="0;URL=register.php">';
+                exit();
+            }
         }
 
+         // CTF Code ??
+         if (isset($_POST['code'])&&($_POST['code']!='')) {
+            
+        }
         
         include "ctf_mail.php";
 

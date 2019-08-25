@@ -65,6 +65,7 @@ services:
       CTF_MAIL_PASSWD: ${CTF_MAIL_PASSWD}
       CTF_MAIL_FROMMAIL: ${CTF_MAIL_FROMMAIL}
       CTF_MAIL_FROMNAME: ${CTF_MAIL_FROMNAME}
+      CTF_REGISTER_CODE: ${CTF_REGISTER_CODE}
     volumes:
       - ./www_site:/www_site
     networks:
