@@ -109,7 +109,7 @@ function getNbUsers(){
 function dumpFlagDataSetCurrentUser() {
 	$r = 240; $g = 20;	$b = 80;
 	echo "{
-		label: '".htmlspecialchars($_SESSION['login'])."',
+		label: '".htmlspecialchars($_SESSION['login'], ENT_QUOTES| ENT_HTML401)."',   
 		backgroundColor: color('rgb($r, $g, $b)').alpha(0.5).rgbString(),
 		borderColor: 'rgb($r, $g, $b)',
 		fill: false,
@@ -141,7 +141,7 @@ function dumpFlagDataSet($pageId) {
 					}
 					
 					echo "{
-						label: '".htmlspecialchars($login)."',
+						label: '".htmlspecialchars($login, ENT_QUOTES| ENT_HTML401)."',
 						backgroundColor: color('rgb($r, $g, $b)').alpha(0.5).rgbString(),
 						borderColor: 'rgb($r, $g, $b)',
 						fill: false,

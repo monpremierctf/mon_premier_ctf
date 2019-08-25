@@ -159,12 +159,14 @@
         exit();
     }
 
+    function generate_UIDCTF($len = 5){
+        return strtoupper(substr(md5(microtime()),rand(0,26),$len));
+      }
 
     //
     // Create CTF
     //
     if (isset($_GET['createCTF'])){
-        // Already exist ?
         $desiredname = $_GET['createCTF'];
         if(strlen($desiredname)<2) {
             // 400 Bad Request
@@ -173,22 +175,24 @@
             exit();
         }
         $desiredname = str_replace("'", "", $desiredname);
-        $name = mysqli_real_escape_string($mysqli, $desiredname);
+        $name_sqlsafe  = mysqli_real_escape_string($mysqli, $desiredname);
+        $name_htmlsafe = htmlspecialchars($desiredname, ENT_QUOTES| ENT_HTML401);
 
         // Already exist ?
-        $request = "SELECT * FROM ctfs WHERE ctfname='$name'";
+        $request = "SELECT * FROM ctfs WHERE ctfname='$name_sqlsafe'";
         $result = $mysqli->query($request);
         $count  = $result->num_rows;
         if($count>0) {
             // 400 Bad Request
             http_response_code(400);
-            echo json_encode(array("message" => "Existing CTF name.".$name));
+            echo json_encode(array("message" => "Existing CTF name.".$name_htmlsafe));
             exit();
         }
         
         $uid = $_SESSION['uid'];
         $creation_date = date("Y-m-d H:i:s");
-        $request = "INSERT into ctfs (creation_date, UIDCTF, ctfname, UIDADMIN) VALUES (now(), 'AAZZEE', '$name','$uid');";
+        $uidctf = generate_UIDCTF(5);
+        $request = "INSERT into ctfs (creation_date, UIDCTF, ctfname, UIDADMIN) VALUES (now(), '$uidctf', '$name_sqlsafe','$uid');";
         $result = $mysqli->query($request);
         if ($result) {
             http_response_code(200);
@@ -202,7 +206,60 @@
 
 
 
-    
-    
+    function getCTFFromUID($uidctf)
+    {
+        global $mysqli;
+        $request = "SELECT * FROM ctfs WHERE UIDCTF='$uidctf'";
+        $result = $mysqli->query($request);
+        $count  = $result->num_rows;
+        if($count>0) {
+            $row = $result->fetch_array();
+            $ctfname =  $row['ctfname'];
+            return $ctfname;
+        }
+        return "";
+    }
+
+    //
+    // Join CTF
+    //
+    if (isset($_GET['joinCTF'])){
+        $desiredname = $_GET['joinCTF'];
+        $name_sqlsafe  = mysqli_real_escape_string($mysqli, $desiredname);
+        $name_htmlsafe = htmlspecialchars($desiredname, ENT_QUOTES| ENT_HTML401);
+
+        // CTF exist ?
+        $request = "SELECT * FROM ctfs WHERE UIDCTF='$name_sqlsafe'";
+        $result = $mysqli->query($request);
+        $count  = $result->num_rows;
+        if($count<=0) {
+            // 400 Bad Request
+            http_response_code(400);
+            echo json_encode(array("message" => "Unkown CTF name.".$name_htmlsafe));
+            exit();
+        }
+        
+        // Already in a CTF ?
+        $uid = $_SESSION['uid'];
+        $request = "SELECT * FROM ctfsusers WHERE UIDUSER='$uid'";
+        $result = $mysqli->query($request);
+        $count  = $result->num_rows;
+        if($count>0) {
+            $request = "UPDATE ctfsusers SET UIDCTF='$name_sqlsafe' WHERE UIDUSER='$uid';";
+        } else {
+            $request = "INSERT into ctfsusers (UIDCTF, UIDUSER) VALUES ('$name_sqlsafe', '$uid');";
+        }
+        $result = $mysqli->query($request);
+        if ($result) {
+            $_SESSION['ctfuid']=$desiredname;
+            $_SESSION['ctfname']=getCTFFromUID($desiredname);
+            http_response_code(200);
+            echo json_encode(array("message" => "Joined CTF."));
+        } else {
+            // 500 Internal Server Error
+            http_response_code(500);
+            echo json_encode(array("message" => "Erreur sql [".$request."] ".$mysqli->error));
+        }
+    }    
 
 ?>

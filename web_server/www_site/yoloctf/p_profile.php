@@ -91,10 +91,15 @@
       <div class="row chall-titre bg-secondary text-white">
         <div class="col-sm text-left">Rejoindre un CTF</div>
       </div>
-        <div class="form-group text-left  row ">
+      <div class="form-group text-left  row ">
 		  <label for="usr" class="col-2">CTF</label>
-		  <input type="text" class="col-6 form-control" id="ctf" name="ctf" value="<?php echo isset($_SESSION['ctf'])?htmlspecialchars($_SESSION['ctf']):""; ?>">
-          <label for="usr" class="col-2"></label>
+		  <label for="usr" class="col-6 " id="ctf_current" name="ctf_current"><?php echo isset($_SESSION['ctfname'])?htmlspecialchars($_SESSION['ctfname'], ENT_QUOTES| ENT_HTML401):""; ?></label>
+          <label for="usr" class="col-2"></label>  
+        </div>
+        <div class="form-group text-left  row ">
+		  <label for="usr" class="col-2">CTF Code</label>
+		  <input type="text" class="col-6 form-control" id="ctf" name="ctf" value="">
+          <label for="usr" class="col-2"></label>  
         </div>
        
         <div class="form-group text-right row ">
@@ -127,9 +132,10 @@
           $uidctf =  $row['UIDCTF'];
           echo "<div class='form-group text-left  row '>";
           echo "<label for='usr' class='col-2'></label>";
-          echo "<label for='usr' class='col-2'>".htmlspecialchars($ctfname)."</label>";
-          echo "<label for='usr' class='col-4'>$creation_date</label>";
-          echo "<button type='submit' class='btn btn-primary' onclick='return onStopCTF()'>Stop CTF</button>";
+          echo "<label for='usr' class='col-1'>$uidctf</label>";
+          echo "<label for='usr' class='col-3'>".htmlspecialchars($ctfname, ENT_QUOTES| ENT_HTML401)."</label>";
+          echo "<label for='usr' class='col-3'>$creation_date</label>";
+          //echo "<button type='submit' class='btn btn-primary' onclick='return onStopCTF()'>Stop CTF</button>";
           echo "</div>";
           }
       }
@@ -220,12 +226,18 @@
         }
         function onJoinCTF()
         {
-            // Check name is available
-
-            // Check fields are filled
+          var ctfname_raw = $("#ctf").val();
+          var ctfname = encodeURIComponent(ctfname_raw); 
+           $.get( "cmd_ctf.php?joinCTF="+ctfname, function( data, status ) {
+                //var ret = JSON.parse(data);
+                //$("#ctf_current").val(ctfname_raw); 
+                window.location.reload(true);          
+              })
+            .fail(function(XMLHttpRequest, textStatus, errorThrown) {
+                var ret = JSON.parse(XMLHttpRequest.responseText);
+                alert(ret.message);   
+            });
             
-            //alert("onProfileSave");
-            // reload page from server
             return false;
         }
         function onCreateCTF()
