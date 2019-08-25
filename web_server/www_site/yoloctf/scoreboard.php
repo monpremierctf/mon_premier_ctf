@@ -40,9 +40,6 @@
     $Parsedown = new Parsedown();
 	include 'header.php'; 
 	require_once 'ctf_env.php'; 
-	// Yop
-	$scoreboard_aff='user_only';
-	
 ?>
 
 
