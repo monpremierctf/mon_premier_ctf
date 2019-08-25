@@ -64,7 +64,16 @@ require_once('ctf_challenges.php');
 
 <div class="jumbotron ctf-title text-center">
 <h1 class="ctf-title-size">Y0L0 CTF</h1>
-<p ><pre class="ctf-subtitle-size">Mon premier CTF</pre></p> 
+
+
+<?php
+// Custom CTF name ?
+if (isset($_SESSION['ctfname'])&&($_SESSION['ctfname']!=='')) {
+    echo "<p ><pre class='ctf-subtitle-size'>".htmlspecialchars($_SESSION['ctfname'])."</pre></p>";
+} else {
+    echo "<p ><pre class='ctf-subtitle-size'>Mon premier CTF</pre></p>";
+}
+?>
 </div>
 
 <script>

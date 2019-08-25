@@ -40,7 +40,8 @@
     $Parsedown = new Parsedown();
 	include 'header.php'; 
 	require_once 'ctf_env.php'; 
-
+	// Yop
+	$scoreboard_aff='user_only';
 	
 ?>
 
@@ -119,16 +120,14 @@ function dumpFlagDataSetCurrentUser() {
 	},";
 }
 
-function dumpFlagDataSet($pageId,$ctfuid='') {
+function dumpFlagDataSet($pageId, $ctfuid='') {
 		include "ctf_sql.php";
 		$min = $pageId*20;
 		
-		echo "ctfuid=$ctfuid";
 		if ($ctfuid==='') {
 			$user_query = "SELECT login, UID FROM users LIMIT $min, 20;";
 		} else {
-			echo "ctfuid=$ctfuid";
-			$user_query = "SELECT users.login, users.UID FROM users INNER JOIN ctfsusers ON users.UIDUSER = ctfsusers.UIDUSER WHERE ctfsusers.UIDCTF='$ctfuid' LIMIT $min, 20;";
+			$user_query = "SELECT users.login, users.UID FROM users INNER JOIN ctfsusers ON users.UID = ctfsusers.UIDUSER WHERE ctfsusers.UIDCTF='$ctfuid' LIMIT $min, 20;";
 		}
 
 		if ($user_result = $mysqli->query($user_query)) {
@@ -161,6 +160,8 @@ function dumpFlagDataSet($pageId,$ctfuid='') {
 		
 			/* free result set */
 			$user_result->close();
+		} else {
+			echo "pb query";
 		}
 
 		/* close connection */
@@ -170,24 +171,27 @@ function dumpFlagDataSet($pageId,$ctfuid='') {
         
 
 <?php
-	$scoreboard_aff='user_only';
+	
 
 
 	function getNbUsersInCTF($uidctf)
 	{
 		include "ctf_sql.php";
 		$uidctf_sqlsafe = mysqli_real_escape_string($mysqli, $uidctf);
-		$request = "SELECT * FROM ctfuserss WHERE UIDCTF='$uidctf_sqlsafe'";
+		$request = "SELECT * FROM ctfsusers WHERE UIDCTF='$uidctf_sqlsafe'";
 		$result = $mysqli->query($request);
 		$count  = $result->num_rows;
 		return $count;
 	}
-		
+
+	
 	if ($scoreboard_aff=='user_only') {
 		// Online: User in a dynamic CTF
 		if (isset($_SESSION['ctfuid'])&&($_SESSION['ctfuid']!=='')) {
+			//echo "<div class='col-2'>dynamic CTF : ".$_SESSION['ctfname']."</div>";	
 			$nbusers = getNbUsersInCTF($_SESSION['ctfuid']);
 			$nbpages = floor($nbusers/20);
+			//echo "<br>nbusers=$nbusers nbpages=$nbpages";
 		// Online: User only
 		} else {
 			$nbusers = 1;
@@ -198,7 +202,7 @@ function dumpFlagDataSet($pageId,$ctfuid='') {
 		$nbusers = getNbUsers();
 		$nbpages = floor($nbusers/20);
 	}
-
+ 	
 	//
 	// Let print the scoreboards with datas
 	//
@@ -233,14 +237,11 @@ function dumpFlagDataSet($pageId,$ctfuid='') {
 				datasets: [	";	
 		if ($scoreboard_aff=='user_only')		{
 			if (isset($_SESSION['ctfuid'])&&($_SESSION['ctfuid']!=='')) {
-				echo 'yolo';
 				dumpFlagDataSet($pageid, $_SESSION['ctfuid']);
 			} else {
-				echo 'yolo2';
 				dumpFlagDataSetCurrentUser();
 			}
 		} else {
-			echo 'yolo3';
 		 	dumpFlagDataSet($pageid);
 		}		 
 		echo "
