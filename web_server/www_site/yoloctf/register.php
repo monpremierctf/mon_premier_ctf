@@ -57,7 +57,7 @@
     //
     // Register a new account
     //
-    if (isset($_POST['login']) && isset($_POST['password']) && isset($_POST['code'])) {
+    if (isset($_POST['login']) && isset($_POST['password']) ) {
 
         // Login, passwd too short ??
         if ((strlen($_POST['login'])<2) or (strlen($_POST['password'])<2)) {
@@ -189,11 +189,13 @@
           <label for="usr" class="col-2">Le Pseudo à afficher sur le tableau de score à la place du login.</label>
         </div>
         -->
+        <?php if (isset($ctf_register_code)&&($ctf_register_code!='')) { ?>
         <div class="form-group text-left  row ">
 		  <label for="usr" class="col-2">Code Invitation (*)</label>
 		  <input type="text" class="col-6 form-control" id="code" name="code">
           <label for="usr" class="col-2"></label>
 		</div>
+        <?php } ?>
 		<button type="submit" class="btn btn-primary" onclick="return checkRegisterForm()">Register</button>
 	  </form>
     </div>

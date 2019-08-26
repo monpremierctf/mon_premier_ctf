@@ -87,6 +87,7 @@
 </div>
 
 <!---- Join CTF  --->
+<?php if ($scoreboard_aff=='user_only') {?>
 <div class="">
       <div class="row chall-titre bg-secondary text-white">
         <div class="col-sm text-left">Rejoindre un CTF</div>
@@ -155,6 +156,7 @@
       </div> 
 
 </div>
+<?php } ?>
 
 <div class="form-group text-left  row ">
 <hr>

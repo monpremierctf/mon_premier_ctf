@@ -66,6 +66,7 @@ services:
       CTF_MAIL_FROMMAIL: ${CTF_MAIL_FROMMAIL}
       CTF_MAIL_FROMNAME: ${CTF_MAIL_FROMNAME}
       CTF_REGISTER_CODE: ${CTF_REGISTER_CODE}
+      CTF_LOCALE_ENABLED: ${CTF_LOCALE_ENABLED}
     volumes:
       - ./www_site:/www_site
     networks:
