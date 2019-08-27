@@ -5,5 +5,5 @@
 
 void print_flag()
 {
-    printf("flag{tr0p_b13n_c4ch3}\n");
+    printf("flag{p4s_fAc1l}\n");
 }
