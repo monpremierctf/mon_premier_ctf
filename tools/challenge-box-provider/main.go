@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"errors"
 
 	//	"os"
 	"encoding/json"
@@ -392,37 +393,55 @@ func createNewChallengeBox(requestId int, box string, duration string, port stri
 	return
 }
 
-func createNewUserNet(uid string, duration int) (containerID string, err error) {
+func createNewUserNet(uid string, duration int) (containerID string, err2 error) {
 	labels := map[string]string{
 		"ctf-uid":        fmt.Sprintf("CTF_UID_%s", uid),
 		"ctf-start-time": time.Now().String(),
 		"ctf-duration":   string(strconv.Itoa(duration))}
 
-	net_2++
-	if net_2 > 250 {
-		net_1++
-		net_2 = 10
-	}
 	ipamConfig := network.IPAMConfig{
 		Subnet:  fmt.Sprintf("%d.%d.0.0/16", net_1, net_2),
 		Gateway: fmt.Sprintf("%d.%d.0.1", net_1, net_2),
 	}
-	log.Printf("Create subnet : %s", ipamConfig.Subnet)
-	ipam := network.IPAM{
-		//Driver: "Default",
-		Config: []network.IPAMConfig{ipamConfig},
+	for  try_create:=true; try_create; {
+		net_2++
+		if net_2 > 250 {
+			net_1++
+			net_2 = 10
+		}
+		if net_1 > 250 {
+			containerID=""
+			err2 = errors.New("No more IP network")
+			return;
+		}
+		ipamConfig = network.IPAMConfig{
+			Subnet:  fmt.Sprintf("%d.%d.0.0/16", net_1, net_2),
+			Gateway: fmt.Sprintf("%d.%d.0.1", net_1, net_2),
+		}
+		log.Printf("Try create subnet : %s", ipamConfig.Subnet)
+		ipam := network.IPAM{
+			//Driver: "Default",
+			Config: []network.IPAMConfig{ipamConfig},
+		}
+		resp, err := dockerClient.NetworkCreate(
+			ctx, fmt.Sprintf("Net_%s", uid),
+			types.NetworkCreate{
+				Labels:   labels,
+				IPAM:     &ipam,
+				Internal: true}) // No external access
+		if err != nil {
+			log.Printf("Cant create subnet : %s", err)
+			log.Printf("Try another network")
+			//panic(err)
+		} else {
+			containerID = resp.ID
+			try_create = false
+		}
 	}
-	resp, err := dockerClient.NetworkCreate(
-		ctx, fmt.Sprintf("Net_%s", uid),
-		types.NetworkCreate{
-			Labels:   labels,
-			IPAM:     &ipam,
-			Internal: true}) // No external access
-	if err != nil {
-		panic(err)
-	}
-	containerID = resp.ID
-	fmt.Println(containerID)
+
+	log.Printf("Created subnet: %s", ipamConfig.Subnet)
+	log.Printf("Subnet ID : %s", containerID)
+	//fmt.Println(containerID)
 	/*
 		containerIDDirty, err := exec.Command(
 			"docker", "network", "create",
