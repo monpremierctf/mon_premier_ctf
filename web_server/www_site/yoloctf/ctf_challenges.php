@@ -54,7 +54,7 @@ function getChallengeById($challId){
 function isFlagValid($id, $flag){
   global $flags;
   foreach ($flags['results'] as $f) {
-    if ($f['challenge_id']==$id) {
+    if ($f['challenge_id']===$id) {
       //print "Found id";
       $a = trim($f['content']);
       $b = trim($flag);

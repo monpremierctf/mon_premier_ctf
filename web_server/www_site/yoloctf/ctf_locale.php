@@ -40,6 +40,10 @@
         return $string;
     }
     function getLangage() {
+        if ($ctf_locale_enabled!=='true') {
+            $_SESSION['lang']='fr';
+            return $_SESSION['lang'];
+        }
         // current Session
         if (isset($_SESSION['lang'] )) { 
             return $_SESSION['lang'];
