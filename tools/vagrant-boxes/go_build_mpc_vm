@@ -1,0 +1,41 @@
+#!/bin/bash
+
+#
+# Vagrant is already installed
+
+
+#
+# Vagrant 2.xx installed
+printf "=> Verification : Vagrant installé : "
+if [[ $(which vagrant) ]]; then
+    echo "Ok"
+    printf "$(vagrant --version)"
+  else
+    printf "${RED}Ko${NC}\n"
+    echo "Pour installer vagrant rapidement:"
+    echo "wget https://releases.hashicorp.com/vagrant/2.2.5/vagrant_2.2.5_x86_64.deb"
+    echo "apt install ./vagrant_2.2.5_x86_64.deb"
+    exit;
+fi
+
+#vagrant up
+
+init_script='
+sudo apt-get update;
+sudo apt-get install -y python-minimal;
+sudo apt-get install -y wget;
+sudo apt-get install -y docker-compose;
+sudo apt install -y zip;
+sudo gpasswd -a \$USER docker'
+
+vagrant ssh -c "$init_script"
+vagrant halt
+vagrant up
+
+init_script='
+git clone https://github.com/monpremierctf/mon_premier_ctf.git;
+cd mon_premier_ctf;
+./go_first_install_webserver_run -y'
+
+
+vagrant ssh -c "$init_script"

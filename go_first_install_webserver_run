@@ -1,6 +1,33 @@
 #!/bin/bash
 #
 
+
+
+# Help
+usage () {
+  echo "Usage: $0 [-h] [-y]" 1>&2; exit 1;
+}
+
+# Parse arguments
+for i in "$@"
+do
+case $i in
+    -y)
+    echo "Yes to all"
+    YESTOALL=1
+    shift # past argument=value
+    ;;
+
+    -h)
+    usage
+    ;;
+esac
+done
+
+
+
+
+
 ctf_install() {
 #
 TIME_START=$(date +%s);
@@ -16,10 +43,6 @@ WITH_UFW=0
 # copy your certs manualy in acme.json
 # and docker-compose up --build manually
 TRAEFIK_SELF_SIGNED_CERTS=1
-
-
-
-
 
 if [ $WITH_UFW == 1 ] 
 then
@@ -94,13 +117,16 @@ if [ $(id -u) -eq 0 ]; then
     echo "Il est recommandé de lancer le script avec un compte utilisateur non root appartenant au groupe Docker."
     echo "Vous etes actuellement root ou dans un sudo."
     echo "Des fichiers ou répertoires risquent d'être créés par root et ne seront plus lisibles/effacables par un utilisateur lambda."
-    while true; do
-        read -p "Désirez vous continuer en root (o/N) ? : " yn
-        case $yn in
-            [Oo]* ) echo "Ok, on continue en root"; break;;
-            * ) echo "Ok, on arrête ici. Relancez sans sudo ou avec un user non root"; exit;;
-        esac
-    done
+    if [ $YESTOALL != "1" ]
+    then
+      while true; do
+          read -p "Désirez vous continuer en root (o/N) ? : " yn
+          case $yn in
+              [Oo]* ) echo "Ok, on continue en root"; break;;
+              * ) echo "Ok, on arrête ici. Relancez sans sudo ou avec un user non root"; exit;;
+          esac
+      done
+    fi
 else 
     echo "Ok"
 fi
@@ -257,14 +283,17 @@ python -c 'from gen_config import dump_challenges_env; dump_challenges_env()'
 echo ''
 echo '[web_server/.env]'
 cat web_server/.env
-while true; do
-    echo "";echo ""
-    read -p "La config est-elle ok ? (O/n) ? : " yn
-    case $yn in
-        [Nn]* ) echo "Ok, on arrête ici."; exit;;
-        * ) echo "Ok, on continue."; break;;
-    esac
-done
+if [ $YESTOALL != "1" ]
+then
+  while true; do
+      echo "";echo ""
+      read -p "La config est-elle ok ? (O/n) ? : " yn
+      case $yn in
+          [Nn]* ) echo "Ok, on arrête ici."; exit;;
+          * ) echo "Ok, on continue."; break;;
+      esac
+  done
+fi
 
 #
 # Copy json files to web server
