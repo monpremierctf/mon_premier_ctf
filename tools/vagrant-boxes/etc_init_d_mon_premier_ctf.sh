@@ -1,4 +1,3 @@
-
 #!/bin/sh -e
 
 ### BEGIN INIT INFO
@@ -30,12 +29,12 @@ case "$1" in
     cd /home/vagrant/mon_premier_ctf
     echo "Restarted at : " >> ./last_restart.log 
     date >> ./last_restart.log 
-    start-stop-daemon --start  --chdir $DAEMONDIR --chuid $DAEMONUSER --exec $DAEMON -- $daemon_OPT
-	;;
+    start-stop-daemon --name $daemon_NAME --start  --chdir $DAEMONDIR --chuid $DAEMONUSER --exec $DAEMON -- $daemon_OPT
+    ;;
   stop)
-	;;
+    ;;
   *)
-	exit 1
+    exit 1
 esac
 
 exit 0
