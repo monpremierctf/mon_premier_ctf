@@ -12,3 +12,4 @@ else
     echo
     echo " System information disabled due to load higher than $threshold"
 fi
+echo

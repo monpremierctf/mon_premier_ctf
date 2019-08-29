@@ -18,7 +18,7 @@
 set -e
 
 DAEMON="/home/vagrant/mon_premier_ctf/go_first_install_webserver_run" #ligne de commande du programme.
-daemon_OPT="-y"  #argument à utiliser par le programme.
+daemon_OPT="-y -n"  #argument à utiliser par le programme.
 DAEMONDIR="/home/vagrant/mon_premier_ctf" 
 DAEMONUSER="vagrant" #utilisateur du programme
 daemon_NAME="go_first_install_webserver_run" #Nom du programme (doit être identique à l'exécutable).
@@ -27,7 +27,10 @@ daemon_NAME="go_first_install_webserver_run" #Nom du programme (doit être ident
 
 case "$1" in
   start)
-    start-stop-daemon --background --name $daemon_NAME --start --quiet --chdir $DAEMONDIR --chuid $DAEMONUSER --exec $DAEMON -- $daemon_OPT
+    cd /home/vagrant/mon_premier_ctf
+	echo "Restarted at : " >> ./last_restart.log 
+    date >> ./last_restart.log 
+    start-stop-daemon --name $daemon_NAME --start  --chdir $DAEMONDIR --chuid $DAEMONUSER --exec $DAEMON -- $daemon_OPT
 	;;
   stop)
 	;;
