@@ -8,8 +8,8 @@ Vagrant.configure("2") do |config|
     run: "always",
     inline: "route del default; route add default gw lan.home "
   # copy /etc/issue
-  config.vm.provision "file", source: "issue", destination: "/etc/issue"
-  config.vm.provision "file", source: "issue", destination: "~/issue"
+  config.vm.provision "file", source: "etc_issue", destination: "/etc/issue"
+  config.vm.provision "file", source: "etc_issue", destination: "~/issue"
   config.vm.provider "virtualbox" do |vb|
     vb.name = "vm_yoloctf"
     vb.memory = 4000

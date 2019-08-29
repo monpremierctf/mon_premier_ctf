@@ -3,10 +3,8 @@
 # Build the standalone Mon premier CTF VM
 #
 
-
-ctf_install() {
-
-
+ff() {
+    
 #
 # Vagrant 2.xx installed ?
 printf "=> Verification : Vagrant installé : "
@@ -48,9 +46,11 @@ vagrant ssh -c "$init_script"
 # Reboot VM
 #
 vagrant halt
+
+
 vagrant up
 
-}
+
 
 #
 # Install mon_premier_ctf and run it
@@ -59,6 +59,7 @@ vagrant up
 init_script='
 if [ ! -d "mon_premier_ctf" ]; then git clone https://github.com/monpremierctf/mon_premier_ctf.git; fi;
 cd mon_premier_ctf;
+git pull;
 ./go_first_install_webserver_run -y
 
 sudo cp tools/vagrant-boxes/etc_init_d_mon_premier_ctf.sh /etc/init.d/mon_premier_ctf.sh
@@ -67,7 +68,7 @@ sudo update-rc.d mon_premier_ctf defaults'
 
 vagrant ssh -c "$init_script"
 
-
+}
 
 
 
@@ -77,6 +78,9 @@ vagrant ssh -c "$init_script"
 init_script='
 sudo cp mon_premier_ctf/tools/vagrant-boxes/etc_issue /etc/issue
 sudo chmod 755 /etc/init.d/mon_premier_ctf.sh
+sudo rm -f /etc/update-motd.d/*;
+sudo cp mon_premier_ctf/tools/vagrant-boxes/etc_update-motd.d_00-header            /etc/update-motd.d/;
+sudo cp mon_premier_ctf/tools/vagrant-boxes/etc_update-motd.d_50-landscape-sysinfo /etc/update-motd.d/
 '
 
 vagrant ssh -c "$init_script"
