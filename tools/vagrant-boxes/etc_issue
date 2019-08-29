@@ -12,7 +12,7 @@ Login    : ctf
 Password : ctf
 
 English Keyboard by default
-Switch to french : loadkeys fr   (loqdkeys fr)
+Switch to french : sudo loadkeys fr   (loqdkeys fr)
 
 Enjoy !
 
