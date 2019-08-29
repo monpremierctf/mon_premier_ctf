@@ -1,10 +1,13 @@
-Host: Ubuntu Eoan Ermine (development branch) \n \l
+Host: Ubuntu Eoan Ermine (development branch) 
 
 IP : \4{enp0s3}
 IP : \4{enp0s8}
 
-Login    : ctfadmin
-Password : ctfadmin
+Login    : ctf
+Password : ctf
 
+English Keyboard by default
+Switch to french : loadkeys fr   (loqdkeys fr)
 
 Enjoy !
+\n \l

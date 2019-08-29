@@ -35,10 +35,10 @@ sudo apt-get install -y wget net-tools;
 sudo apt-get install -y docker-compose;
 sudo apt install -y zip;
 sudo gpasswd -a $USER docker
-sudo adduser ctfadmin --gecos "" --disabled-password 
-echo "ctfadmin:ctfadmin" | sudo chpasswd
-sudo gpasswd -a ctfadmin docker
-sudo gpasswd -a ctfadmin sudo
+sudo adduser ctf --gecos "" --disabled-password 
+echo "ctf:ctf" | sudo chpasswd
+sudo gpasswd -a ctf docker
+sudo gpasswd -a ctf sudo
 '
 
 vagrant ssh -c "$init_script"
@@ -50,31 +50,32 @@ vagrant ssh -c "$init_script"
 vagrant halt
 vagrant up
 
+}
 
 #
 # Install mon_premier_ctf and run it
 # then Setup auto run at VM startup
 #
 init_script='
-git clone https://github.com/monpremierctf/mon_premier_ctf.git;
+if [ ! -d "mon_premier_ctf" ]; then git clone https://github.com/monpremierctf/mon_premier_ctf.git; fi;
 cd mon_premier_ctf;
 ./go_first_install_webserver_run -y
 
 sudo cp tools/vagrant-boxes/etc_init_d_mon_premier_ctf.sh /etc/init.d/mon_premier_ctf.sh
 sudo chmod 755 /etc/init.d/mon_premier_ctf.sh
-sudo update-rc.d mon_premier_ctf.sh defaults'
+sudo update-rc.d mon_premier_ctf defaults'
 
 vagrant ssh -c "$init_script"
 
 
-}
+
 
 
 #
 # Update startup banner
 #
 init_script='
-sudo cp tools/vagrant-boxes/etc_issue /etc/issue
+sudo cp mon_premier_ctf/tools/vagrant-boxes/etc_issue /etc/issue
 sudo chmod 755 /etc/init.d/mon_premier_ctf.sh
 '
 
