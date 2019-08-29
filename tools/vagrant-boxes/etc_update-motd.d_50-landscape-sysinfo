@@ -7,10 +7,7 @@ cores=$(grep -c ^processor /proc/cpuinfo 2>/dev/null)
 threshold="${cores:-1}.0"
 if [ $(echo "`cut -f1 -d ' ' /proc/loadavg` < $threshold" | bc) -eq 1 ]; then
     echo
-    echo -n "  System information as of "
-    /bin/date
-    echo
-    /usr/bin/landscape-sysinfo
+    /usr/bin/landscape-sysinfo | grep -v "br-" | grep -v "docker0"
 else
     echo
     echo " System information disabled due to load higher than $threshold"
