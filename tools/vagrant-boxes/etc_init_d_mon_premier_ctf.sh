@@ -11,8 +11,9 @@
 ### END INIT INFO
 
 # $ service --status-all
-# $ sudo service mon_premier_ctf.sh start
-# $ service mon_premier_ctf.sh status
+# $ sudo systemctl daemon-reload
+# $ sudo systemctl start mon_premier_ctf
+# $ sudo systemctl status mon_premier_ctf
 
 set -e
 

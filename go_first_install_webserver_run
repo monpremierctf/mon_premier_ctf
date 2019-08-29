@@ -5,7 +5,7 @@
 
 # Help
 usage () {
-  echo "Usage: $0 [-h] [-y]" 1>&2; exit 1;
+  echo "Usage: $0 [-h] [-y] [-n]" 1>&2; exit 1;
 }
 
 # Parse arguments
@@ -15,6 +15,12 @@ case $i in
     -y)
     echo "Yes to all"
     YESTOALL=1
+    shift # past argument=value
+    ;;
+
+    -n)
+    echo "No rebuild"
+    NOREBUILD=1
     shift # past argument=value
     ;;
 
@@ -320,28 +326,34 @@ docker network create webserver_webLAN
 #
 # Build ctf-sshd
 #
+if [ $NOREBUILD != "1" ]
+then
 echo "Building ctf-sshd image"
 cd tools/ctf-sshd
 docker build -t ctf-sshd .
 cd - > /dev/null
-
+fi
 
 #
 # Build ctf-python-editor
 #
+if [ $NOREBUILD != "1" ]
+then
 echo "Building ctf-php-nginx image"
 cd tools/ctf-php-nginx
 docker build -t ctf-php-nginx .
 cd - > /dev/null
-echo "Building ctf-php-nginx image"
+echo "Building ctf-python-editor image"
 cd tools/ctf-python-editor
 docker build -t ctf-python-editor .
 cd - > /dev/null
-
+fi
 
 #
 # Build xtermjs
 #
+if [ $NOREBUILD != "1" ]
+then
 echo "Building ctf-tools-xtermjs image"
 cd tools/xterm
 ./go_xterm
@@ -352,18 +364,22 @@ cd - > /dev/null
 cd tools/xterm/ctf-tool-xterm/
 docker-compose build
 cd - > /dev/null
-
+fi
 
 #
 # Build dockers images for challenges
 #
+if [ $NOREBUILD != "1" ]
+then
 python -c 'from gen_config import build_challenges; build_challenges()'
 #python -c 'from gen_config import start_challenges; start_challenges()'
-
+fi
 
 #
 # Generate self-signed certificates
 #
+if [ $NOREBUILD != "1" ]
+then
 if [ $TRAEFIK_SELF_SIGNED_CERTS == 1 ] 
 then
   cd web_server/traefik
@@ -374,6 +390,7 @@ else
   then
     cp web_server/traefik_acme/acme.json.default web_server/traefik_acme/acme.json
   fi
+fi
 fi
 
 #
