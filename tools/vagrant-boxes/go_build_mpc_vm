@@ -1,4 +1,10 @@
 #!/bin/bash
+#
+# Build the standalone Mon premier CTF VM
+#
+
+
+ctf_install() {
 
 
 #
@@ -28,7 +34,12 @@ sudo apt-get install -y python-minimal;
 sudo apt-get install -y wget net-tools;
 sudo apt-get install -y docker-compose;
 sudo apt install -y zip;
-sudo gpasswd -a $USER docker'
+sudo gpasswd -a $USER docker
+sudo adduser ctfadmin --gecos "" --disabled-password 
+echo "ctfadmin:ctfadmin" | sudo chpasswd
+sudo gpasswd -a ctfadmin docker
+sudo gpasswd -a ctfadmin sudo
+'
 
 vagrant ssh -c "$init_script"
 
@@ -39,51 +50,35 @@ vagrant ssh -c "$init_script"
 vagrant halt
 vagrant up
 
-#
-# /etc/init.d/
-content='
-! /bin/sh
 
-### BEGIN INIT INFO
-# Provides:		sshd
-# Required-Start:	$remote_fs $syslog
-# Required-Stop:	$remote_fs $syslog
-# Default-Start:	2 3 4 5
-# Default-Stop:		
-# Short-Description:	OpenBSD Secure Shell server
-### END INIT INFO
-
-set -e
-case "$1" in
-  start)
-	cd /home/vagrant/mon_premier_ctf; 
-    ./go_first_install_webserver_run -y
-	;;
-  stop)
-	;;
-  *)
-	exit 1
-esac
-
-exit 0
-'
- 
 #
 # Install mon_premier_ctf and run it
+# then Setup auto run at VM startup
 #
 init_script='
 git clone https://github.com/monpremierctf/mon_premier_ctf.git;
 cd mon_premier_ctf;
 ./go_first_install_webserver_run -y
-echo "$content" | sudo tee -a /etc/init.d/mon_premier_ctf.sh
+
+sudo cp tools/vagrant-boxes/etc_init_d_mon_premier_ctf.sh /etc/init.d/mon_premier_ctf.sh
 sudo chmod 755 /etc/init.d/mon_premier_ctf.sh
 sudo update-rc.d mon_premier_ctf.sh defaults'
 
 vagrant ssh -c "$init_script"
 
-#
-# Set run at VM startup
 
+}
+
+
+#
+# Update startup banner
+#
+init_script='
+sudo cp tools/vagrant-boxes/etc_issue /etc/issue
+sudo chmod 755 /etc/init.d/mon_premier_ctf.sh
+'
+
+vagrant ssh -c "$init_script"
 
 
 
