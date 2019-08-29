@@ -28,9 +28,9 @@ daemon_NAME="go_first_install_webserver_run" #Nom du programme (doit être ident
 case "$1" in
   start)
     cd /home/vagrant/mon_premier_ctf
-	echo "Restarted at : " >> ./last_restart.log 
+    echo "Restarted at : " >> ./last_restart.log 
     date >> ./last_restart.log 
-    start-stop-daemon --name $daemon_NAME --start  --chdir $DAEMONDIR --chuid $DAEMONUSER --exec $DAEMON -- $daemon_OPT
+    start-stop-daemon --start  --chdir $DAEMONDIR --chuid $DAEMONUSER --exec $DAEMON -- $daemon_OPT
 	;;
   stop)
 	;;

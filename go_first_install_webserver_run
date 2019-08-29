@@ -436,6 +436,9 @@ cd - > /dev/null
 #
 # Print config overall duration
 #
+echo
+echo `date`
+echo
 TIME_END=$(date +%s);
 echo $((TIME_END-TIME_START)) | awk '{print "Configuration réalisée en "int($1/60)" minutes "int($1%60)" secondes"}'
 
