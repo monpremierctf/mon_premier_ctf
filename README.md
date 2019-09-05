@@ -10,7 +10,7 @@ Un jeu de slide à destination des participants est disponible en https://github
 </br>
 
 </br>
-Un serveur de test est disponible sur http://yoloctf.org. Vous pouvez vous créer un compte avec le code 'yolo'. Il est régulièrement effaçé et réinstallé. La durée de vie d'un profil est de 3h... Idéal pour un atelier de 2h. Ensuite le terminal ne se lance plus. 
+Un serveur de test est disponible sur http://yoloctf.org. Vous pouvez vous créer un compte avec le code 'yolo'. Il est régulièrement effaçé et réinstallé. La durée de vie d'un profil est de 30h... Idéal pour un atelier de 2h qui déborde un peu. Ensuite le terminal ne se lance plus. Il faudra recréer un profil.
 </br>
 
 ## Prerequis
@@ -100,116 +100,13 @@ Si nécessaire, la commande d'installation est suggérée.</br></br>
 La configuration, et le build des images docker des challenges se fait grace aux fichier ctf-xxx/.env et ctf-xxx/docker-compose
 ```
 
-Extracting default config
-Mise à jour des fichiers de config propres à chaque challenge
-MaJ des fichiers de config des challenges
 Lecture de la liste de challenges : challenges_list.cfg
 Set IPSERVER=192.168.1.22
 ['ctf-shell', 'ctf-escalation', 'ctf-net', 'ctf-sqli', 'ctf-buffer', 'ctf-decode', 'ctf-transfert']
 
 [ctf-shell/challenge_set_config.sh]
 no challenge_set_config.sh file
-
-[ctf-escalation/challenge_set_config.sh]
-no challenge_set_config.sh file
-
-[ctf-net/challenge_set_config.sh]
-
-[ctf-sqli/challenge_set_config.sh]
-no challenge_set_config.sh file
-
-[ctf-buffer/challenge_set_config.sh]
-no challenge_set_config.sh file
-
-[ctf-decode/challenge_set_config.sh]
-no challenge_set_config.sh file
-
-[ctf-transfert/challenge_set_config.sh]
-no challenge_set_config.sh file
-Generation des fichers de config pour CTFd
-Lecture de la liste de challenges : challenges_list.cfg
-Set IPSERVER=192.168.1.22
-['ctf-shell', 'ctf-escalation', 'ctf-net', 'ctf-sqli', 'ctf-buffer', 'ctf-decode', 'ctf-transfert']
-Enter [ctf-shell]
-- Processing Challenge_0
-- Processing Challenge_00
-- Processing Challenge_1
-- Processing Challenge_2
-- Processing Challenge_3
-- Processing Challenge_4
-- Processing Challenge_5
-- Processing Challenge_6
-- Processing Challenge_7
-- Processing Challenge_10
-- Processing Challenge_11
-- Processing Challenge_12
-Enter [ctf-escalation]
-- Processing Challenge_2
-- Processing Challenge_3
-- Processing Challenge_4
-Enter [ctf-net]
-- Processing Challenge_1
-- Copy [ctf-net/flag01.gz.pcapng]  => ctfd_config/tmp/uploads/ctf-net/flag01.gz.pcapng
-- Processing Challenge_2
-- Copy [ctf-net/flag02.gz.pcapng]  => ctfd_config/tmp/uploads/ctf-net/flag02.gz.pcapng
-- Processing Challenge_3
-- Copy [ctf-net/flag03.gz.pcapng]  => ctfd_config/tmp/uploads/ctf-net/flag03.gz.pcapng
-- Processing Challenge_4
-- Copy [ctf-net/flag04.gz.pcapng]  => ctfd_config/tmp/uploads/ctf-net/flag04.gz.pcapng
-- Processing Challenge_5
-- Copy [ctf-net/flag05.gz.pcapng]  => ctfd_config/tmp/uploads/ctf-net/flag05.gz.pcapng
-- Processing Challenge_arp_poison
-- Processing Challenge_nc
-- Processing Challenge_telnet
-- Processing Challenge_ftp
-- Processing Challenge_pop3
-Enter [ctf-sqli]
-- Processing Challenge_1
-- Processing Challenge_2
-- Processing Challenge_3
-Enter [ctf-buffer]
-- Processing Challenge_1
-- Processing Challenge_2
-- Processing Challenge_3
-Enter [ctf-decode]
-- Processing Challenge_hexa
-- Processing Challenge_ascii
-- Processing Challenge_base64
-- Processing Challenge_base64_2
-- Processing Challenge_url
-Enter [ctf-transfert]
-- Processing Challenge_1
-- Copy [ctf-transfert/flag01_enc.bin]  => ctfd_config/tmp/uploads/ctf-transfert/flag01_enc.bin
-- Processing Challenge_2
-- Copy [ctf-transfert/dechiffre_02]  => ctfd_config/tmp/uploads/ctf-transfert/dechiffre_02
-- Processing Challenge_3
-- Copy [ctf-transfert/dechiffre_03]  => ctfd_config/tmp/uploads/ctf-transfert/dechiffre_03
-updating: db/tags.json (stored 0%)
-updating: db/submissions.json (stored 0%)
-updating: db/solves.json (stored 0%)
-updating: db/files.json (deflated 83%)
-updating: db/alembic_version.json (deflated 4%)
-updating: db/awards.json (stored 0%)
-updating: db/pages.json (deflated 56%)
-updating: db/users.json (deflated 34%)
-updating: db/flags.json (deflated 82%)
-updating: db/challenges.json (deflated 74%)
-updating: db/tracking.json (deflated 55%)
-updating: db/unlocks.json (stored 0%)
-updating: db/dynamic_challenge.json (stored 0%)
-updating: db/config.json (deflated 70%)
-updating: db/notifications.json (stored 0%)
-updating: db/hints.json (stored 0%)
-updating: db/teams.json (stored 0%)
-updating: uploads/ctf-transfert/dechiffre_02 (deflated 67%)
-updating: uploads/ctf-transfert/flag01_enc.bin (deflated 28%)
-updating: uploads/ctf-transfert/dechiffre_03 (deflated 67%)
-updating: uploads/ctf-net/flag02.gz.pcapng (deflated 69%)
-updating: uploads/ctf-net/flag05.gz.pcapng (deflated 73%)
-updating: uploads/ctf-net/flag04.gz.pcapng (deflated 59%)
-updating: uploads/ctf-net/flag03.gz.pcapng (deflated 71%)
-updating: uploads/ctf-net/flag01.gz.pcapng (deflated 69%)
-myctf.zip generated for ctfd
+...
 ```
 Si vous avez une erreur de type
 ```
@@ -219,13 +116,9 @@ c'est que docker n'est pas lancé. Faites
 ````
 sudo reboot
 ````
-et reconnectez vous.
+Reconnectez vous, et relancez './go_first_install_webserver'.
 
 </br>
-Enfin les dockers sont lancés, ainsi que le serveur web.
-
-
-
 </br>
 
 
@@ -255,5 +148,15 @@ Monitoring global en interface web sur http://localhost:8888
 chmod a+x tools/monitor.sh
 tools/monitor.sh
 ````
+
+</br>
+
+# Customisation
+
+Pour ajouter des challenges jetez un oeil à : [doc/create_new_challenges.md]
+
+
+
+
 
 Enjoy !
