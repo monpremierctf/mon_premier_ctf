@@ -55,15 +55,15 @@ description:
 # Ajouter un challenge texte 
 
 
-Dans le fichier challenge.cfg ajouter la description du challenge
+Dans le fichier challenge.cfg ajouter la description du challenge.
 
 ```
 [XXX]  Label du challenge, doit être unique, sans contrainte particulière
-name:  Home Sweet Home : Nom du challenge tel qu'il apparait 
-value: 10 : Nombre de points marqués pour la résolution du challenge
+name:  Nom du challenge tel qu'il apparait 
+value: Nombre de points marqués pour la résolution du challenge
 category:  La catégorie qui permet de regrouper des challenges
-flag:  martinique : format libre
-flag2:  Martinique : (optionnel) : un second flag pour le challenge
+flag:  format libre
+flag2: (optionnel) : un second flag pour le challenge
 file: (optionnel) : le nom d'un fichier qui sera téléchargeable par les participants.
 description: 
     La description peut tenir sur une ou plusieurs lignes.
@@ -75,6 +75,24 @@ description:
     $ commande shell, ou bout de code
     &#96;&#96;&#96;
 ```
+
+ex:
+````
+[Challenge_1]
+name:  Une affaire de famille
+value: 1
+category:  Password
+flag:  martinique
+description: 
+    Jean Bon vient de monter sa startup spécialisée dans la vente de sabres lasers.
+    Il a passé la soirée à consolider ses commandes, en pensant à ses dernières vacances en Martinique.
+    Avant de rentrer, regarder le dernier épisode de Game of Throne, il sauvegarde ses documents dans un zip chiffré sur une clef usb.
+    Quand winzip lui demande un mot de passe, sans contrainte particulière, il a un souvenir d'une vague formation en sécurité, et il entre rapidement un mot de passe de plus de 8 lettres facile à retrouver.
+    .
+    Le flag est le mot de passe qu'il va utiliser. 
+````
+    
+
 
 
 
