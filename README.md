@@ -105,9 +105,15 @@ Set IPSERVER=192.168.1.22
 ['ctf-shell', 'ctf-escalation', 'ctf-net', 'ctf-sqli', 'ctf-buffer', 'ctf-decode', 'ctf-transfert']
 
 [ctf-shell/challenge_set_config.sh]
-no challenge_set_config.sh file
 ...
 ```
+Le téléchargement des dockers peut prendre du temps sur une liaison adls, il y apres de 6G d'images...
+````
+Step 9/13 : RUN chown -R yolo:yolo /usr/src/app/. 
+````
+Cette commande peut prendre plus de 10 minutes.
+Faites une pause yoga. 
+
 Si vous avez une erreur de type
 ```
 ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?
