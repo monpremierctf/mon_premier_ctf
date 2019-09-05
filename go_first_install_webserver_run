@@ -326,7 +326,7 @@ docker network create webserver_webLAN
 #
 # Build ctf-sshd
 #
-if [ $NOREBUILD != "1" ]
+if [ ! "$NOREBUILD" == 1 ]
 then
 echo "Building ctf-sshd image"
 cd tools/ctf-sshd
@@ -337,7 +337,7 @@ fi
 #
 # Build ctf-python-editor
 #
-if [ $NOREBUILD != "1" ]
+if [ ! "$NOREBUILD" == 1 ]
 then
 echo "Building ctf-php-nginx image"
 cd tools/ctf-php-nginx
@@ -352,7 +352,7 @@ fi
 #
 # Build xtermjs
 #
-if [ $NOREBUILD != "1" ]
+if [ ! "$NOREBUILD" == 1 ]
 then
 echo "Building ctf-tools-xtermjs image"
 cd tools/xterm
@@ -369,7 +369,7 @@ fi
 #
 # Build dockers images for challenges
 #
-if [ $NOREBUILD != "1" ]
+if [ ! "$NOREBUILD" == 1 ]
 then
 python -c 'from gen_config import build_challenges; build_challenges()'
 #python -c 'from gen_config import start_challenges; start_challenges()'
@@ -378,7 +378,7 @@ fi
 #
 # Generate self-signed certificates
 #
-if [ $NOREBUILD != "1" ]
+if [ ! "$NOREBUILD" == 1 ]
 then
 if [ $TRAEFIK_SELF_SIGNED_CERTS == 1 ] 
 then

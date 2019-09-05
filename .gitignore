@@ -10,6 +10,7 @@ myconfig.zip
 ctf-sqli/mysql/init_db_mccoy.sql
 *.db
 web_server/.env
+web_server/www_site/yoloctf/*.custom.php
 web_server/www_site/yoloctf/db/*
 web_server/www_site/yoloctf/uploads/*
 web_server/www_site/yoloctf/intro/*

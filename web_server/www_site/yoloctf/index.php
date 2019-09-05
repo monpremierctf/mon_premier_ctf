@@ -34,6 +34,7 @@
     include "Parsedown.php";
     $Parsedown = new Parsedown();
     include 'header.php'; 
+
 ?>
 
 <!-- Modal -->

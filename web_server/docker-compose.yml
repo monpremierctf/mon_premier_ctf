@@ -55,18 +55,8 @@ services:
     #image: php:7-fpm
     build: php/.
     container_name: webserver_php
-    environment:
-      MYSQL_USER_PASSWORD: ${MYSQL_USER_PASSWORD}
-      CTF_ADMIN_ACCOUNT: ${CTF_ADMIN_ACCOUNT}
-      CTF_SCOREBOARD_AFF: ${CTF_SCOREBOARD_AFF}
-      CTF_REQUIRE_EMAIL_VALIDATION: ${CTF_REQUIRE_EMAIL_VALIDATION}
-      CTF_MAIL_ENABLED: ${CTF_MAIL_ENABLED}
-      CTF_MAIL_USERNAME: ${CTF_MAIL_USERNAME}
-      CTF_MAIL_PASSWD: ${CTF_MAIL_PASSWD}
-      CTF_MAIL_FROMMAIL: ${CTF_MAIL_FROMMAIL}
-      CTF_MAIL_FROMNAME: ${CTF_MAIL_FROMNAME}
-      CTF_REGISTER_CODE: ${CTF_REGISTER_CODE}
-      CTF_LOCALE_ENABLED: ${CTF_LOCALE_ENABLED}
+    env_file:
+      - .env
     volumes:
       - ./www_site:/www_site
     networks:

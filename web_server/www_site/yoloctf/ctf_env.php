@@ -14,4 +14,11 @@
 
     // Register require code
     $ctf_register_code = getenv('CTF_REGISTER_CODE')?getenv('CTF_REGISTER_CODE'):'';
+
+    // Custom Header
+    $ctf_title    = getenv('CTF_TITLE')?getenv('CTF_TITLE'):'YOLO CTF';
+    $ctf_subtitle = getenv('CTF_SUBTITLE')?getenv('CTF_SUBTITLE'):'Mon premier CTF';
+    $ctf_logo1 = getenv('CTF_LOGOFILE_1')?getenv('CTF_LOGOFILE_1'):'';
+    $ctf_logo2 = getenv('CTF_LOGOFILE_2')?getenv('CTF_LOGOFILE_2'):'';
+    $ctf_logo3 = getenv('CTF_LOGOFILE_3')?getenv('CTF_LOGOFILE_3'):'';
 ?>
