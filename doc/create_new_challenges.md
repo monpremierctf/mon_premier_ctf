@@ -22,7 +22,8 @@ Vous pouvez ajouter des répertoires, ou les commenter avec un #
 
 # Ajouter une catégorie de challenges
 
-Cette nouvelle catégorie de challenge va apparaitre dans le menu de gauche du CTF.
+Les catégories de challenges correspondent aux entrées dans le menu de gauche du CTF.
+
 Créer un nouveau répertoire : ctf-xxxxx
 ````
 mkdir ctf-test
