@@ -159,7 +159,7 @@ tools/monitor.sh
 
 # Customisation
 
-Pour ajouter des challenges jetez un oeil à : [doc/create_new_challenges.md]
+Pour ajouter des challenges jetez un oeil à : [doc/create_new_challenges.md](doc/create_new_challenges.md)
 
 
 
