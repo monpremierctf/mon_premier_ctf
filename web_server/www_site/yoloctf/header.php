@@ -5,6 +5,7 @@
 //
 require_once('ctf_challenges.php');
 require_once('ctf_env.php'); 
+require_once('ctf_lang.php');
 
 if(file_exists('header.custom.php')) {
     include 'header.custom.php';
@@ -46,7 +47,8 @@ function ctf_insert_logo($logo) {
         <!---- English/French choice ---->
         <?php if ($ctf_locale_enabled==='true') { ?>
         <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonLang" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonLang" 
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <?php print getLangage() ?>
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonLang" id="MyLangList">
@@ -70,11 +72,6 @@ function ctf_insert_logo($logo) {
 
     </div>
 </div>  
-<script>
-$(document).ready(function() {
-    
-});
-</script>
  
 
 <div class="jumbotron ctf-title text-center">
@@ -89,11 +86,13 @@ $(document).ready(function() {
 </div>
 </div>
 <script> 
+     
+    $(document).ready(function() {
         // Login
-        $(document).ready(function() {
-            $("#Login").click(function(){
+        $("#Login").click(function(){
             window.location.href = "login.php";
         }); 
+
         $("#Logout").click(function(){
             alert("Deconnection");
             window.location.href = "logout.php";
@@ -102,15 +101,19 @@ $(document).ready(function() {
         // Language
         $("#lang-fr").click(function(e){
             $("#dropdownMenuButtonLang").html("fr");
-            $.get( "ctf_lang.php?cmd=setLang&lang=fr", function( data, status ) {
-                if (data=="fr") { window.location.reload(); }
+            $.get("cmd_lang.php?cmd=setLang&lang=fr", function( data, status ) {
+                if (data=="fr") { 
+                    window.location.reload(); 
+                }
             });
         
         });
         $("#lang-en").click(function(e){
             $("#dropdownMenuButtonLang").html("en");
-            $.get( "ctf_lang.php?cmd=setLang&lang=en", function( data, status ) {
-                if (data=="en") { window.location.reload(); }
+            $.get( "cmd_lang.php?cmd=setLang&lang=en", function( data, status ) {
+                if (data=="en") { 
+                    window.location.reload(); 
+                }
             });
         });
     });

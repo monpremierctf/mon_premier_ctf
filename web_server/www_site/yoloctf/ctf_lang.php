@@ -1,12 +1,5 @@
 <?php
 
-ini_set('session.cookie_httponly', 1);
-ini_set('session.cookie_secure', 1);
-header_remove("X-Powered-By");
-header("X-XSS-Protection: 1");
-header('X-Frame-Options: SAMEORIGIN'); 
-session_start ();
-
 function get_lang_from_http() {
   $langs = array();
 
@@ -59,23 +52,5 @@ function getLangage() {
   return $l;
 }
 
-
-if (isset($_GET['cmd'])) {
-    if ($_GET['cmd']=="getLang") {
-        echo getLangage();
-    }
-    if ($_GET['cmd']=="setLang") {
-        if (isset($_GET['lang'])) {
-            if ($_GET['lang']=="en") {
-                $_SESSION['lang']=$_GET['lang'];
-                setLangage("en");
-            } else {
-                $_SESSION['lang']="fr";
-                setLangage("fr");
-            }
-        }
-        echo $_SESSION['lang'];
-    }
-}
 
 ?>

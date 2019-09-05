@@ -297,7 +297,9 @@ $(document).ready(function() {
 
 
       $.get("containers_cmd.php?status='.$id.'",function(data) { 
-          if (data=="ko") {
+          if (data=="ko_not_logged" || data =="Merci de vous connecter.") {
+              $("#ServerStatus'.$id.'").html("Server status: Please log in..");
+          } else if (data=="ko") {
               $("#ServerStatus'.$id.'").html("Server status: Problem... Cant start");
           } else  {
              var resp = JSON.parse(data);
