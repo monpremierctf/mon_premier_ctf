@@ -44,7 +44,7 @@ function ctf_insert_logo($logo) {
     <!---- Right box with User profile ---->
     <div class="col-md-1 float-right">
         <!---- English/French choice ---->
-        <?php if ($ctf_locale_enabled==='true') { ?>}
+        <?php if ($ctf_locale_enabled==='true') { ?>
         <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonLang" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <?php print getLangage() ?>
