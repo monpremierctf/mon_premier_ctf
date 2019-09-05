@@ -139,8 +139,8 @@ Déclarer ce docker dans le fichier de config 'tools/challenge-box-provider/chal
 ````
 - "id": identificant du docker utilisé dans challenge.cfg
 - "image": image docker crée par docker-compose build
-- "port": port à mapper
-- "traefikport": port à déclarer sur Traefic pour un accès en HTTPS d'internet
+- "port": port à mapper sur le serveur Host. Une fonction permet de récupérer le port mappé. Permet de tester depuis le serveur.
+- "traefikport": port qui sera utilisé par Traefic pour un accès en HTTPS à partir d'internet
 - "duration": durée de vie du serveur en secondes. Il sera ensuite détruit.
     - 60 : 1 min
     - 900 : 15 min
