@@ -111,8 +111,6 @@ docker: ctf-escalation
 
 Si ce docker n'est utilisé que par un challenge, le déclarer dans le challenge:
 ````
-
-
 [Challenge_nc]
 name:  Netcat
 value: 20
