@@ -51,7 +51,7 @@ Ce peut être:
 Un CTF c'est sympa seul, mais c'est encore plus fun avec des potes.
 Du coup, on s'authentifie souvent deux fois, comme participant puis comme équipe.
 Il existe des classements mondiaux, et les grands CTFs rapportent des points pour ce classement.
-La liste des CTFs à venir et les classement sont sur [ctftime.org](https://ctftime.org/).
+La liste des CTFs à venir et les classements sont sur [ctftime.org](https://ctftime.org/).
 
 
 
