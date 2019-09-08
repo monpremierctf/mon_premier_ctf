@@ -7,7 +7,7 @@
     $ctf_labels["login_invalid_credentials"] = "Login/password non valides...";
     $ctf_labels["login_invalid_credentials_en"] = "Invalid credentials...";
 
-
+    require_once('ctf_lang.php');
     
     function getLocalizedIndex($tab,$index)
     {

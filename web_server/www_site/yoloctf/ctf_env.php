@@ -21,4 +21,7 @@
     $ctf_logo1 = getenv('CTF_LOGOFILE_1')?getenv('CTF_LOGOFILE_1'):'';
     $ctf_logo2 = getenv('CTF_LOGOFILE_2')?getenv('CTF_LOGOFILE_2'):'';
     $ctf_logo3 = getenv('CTF_LOGOFILE_3')?getenv('CTF_LOGOFILE_3'):'';
+    $ctf_url1 = getenv('CTF_URL_1')?getenv('CTF_URL_1'):'';
+    $ctf_url2 = getenv('CTF_URL_2')?getenv('CTF_URL_2'):'';
+    $ctf_url3 = getenv('CTF_URL_3')?getenv('CTF_URL_3'):'';
 ?>

@@ -14,6 +14,8 @@ if(file_exists('header.custom.php')) {
 
 function ctf_get_name() {
     global $ctf_subtitle;
+
+
     // Current dynamic CTF
     if (isset($_SESSION['ctfname'])&&($_SESSION['ctfname']!=='')) {
         return $_SESSION['ctfname'];
@@ -28,9 +30,12 @@ function ctf_get_name() {
 }
 
 
-function ctf_insert_logo($logo) {
+function ctf_insert_logo($logo, $url) {
+
     if ($logo!=='') {
+        if ($url!=='') { echo "<a href='$url'  target='_blank'>"; };
         echo "<img src='$logo'  height='60' alt='' >";
+        if ($url!=='') { echo "</a>"; };
     }
 }
 
@@ -76,13 +81,13 @@ function ctf_insert_logo($logo) {
 
 <div class="jumbotron ctf-title text-center">
 <div class="row">
-    <div class="col-md-2"><?php ctf_insert_logo($ctf_logo1); ?></div>
-    <div class="col-md-3"><?php ctf_insert_logo($ctf_logo2); ?></div>
+    <div class="col-md-2"><?php ctf_insert_logo($ctf_logo1, $ctf_url1); ?></div>
+    <div class="col-md-3"><?php ctf_insert_logo($ctf_logo2, $ctf_url2); ?></div>
     <div class="col-md-4">
         <h1 class="row-md-4 ctf-title-size"><?php echo "$ctf_title" ?></h1>
         <p><pre class='row-md-4 ctf-subtitle-size'> <?php echo htmlspecialchars(ctf_get_name()); ?> </pre></p>  
     </div>
-    <div class="col-md-2"><?php ctf_insert_logo($ctf_logo3); ?></div>
+    <div class="col-md-2"><?php ctf_insert_logo($ctf_logo3, $ctf_url3); ?></div>
 </div>
 </div>
 <script> 
