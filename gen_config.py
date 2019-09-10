@@ -1,5 +1,11 @@
-#
-# Generates a config file ready to be imported in CTFd
+#!/bin/python
+
+# 
+# Configure challenges
+# Build docker challenges images
+# Launch some challenges
+# Configure web_server & traefik
+# Launch web_server & traefik
 #
 
 import ConfigParser

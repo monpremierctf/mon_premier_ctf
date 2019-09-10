@@ -3,7 +3,20 @@
 #
 # Remove all docker containers and images from the system
 #
-docker stop $(docker ps -aq)
-docker rm $(docker ps -aq)
-docker rmi $(docker images -q)
+#!/bin/bash
 
+# Kill all running containers
+docker kill $(docker ps -aq)
+
+# Delete all stopped containers
+docker rm $(docker ps -aq)
+
+# Delete all docker networks
+docker network rm $(docker network ls | awk '{print $(2)}' | grep Net_)
+docker network prune -f
+
+# Delete useless images
+docker rmi $(docker images | grep "<none>" |awk  '{print $3 }' )
+
+# echo If passwords are changed dont forget to :
+docker rmi webserver_webserver_mysql

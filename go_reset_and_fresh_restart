@@ -13,8 +13,8 @@ docker network prune -f
 # Delete useless images
 docker rmi $(docker images | grep "<none>" |awk  '{print $3 }' )
 
-echo If passwords are changed dont forget to :
-echo docker rmi webserver_webserver_mysql
+# echo If passwords are changed dont forget to :
+docker rmi webserver_webserver_mysql
 
 # restart from scratch
 ./go_first_install_webserver_run

@@ -1,0 +1,267 @@
+#!/bin/bash
+#
+#
+
+
+
+# http://patorjk.com/software/taag/#p=display&f=Small&t=Mon%20Premier%20CTF
+echo "
+  __  __            ___               _            ___ _____ ___ 
+ |  \/  |___ _ _   | _ \_ _ ___ _ __ (_)___ _ _   / __|_   _| __|
+ | |\/| / _ \ ' \  |  _/ '_/ -_) '  \| / -_) '_| | (__  | | | _| 
+ |_|  |_\___/_||_| |_| |_| \___|_|_|_|_\___|_|    \___| |_| |_| 
+"
+echo "= Verification du système..."
+
+#
+# system Ubuntu
+printf "=> Verification : Ubuntu : "
+
+if uname -a |grep -qw Ubuntu; then 
+    echo "Ok"; 
+    echo $(uname -v)
+else 
+    echo "Ko"; 
+    echo uname -v
+    echo "Les scripts n'ont été testé que sous Ubuntu 18. Ca peut marcher .. ou pas. Bonne chance."
+fi
+
+#
+# Please avoid running as root or with sudo
+printf "=> Verification : Utilisateur non root : "
+if [ $(id -u) -eq 0 ]; then 
+    echo "Ko"
+    echo "Il est recommandé de lancer le script avec un compte utilisateur non root appartenant au groupe Docker."
+    echo "Vous etes actuellement root ou dans un sudo."
+    echo "Des fichiers ou répertoires risquent d'être créés par root et ne seront plus lisibles/effacables par un utilisateur lambda."
+    while true; do
+        read -p "Désirez vous continuer en root (o/N) ? : " yn
+        case $yn in
+            [Oo]* ) echo "Ok, on continue en root"; break;;
+            * ) echo "Ok, on arrête ici. Relancez sans sudo ou avec un user non root"; exit;;
+        esac
+    done
+else 
+    echo "Ok"
+fi
+
+
+#
+# docker-compose installed
+printf "=> Verification : docker-compose installé : "
+if [[ $(which docker-compose) && $(docker-compose --version) ]]; then
+    echo "Ok"
+    printf "$(docker-compose --version)\n"
+  else
+    echo "Ko"
+    echo "Pour installer docker-compose rapidement:"
+    echo "sudo apt-get update"
+    echo "sudo apt-get install docker-compose"
+    exit;
+fi
+
+
+#
+# Docker installed
+printf "=> Verification : Docker installé : "
+if [[ $(which docker) && $(docker --version) ]]; then
+    echo "Ok"
+    printf "$(docker --version)\n"
+  else
+    echo "Ko"
+    echo "Pour installer docker proprement consultez la documentation de votre distribution."
+    exit;
+fi
+
+
+#
+# python 2.xx installed
+printf "=> Verification : python 2.7 installé : "
+if [[ $(which python) ]]; then
+    echo "Ok"
+    printf "$(python --version)"
+  else
+    echo "Ko"
+    echo "Pour installer python rapidement:"
+    echo "sudo apt-get update"
+    echo "sudo apt install python-minimal"
+    exit;
+fi
+
+
+#
+# zip installed
+# Option -D required
+printf "=> Verification : zip installé : "
+if [[ $(which zip) ]]; then
+    echo "Ok"
+  else
+    echo "Ko"
+    echo "Pour installer zip rapidement:"
+    echo "sudo apt-get update"
+    echo "sudo apt install zip"
+    exit;
+fi
+
+#
+# user in Docker group
+printf "=> Verification : Si non root, Utilisateur dans le group Docker : "
+if [ $(id -u) -ne 0 ]; then 
+    if id -nG $USER | grep -qw "docker"; then
+        echo "Ok"
+    else
+        echo "Ko"
+        echo "Si l'utilisateur n'est pas root, il doit appartenir au groupe Docker."
+        echo "Utilisez la commande suivant pour ajouter l'utilisateur courant au groupe Docker"
+        echo "Ensuite deconnectez et reconnectez vous. Personnellement, je reboote le serveur..."
+        echo "sudo gpasswd -a \$USER docker"
+        exit;
+    fi
+else
+    echo "Ok"
+fi
+
+
+
+#
+# Is docker running ?
+printf "=> Verification : Docker démarré : "
+if docker info 2>&1 | grep -qw "Cannot connect to the Docker daemon"; then 
+    echo "Ko"
+    echo "Vous devriez pouvoir démarrer le service docker avec la commande:"
+    echo "sudo service docker start"
+    exit;
+else
+    echo "Ok"
+    echo $(docker info 2>/dev/null | grep "Server Version")
+fi
+
+
+#
+# Dump Docker config files .env
+echo "Verification du système terminée"
+echo ""
+echo "===================="
+echo "Verification de la configuration"
+echo ""
+python -c 'from gen_config import dump_challenges_env; dump_challenges_env()'
+while true; do
+    read -p "La config est-elle ok ? (O/n) ? : " yn
+    case $yn in
+        [Nn]* ) echo "Ok, on arrête ici."; exit;;
+        * ) echo "Ok, on continue."; break;;
+    esac
+done
+
+#
+# Build challenge-box-provider
+#
+#git clone https://github.com/monpremierctf/challenge-box-provider.git
+#cd challenge-box-provider
+#docker build -t challenge-box-provider .
+#cd - > /dev/null
+
+
+#
+# Extract default config   
+#
+echo "Extracting default config"
+if [ -d ctfd_config/tmp ]; then
+    rm -R ctfd_config/tmp
+fi
+mkdir ctfd_config/tmp
+unzip -q -d ctfd_config/tmp ctfd_config/empty_conf.zip
+
+#
+# Generate CTFd admin password
+#
+
+#
+# Update config in each challenge directory
+#
+echo "Mise à jour des fichiers de config propres à chaque challenge"
+python -c 'from gen_config import challenges_set_config; challenges_set_config()'
+
+#
+# Generate config from challenge directories
+#
+echo "Generation des fichers de config pour CTFd"
+python ./gen_config.py
+
+
+#
+# Rebuild zip
+# 
+# zip must not contain dir entries (-D option)
+cd ./ctfd_config/tmp
+zip -r -D ../../myctf.zip ./*
+cd - > /dev/null
+rm -Rf ctfd_config/tmp
+echo "myctf.zip generated for ctfd"
+
+
+#
+# is Docker daemon running ?
+# service docker start
+
+#
+# is docker clean ?
+# is CTFD clean ?
+# check if .data exist
+
+#
+# clone CTFd
+#
+[ -d "./CTFd" ] && echo "!!! CTFd exists."
+[ ! -d "./CTFd" ] && git clone https://github.com/monpremierctf/CTFd.git
+cp media/logo_frtw.jpg CTFd/CTFd/themes/core/static/img/logo.png
+
+
+#
+# Launch CTFd 
+# 
+cd CTFd
+docker-compose build
+docker-compose up -d
+cd - > /dev/null
+
+
+#
+# Start Dockers for challenges
+#
+python -c 'from gen_config import build_challenges; build_challenges()'
+python -c 'from gen_config import start_challenges; start_challenges()'
+
+
+#
+# Start vitualbox VMs for challenges
+#
+
+
+#
+# Copy and import ctfd config
+#
+cd CTFd
+cp ../myctf.zip .
+docker exec ctfd_ctfd_1 python import.py myctf.zip
+cd - > /dev/null
+
+
+
+#
+# Logs
+#
+# docker-compose logs
+# docker stats
+
+echo "*****************"
+echo ""
+echo "S'il n'y a pas eu de message d'erreur, vous pouvez à présent vous connecter à l'interface web:"
+echo "http://localhost:8000"
+echo "Compte admin : CTFPasswordZ"
+echo "Pensez à changer le mot de passe"
+echo ""
+echo "Commandes utiles:"
+echo "docker stats"
+echo "docker-compose logs"
+

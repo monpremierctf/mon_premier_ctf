@@ -1,0 +1,98 @@
+#!/bin/bash
+#
+#
+
+echo "Mon Premier CTF: Installing required tools"
+if [ $(id -u) -eq 0 ]; then 
+    printf "${RED}Ko${NC}\n"
+    echo "Root: not using sudo"
+    SUDO=""
+else 
+    echo "Using sudo"
+    SUDO="sudo"
+fi
+
+#
+# Update
+#
+printf "Apt-get Update"
+$SUDO apt-get update
+
+#
+# python 2.xx installed
+printf "=> Verification : python 2.7 installé : "
+if [[ $(which python) ]]; then
+    echo "Ok"
+    printf "$(python --version)"
+  else
+    printf "Installing python\n"
+    $SUDO apt-get install python-minimal
+fi
+
+
+#
+# docker-compose installed
+printf "=> Verification : docker-compose installé : "
+if [[ $(which docker-compose) && $(docker-compose --version) ]]; then
+    echo "Ok"
+    printf "$(docker-compose --version)\n"
+  else
+    printf "Installing docker-compose\n"
+    $SUDO apt-get install docker-compose
+fi
+
+
+#
+# Docker installed
+printf "=> Verification : Docker installé : "
+if [[ $(which docker) && $(docker --version) ]]; then
+    echo "Ok"
+    printf "$(docker --version)\n"
+  else
+    printf "${RED}Fatal${NC}\n"
+    echo "Pour installer docker proprement consultez la documentation de votre distribution."
+    exit;
+fi
+
+
+
+
+#
+# zip installed
+# Option -D required
+printf "=> Verification : zip installé : "
+if [[ $(which zip) ]]; then
+    echo "Ok"
+  else
+    printf "Installing Zip\n"
+    $SUDO apt install zip
+fi
+
+
+#
+# user in Docker group
+printf "=> Verification : Si non root, Utilisateur dans le group Docker : "
+if [ $(id -u) -ne 0 ]; then 
+    if id -nG $USER | grep -qw "docker"; then
+        echo "Ok"
+    else
+        printf "Add $USER to docker group\n"
+        $SUDO gpasswd -a \$USER docker
+    fi
+else
+    echo "Ok"
+fi
+
+
+
+#
+# Is docker running ?
+printf "=> Verification : Docker démarré : "
+if docker info 2>&1 | grep -qw "Cannot connect to the Docker daemon"; then 
+    printf "Start Docker\n"
+    $SUDO service docker start
+else
+    echo "Ok"
+    echo $(docker info 2>/dev/null | grep "Server Version")
+fi
+

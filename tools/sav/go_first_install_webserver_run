@@ -3,94 +3,31 @@
 # All in one start/stop script for Yolo CTF server
 #
 
-#
-# Some Globals 
-#
-RED='\033[0;31m'
-NC='\033[0m' # No Color
-YESTOALL=0
-NOREBUILD=0
-BUILDPACKAGE=0
-NOCONFIG=0
-NOSYSTEMCHECK=0
-INSTALLPACKAGES=0
-NORUN=0
-TIME_START=$(date +%s);
-CTF_INSTALL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-CTF_CHALL_LIST=''
 
-#
-# Usage
-#
+# Help
 usage () {
   echo "Usage: $0 [-h] [-y] [-n]" 1>&2; 
   echo "[-h] : this help" 1>&2; 
   echo "[-y] : Yes to all" 1>&2; 
   echo "[-n] : No rebuild" 1>&2; 
-  echo "[-b] : force Build" 1>&2; 
-  echo "[-p] : make Package" 1>&2; 
-  echo "[-c] : No generate config" 1>&2; 
-  echo "[-s] : No check system" 1>&2; 
-  echo "[-x] : Extract and load Docker images" 1>&2;
-  echo "[-r] : No run" 1>&2;
   exit 1;
 }
 
-#
 # Parse arguments
-#
-echo "Parsing command line options."
 for i in "$@"
 do
 case $i in
     -y)
-    echo "- Yes to all"
+    echo "Yes to all"
     YESTOALL=1
     shift # past argument=value
     ;;
 
     -n)
-    echo "- No rebuild"
+    echo "No rebuild"
     NOREBUILD=1
     shift # past argument=value
     ;;
-
-    -b)
-    echo "- Force build"
-    NOREBUILD=0
-    shift # past argument=value
-    ;;
-
-    -c)
-    echo "- No config generated"
-    NOCONFIG=1
-    shift # past argument=value
-    ;;
-
-    -s)
-    echo "- No system check"
-    NOSYSTEMCHECK=1
-    shift # past argument=value
-    ;;
-
-    -p)
-    echo "- Build Package"
-    BUILDPACKAGE=1
-    shift # past argument=value
-    ;;
-
-    -x)
-    echo "- EXtract and load docker images"
-    INSTALLPACKAGES=1
-    shift # past argument=value
-    ;;
-
-    -r)
-    echo "- No run"
-    NORUN=1
-    shift # past argument=value
-    ;;
-
 
     -h)
     usage
@@ -99,41 +36,60 @@ esac
 done
 
 
-
-
-
-
-############################
 #
-# Let put everything in a function to easilly redirect stdout to a log file
+# Put everything in a function to easilly redirect stdout to a log file
 #
 
 ctf_install() {
-
 #
-# chdir to mon_premier_ctf dir
-#
-cd $CTF_INSTALL_DIR/
-
-#
-# Get challenges list
-#
-CTF_CHALL_LIST=$(sed 's/#.*$//' challenges_list.cfg | grep 'ctf-')
+TIME_START=$(date +%s);
 
 #
 # Load config from .env
 #
-if [ ! -f "$CTF_INSTALL_DIR/.env" ]; then
-  cp $CTF_INSTALL_DIR/env.default $CTF_INSTALL_DIR/.env
+if [ ! -f ".env" ]; then
+  cp env.default .env
 fi
-. $CTF_INSTALL_DIR/.env
+
+. ./.env
 
 
-#############################################################################
-#
-# Print Banner
-#
-ctf_print_banner() {
+if [ $WITH_UFW == 1 ] 
+then
+  echo "WITH_UFW active"
+  if [[ $(which ufw) && $(ufw --version) ]]; then
+    echo "ufw found"
+    printf "$(ufw --version)\n"
+
+    # Check no password
+    echo "ufw sudo without passwd : "
+    if sudo -l | grep ufw | grep NOPASSWD; then
+        echo "ok"
+    else
+        echo "ko"
+        echo "Pour activer : "
+        echo 'sudo echo "$USER ALL = NOPASSWD: /usr/sbin/ufw" >> /etc/sudoers'
+    fi
+    # Block all incoming
+    sudo ufw default deny incoming
+    sudo ufw default allow outgoing
+    sudo ufw allow 22
+    sudo ufw allow 80
+    sudo ufw allow 443
+    sudo ufw enable
+    cd tools/ufw
+    python proxy_ufw.py &
+    cd -
+  else
+    echo "Ko"
+    echo "Pour installer ufw rapidement:"
+    echo "sudo apt-get update"
+    echo "sudo apt-get install ufw"
+    exit;
+  fi
+fi
+
+
 # Make banner thanks to:
 # http://patorjk.com/software/taag/#p=display&f=Small&t=Mon%20Premier%20CTF
 echo "
@@ -142,20 +98,13 @@ echo "
  | |\/| / _ \ ' \  |  _/ '_/ -_) '  \| / -_) '_| | (__  | | | _| 
  |_|  |_\___/_||_| |_| |_| \___|_|_|_|_\___|_|    \___| |_| |_| 
 "
-
-}
-ctf_print_banner
-
-
-
 #############################################################################
 #
 # System checks
 #
-ctf_system_check() {
-
 echo "= Verification du système..."
-
+RED='\033[0;31m'
+NC='\033[0m' # No Color
 
 #
 # system Ubuntu
@@ -284,20 +233,11 @@ else
     echo "Ok"
     echo $(docker info 2>/dev/null | grep "Server Version")
 fi
-}
-
-
-if [ $NOSYSTEMCHECK == 0 ]; then
-ctf_system_check
-fi
-
 
 #############################################################################
 #
-# Setup config files
+# Setup
 #
-
-ctf_gen_config() {
 
 if [ ! -f challenges_list.cfg ]; then
   cp challenges_list.cfg.default challenges_list.config
@@ -353,7 +293,8 @@ python -c 'from gen_config import dump_challenges_env; dump_challenges_env()'
 echo ''
 echo '[web_server/.env]'
 cat web_server/.env
-if [ $YESTOALL != "1" ]; then
+if [ $YESTOALL != "1" ]
+then
   while true; do
       echo "";echo ""
       read -p "La config est-elle ok ? (O/n) ? : " yn
@@ -367,22 +308,13 @@ fi
 #
 # Copy json files to web server
 #
-echo "Copying challenges files to web server"
+echo "Copying files to web server"
 cp -R ./ctfd_config/tmp/* web_server/www_site/yoloctf
 chmod -R a+r web_server/www_site/yoloctf
 
-}
 
-if [ $NOCONFIG == 0 ]; then
-ctf_gen_config
-fi
 
-#############################################################################
 #
-# Build Docker images & networks
-#
-ctf_build_all() {
-  #
 # Build challenge-box-provider
 #
 #cd challenge-box-provider
@@ -398,17 +330,19 @@ docker network create webserver_webLAN
 #
 # Build ctf-sshd
 #
-
+if [ ! "$NOREBUILD" == 1 ]
+then
 echo "Building ctf-sshd image"
 cd tools/ctf-sshd
 docker build -t ctf-sshd .
 cd - > /dev/null
-
+fi
 
 #
 # Build ctf-python-editor
 #
-
+if [ ! "$NOREBUILD" == 1 ]
+then
 echo "Building ctf-php-nginx image"
 cd tools/ctf-php-nginx
 docker build -t ctf-php-nginx .
@@ -417,12 +351,13 @@ echo "Building ctf-python-editor image"
 cd tools/ctf-python-editor
 docker build -t ctf-python-editor .
 cd - > /dev/null
- 
+fi
 
 #
 # Build xtermjs
 #
-
+if [ ! "$NOREBUILD" == 1 ]
+then
 echo "Building ctf-tools-xtermjs image"
 cd tools/xterm
 ./go_xterm
@@ -433,22 +368,22 @@ cd - > /dev/null
 cd tools/xterm/ctf-tool-xterm/
 docker-compose build
 cd - > /dev/null
- 
+fi
 
 #
 # Build dockers images for challenges
 #
-
+if [ ! "$NOREBUILD" == 1 ]
+then
 python -c 'from gen_config import build_challenges; build_challenges()'
 #python -c 'from gen_config import start_challenges; start_challenges()'
- 
-
-
+fi
 
 #
 # Generate self-signed certificates
 #
-
+if [ ! "$NOREBUILD" == 1 ]
+then
 if [ $TRAEFIK_SELF_SIGNED_CERTS == 1 ] 
 then
   cd web_server/traefik
@@ -460,157 +395,15 @@ else
     cp web_server/traefik_acme/acme.json.default web_server/traefik_acme/acme.json
   fi
 fi
- 
+fi
 
 #
-# Build traefik
+# Start traefik
 #
 if [ $TRAEFIK_SELF_SIGNED_CERTS == 1 ] 
 then
 cd web_server/traefik
 docker-compose build
-cd - > /dev/null
-fi
-
-
-#
-# Build web_server
-#
-cd web_server
-docker-compose build
-cd - > /dev/null
-}
-
-if [ $NOREBUILD == 0 ]; then
-ctf_build_all
-fi
-
-#############################################################################
-#
-# Make a standalone package
-#
-
-ctf_build_package() {
-  echo "=== Building Install Package ==="
-
-  DOCKER_IMAGES=$(docker images | grep -v '<none>' | awk '{ print $1 ":" $2 }' | grep -v REPOSITORY)
-  IMG_COUNT=$(echo $DOCKER_IMAGES| wc -w)
-  #echo "Images [$DOCKER_IMAGES]"
-
-  # Create Install dir
-  mkdir -p install_package/docker_images
-  mkdir -p install_package/challenges
-
-  # Package docker images
-  IMG_INDEX=0
-  # -9 takes a very very long time
-  COMPRESSION_LEVEL=-9
-  COMPRESSION_LEVEL=''
-  for IMG in $DOCKER_IMAGES; do
-    ((IMG_INDEX++))
-    echo "Packaging ($IMG_INDEX/$IMG_COUNT) [$IMG ]"
-    docker save $IMG > install_package/docker_images/$IMG.tar
-    #gzip $COMPRESSION_LEVEL install_package/$IMG.tar
-  done
-  
-  # Package ctf-xxx
-  CHALL_COUNT=$(echo $CTF_CHALL_LIST| wc -w)
-  CHALL_INDEX=0
-  for CHALL in $CTF_CHALL_LIST; do
-    ((CHALL_INDEX++))
-    echo "Packaging Challenges ($CHALL_INDEX/$CHALL_COUNT) [$CHALL ]"
-    tar -cf install_package/challenges/$CHALL.tar $CHALL
-  done
-
-  # Package web_server
-  echo "Packaging Web Server"
-  tar -cf install_package/webserver.tar web_server
-
-  # Package tools
-  echo "Packaging Tools"
-  tar -cf install_package/tools.tar tools
-
-  # Package scripts
-  echo "Packaging Scripts"
-  cp ./go_*  install_package
-  cp .env  install_package
-  cp gen_config.py  install_package
-  cp *.cfg  install_package
-  cp license.txt  install_package
-
-  # Final package
-  echo "Make final Zip... Have a tea"
-  zip -r -D mon_premier_ctf_install.zip install_package/
-}
-
-if [ $BUILDPACKAGE == 1 ]; then
-ctf_build_package
-fi
-
-
-#############################################################################
-#
-# Install standalone package
-#
-
-ctf_install_package() {
-  echo "=== Install Package ==="
-
-  DOCKER_IMAGES=$(ls install_package/docker_images/)
-  IMG_COUNT=$(echo $DOCKER_IMAGES| wc -w)
-  #echo "Images [$DOCKER_IMAGES]"
-
-
-  # Package docker images
-  IMG_INDEX=0
-  # -9 takes a very very long time
-  for IMG in $DOCKER_IMAGES; do
-    ((IMG_INDEX++))
-    echo "Packaging ($IMG_INDEX/$IMG_COUNT) [$IMG ]"
-    docker load  install_package/docker_images/$IMG.tar
-    done
-  
-  # Package ctf-xxx
-  CTF_CHALL_LIST=$(ls install_package/challenges/)
-  CHALL_COUNT=$(echo $CTF_CHALL_LIST| wc -w)
-  CHALL_INDEX=0
-  for CHALL in $CTF_CHALL_LIST; do
-    ((CHALL_INDEX++))
-    echo "Unzipping Challenges ($CHALL_INDEX/$CHALL_COUNT) [$CHALL ]"
-    unzip install_package/challenges/$CHALL.tar 
-  done
-
-  # Package web_server
-  echo "Packaging Web Server"
-  tar -cf install_package/webserver.tar 
-
-  # Package tools
-  echo "Packaging Tools"
-  tar -cf install_package/tools.tar 
-
-  # Final package
-  echo "Ready to go"
-  echo "./go_first_install_webserver_run web_server -n -c"
-  
-}
-
-if [ $INSTALLPACKAGES == 1 ]; then
-ctf_install_package
-fi
-
-
-
-#############################################################################
-#
-# Start traefik, web_server, challenge_box_provider, shared challenges
-#
-
-ctf_start() {
-#
-# Start traefik
-#
-if [ $TRAEFIK_SELF_SIGNED_CERTS == 1 ]; then
-cd web_server/traefik
 docker-compose up -d
 cd - > /dev/null
 fi
@@ -620,6 +413,7 @@ fi
 # Start web_server
 #
 cd web_server
+docker-compose build
 docker-compose up -d
 cd - > /dev/null
 
@@ -634,25 +428,23 @@ docker-compose up -d
 cd - > /dev/null
 
 
-# Start shared challenges
+# Start static challenges
 # 
-#cd ctf-sqli
-#docker-compose up -d
-#cd - > /dev/null
-#cd ctf-passwd
-#docker-compose up -d
-#cd - > /dev/null
-for CHALL in $CTF_CHALL_LIST; do
-  if [ -f "$CHALL/challenge_start.sh" ]; then
-    printf "Running ${CHALL}/challenge_start.sh"
-    cd $chall
-    . ./.env
-    $CHALL/challenge_start.sh
-    cd - > /dev/null
-  fi
+cd ctf-sqli
+docker-compose up -d
+cd - > /dev/null
+cd ctf-passwd
+docker-compose up -d
+cd - > /dev/null
 
-done
-
+#
+# Print config overall duration
+#
+echo
+echo `date`
+echo
+TIME_END=$(date +%s);
+echo $((TIME_END-TIME_START)) | awk '{print "Configuration réalisée en "int($1/60)" minutes "int($1%60)" secondes"}'
 
 #
 # Logs
@@ -670,23 +462,7 @@ echo ""
 echo ""
 echo "compte admin   : $CTF_ADMIN_ACCOUNT"
 echo "password admin : $CTF_ADMIN_PASSWORD"
-}
-
-if [ ! $NORUN == 1 ]; then
-ctf_install_package
-fi
-
-
-#
-# Print overall duration
-#
-echo
-echo `date`
-echo
-TIME_END=$(date +%s);
-echo $((TIME_END-TIME_START)) | awk '{print "Done in "int($1/60)" minutes "int($1%60)" secondes"}'
 
 }
-
 
 ctf_install 2>&1 | tee ./install.log

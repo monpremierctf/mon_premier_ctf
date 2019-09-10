@@ -1,0 +1,61 @@
+#!/bin/bash
+
+#
+# Usage
+# 
+# ./go_gen_conf 11.0.0.11
+#
+if [ $# -lt 1 ]; then
+    echo "Usage: $0 [IP Server]"
+    exit 0;
+fi
+
+#
+# Extract default config   
+#
+echo "Extracting default config"
+if [ -d ctfd_config/tmp ]; then
+    rm -R ctfd_config/tmp
+fi
+mkdir ctfd_config/tmp
+unzip -q -d ctfd_config/tmp ctfd_config/empty_conf.zip
+
+#
+# Generate CTFd admin password
+#
+
+
+
+#
+# Generate config from challenge directories
+#
+echo "Generating config"
+python ./gen_config.py
+
+
+
+#
+# Copy json files to web server
+#
+echo "Copying files to web server"
+cp -R ./ctfd_config/tmp/* web_server/www_site/yoloctf/
+chmod -R a+r web_server/www_site/yoloctf/
+
+
+#
+# Update IPSERVER in challenge descriptions
+#
+echo "Replacing IPSERVER by $1"
+sed -i "s/IPSERVER/$1/g" ./ctfd_config/tmp/*/*.json 
+
+
+#
+# Rebuild zip
+# 
+#mv $1 $1.sav
+# zip must not contain dir entries (-D option)
+cd ./ctfd_config/tmp
+zip -r -D ../../myconfig.zip ./*
+cd -
+rm -Rf ctfd_config/tmp
+echo "myconfig.zip generated for ctfd"
