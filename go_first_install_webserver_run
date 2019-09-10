@@ -673,7 +673,7 @@ echo "password admin : $CTF_ADMIN_PASSWORD"
 }
 
 if [ ! $NORUN == 1 ]; then
-ctf_install_package
+ctf_start
 fi
 
 

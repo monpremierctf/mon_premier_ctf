@@ -29,7 +29,7 @@ ctfd_config/db
 ctfd_config/uploads
 install.log
 install_package
-
+*.zip
 
 
 
