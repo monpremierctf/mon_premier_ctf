@@ -455,7 +455,7 @@ then
   ./go_gen_certs
   cd - > /dev/null
 else
-  if [ ! -f web_server/traefik_acme/acme.json]
+  if [ ! -f web_server/traefik_acme/acme.json];
   then
     cp web_server/traefik_acme/acme.json.default web_server/traefik_acme/acme.json
   fi
@@ -465,7 +465,7 @@ fi
 #
 # Build traefik
 #
-if [ $TRAEFIK_SELF_SIGNED_CERTS == 1 ] 
+if [ $TRAEFIK_SELF_SIGNED_CERTS == 1 ]; 
 then
 cd web_server/traefik
 docker-compose build
