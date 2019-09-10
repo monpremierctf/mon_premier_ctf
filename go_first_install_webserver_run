@@ -646,7 +646,7 @@ for CHALL in $CTF_CHALL_LIST; do
   if [ -f "$CHALL/challenge_start.sh" ]; then
     printf "Running ${CHALL}/challenge_start.sh\n"
     cd $CHALL
-    . .env
+    #. .env
     ./challenge_start.sh
     cd - > /dev/null
   fi
