@@ -554,9 +554,9 @@ fi
 #
 
 ctf_install_package() {
-  echo "=== Install Package ==="
+  printf "\n=== Install Package ==="
 
-  DOCKER_IMAGES=$(ls install_package/docker_images/)
+  DOCKER_IMAGES=$(ls docker_images/)
   IMG_COUNT=$(echo $DOCKER_IMAGES| wc -w)
   #echo "Images [$DOCKER_IMAGES]"
 
@@ -566,27 +566,27 @@ ctf_install_package() {
   # -9 takes a very very long time
   for IMG in $DOCKER_IMAGES; do
     ((IMG_INDEX++))
-    echo "Packaging ($IMG_INDEX/$IMG_COUNT) [$IMG ]"
-    docker load  install_package/docker_images/$IMG.tar
+    echo "Docker loading ($IMG_INDEX/$IMG_COUNT) [$IMG ]"
+    docker load -i docker_images/$IMG
     done
   
   # Package ctf-xxx
-  CTF_CHALL_LIST=$(ls install_package/challenges/)
+  CTF_CHALL_LIST=$(ls challenges/)
   CHALL_COUNT=$(echo $CTF_CHALL_LIST| wc -w)
   CHALL_INDEX=0
   for CHALL in $CTF_CHALL_LIST; do
     ((CHALL_INDEX++))
-    echo "Unzipping Challenges ($CHALL_INDEX/$CHALL_COUNT) [$CHALL ]"
-    unzip install_package/challenges/$CHALL.tar 
+    echo "Untar Challenges ($CHALL_INDEX/$CHALL_COUNT) [$CHALL ]"
+    tar -xf challenges/$CHALL
   done
 
   # Package web_server
-  echo "Packaging Web Server"
-  tar -cf install_package/webserver.tar 
+  echo "Untar Web Server"
+  tar -xf webserver.tar 
 
   # Package tools
-  echo "Packaging Tools"
-  tar -cf install_package/tools.tar 
+  echo "Untar Tools"
+  tar -xf tools.tar 
 
   # Final package
   echo "Ready to go"

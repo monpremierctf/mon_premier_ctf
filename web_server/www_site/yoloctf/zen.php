@@ -103,12 +103,22 @@
         include "ctf_sql.php";
 		$query = "DELETE FROM flags;";
 		if ($result = $mysqli->query($query)) {
-			$result->close();
+			
 		}
 		$mysqli->close();
 
     }
 
+    function clearUsers(){
+        include "ctf_sql.php";
+        clearFlags();
+		$query = "DELETE FROM users  where login!='$admin';";
+		if ($result = $mysqli->query($query)) {
+			
+		}
+		$mysqli->close();
+
+    }
 
     function dumpUserContainersList($cont){
         include "ctf_sql.php";
@@ -182,7 +192,7 @@
             echo "</br>".$json;
             
             echo "<h4>BDD</h4>";
-            print '<a href="zen.php?clearFlags=1" ><pre class="ctf-menu-color">[ClearFlags]</pre></a> ';
+            print '<a href="zen.php?clearFlags" ><pre class="ctf-menu-color">[ClearFlags]</pre></a> ';
 
 
         } else {
