@@ -542,6 +542,10 @@ ctf_build_package() {
   cp gen_config.py  $INSTALL_PACKAGE_NAME
   cp *.cfg  $INSTALL_PACKAGE_NAME
   cp license.txt  $INSTALL_PACKAGE_NAME
+  cp ctf_install  $INSTALL_PACKAGE_NAME
+  cp ctf_run  $INSTALL_PACKAGE_NAME
+
+
 
   # Final package
   echo "Make final Zip... Have a tea"

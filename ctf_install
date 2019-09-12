@@ -1,0 +1,2 @@
+./go_install_all
+./go_first_install_webserver_run -y -n -c -x -r
