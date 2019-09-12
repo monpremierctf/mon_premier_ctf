@@ -23,7 +23,7 @@ CTF_CHALL_LIST=''
 # Usage
 #
 usage () {
-  echo "Usage: $0 [-h] [-y] [-n]" 1>&2; 
+  echo "Usage: $0 [options]" 1>&2; 
   echo "[-h] : this help" 1>&2; 
   echo "[-y] : Yes to all" 1>&2; 
   echo "[-n] : No rebuild" 1>&2; 
@@ -381,6 +381,13 @@ fi
 #
 # Build Docker images & networks
 #
+
+#
+# Create docker netkorks
+# 
+docker network create webserver_webLAN
+
+
 ctf_build_all() {
   #
 # Build challenge-box-provider
@@ -389,10 +396,7 @@ ctf_build_all() {
 #docker build -t challenge-box-provider .
 #cd - > /dev/null
 
-#
-# Create docker netkorks
-# 
-docker network create webserver_webLAN
+
 
 
 #
@@ -493,13 +497,14 @@ fi
 ctf_build_package() {
   echo "=== Building Install Package ==="
 
+  INSTALL_PACKAGE_NAME=mon_premier_ctf
   DOCKER_IMAGES=$(docker images | grep -v '<none>' | awk '{ print $1 ":" $2 }' | grep -v REPOSITORY)
   IMG_COUNT=$(echo $DOCKER_IMAGES| wc -w)
   #echo "Images [$DOCKER_IMAGES]"
 
   # Create Install dir
-  mkdir -p install_package/docker_images
-  mkdir -p install_package/challenges
+  mkdir -p $INSTALL_PACKAGE_NAME/docker_images
+  mkdir -p $INSTALL_PACKAGE_NAME/challenges
 
   # Package docker images
   IMG_INDEX=0
@@ -509,7 +514,7 @@ ctf_build_package() {
   for IMG in $DOCKER_IMAGES; do
     ((IMG_INDEX++))
     echo "Packaging ($IMG_INDEX/$IMG_COUNT) [$IMG ]"
-    docker save $IMG > install_package/docker_images/$IMG.tar
+    docker save $IMG > $INSTALL_PACKAGE_NAME/docker_images/$IMG.tar
     #gzip $COMPRESSION_LEVEL install_package/$IMG.tar
   done
   
@@ -519,28 +524,28 @@ ctf_build_package() {
   for CHALL in $CTF_CHALL_LIST; do
     ((CHALL_INDEX++))
     echo "Packaging Challenges ($CHALL_INDEX/$CHALL_COUNT) [$CHALL ]"
-    tar -cf install_package/challenges/$CHALL.tar $CHALL
+    tar -cf $INSTALL_PACKAGE_NAME/challenges/$CHALL.tar $CHALL
   done
 
   # Package web_server
   echo "Packaging Web Server"
-  tar -cf install_package/webserver.tar web_server
+  tar -cf $INSTALL_PACKAGE_NAME/webserver.tar web_server
 
   # Package tools
   echo "Packaging Tools"
-  tar -cf install_package/tools.tar tools
+  tar -cf $INSTALL_PACKAGE_NAME/tools.tar tools
 
   # Package scripts
   echo "Packaging Scripts"
-  cp ./go_*  install_package
-  cp .env  install_package
-  cp gen_config.py  install_package
-  cp *.cfg  install_package
-  cp license.txt  install_package
+  cp ./go_*  $INSTALL_PACKAGE_NAME
+  cp .env  $INSTALL_PACKAGE_NAME
+  cp gen_config.py  $INSTALL_PACKAGE_NAME
+  cp *.cfg  $INSTALL_PACKAGE_NAME
+  cp license.txt  $INSTALL_PACKAGE_NAME
 
   # Final package
   echo "Make final Zip... Have a tea"
-  zip -r -D mon_premier_ctf_install.zip install_package/
+  zip -r -D mon_premier_ctf_install.zip $INSTALL_PACKAGE_NAME/
 }
 
 if [ $BUILDPACKAGE == 1 ]; then
@@ -571,14 +576,17 @@ ctf_install_package() {
     done
   
   # Package ctf-xxx
-  CTF_CHALL_LIST=$(ls challenges/)
-  CHALL_COUNT=$(echo $CTF_CHALL_LIST| wc -w)
+  CTF_CHALLTAR_LIST=$(ls challenges/)
+  CHALL_COUNT=$(echo $CTF_CHALLTAR_LIST| wc -w)
   CHALL_INDEX=0
-  for CHALL in $CTF_CHALL_LIST; do
+  for CHALL in $CTF_CHALLTAR_LIST; do
     ((CHALL_INDEX++))
     echo "Untar Challenges ($CHALL_INDEX/$CHALL_COUNT) [$CHALL ]"
     tar -xf challenges/$CHALL
   done
+  
+  # Get challenges list
+  CTF_CHALL_LIST=$(sed 's/#.*$//' challenges_list.cfg | grep 'ctf-')
 
   # Package web_server
   echo "Untar Web Server"
@@ -665,7 +673,7 @@ echo "S'il n'y a pas eu de message d'erreur, vous pouvez à présent vous connec
 echo "http://localhost/yoloctf/"
 echo ""
 
-. ./web_server/.env
+. ./web_server/.env 2>/dev/null
 echo ""
 echo "compte admin   : $CTF_ADMIN_ACCOUNT"
 echo "password admin : $CTF_ADMIN_PASSWORD"
