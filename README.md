@@ -13,6 +13,26 @@ Un jeu de slide à destination des participants est disponible en https://github
 Un serveur de test est disponible sur http://yoloctf.org. Vous pouvez vous créer un compte avec le code 'yolo'. Il est régulièrement effaçé et réinstallé. La durée de vie d'un profil est de 30h... Idéal pour un atelier de 2h qui déborde un peu. Ensuite le terminal ne se lance plus. Il faudra recréer un profil.
 </br>
 
+## Installation dans une VM, pour un CTF sur le LAN
+
+
+Télécharger https://yoloctf.org/yoloctf/iso/yoloctf.ova
+
+Il fait 4,4G. En fonction de votre liaison adsl/fibre ça peut prendre du temps.
+
+Si nécessaire installer Virtualbox : https://www.virtualbox.org/
+
+Lancer VirtualBox.
+
+[fichier/Importer un appareil virtuel]
+Selectionnez le fichier yoloctf.ova, faite [Suivant]
+cliquez sur Reinitialiser l'adresse MAC.
+Puis [Importer]
+
+
+
+
+
 ## Prerequis
 
 Prévoir une VM Ubuntu 18 vierge avec 3G de mémoire.</br>
