@@ -264,6 +264,7 @@ if [ $(id -u) -ne 0 ]; then
         echo "Utilisez la commande suivant pour ajouter l'utilisateur courant au groupe Docker"
         echo "Ensuite deconnectez et reconnectez vous. Personnellement, je reboote le serveur..."
         echo "sudo gpasswd -a \$USER docker"
+        echo "newgrp docker"
         exit;
     fi
 else
@@ -385,7 +386,7 @@ fi
 #
 # Create docker netkorks
 # 
-docker network create webserver_webLAN
+docker network create webserver_webLAN   2>/dev/null
 
 
 ctf_build_all() {
@@ -542,8 +543,8 @@ ctf_build_package() {
   cp gen_config.py  $INSTALL_PACKAGE_NAME
   cp *.cfg  $INSTALL_PACKAGE_NAME
   cp license.txt  $INSTALL_PACKAGE_NAME
-  cp ctf_install  $INSTALL_PACKAGE_NAME
-  cp ctf_run  $INSTALL_PACKAGE_NAME
+  cp ctf_*  $INSTALL_PACKAGE_NAME
+  
 
 
 
@@ -563,7 +564,7 @@ fi
 #
 
 ctf_install_package() {
-  printf "\n=== Install Package ==="
+  printf "\n=== Install Package ===\n"
 
   DOCKER_IMAGES=$(ls docker_images/)
   IMG_COUNT=$(echo $DOCKER_IMAGES| wc -w)
@@ -602,7 +603,8 @@ ctf_install_package() {
 
   # Final package
   echo "Ready to go"
-  echo "./go_first_install_webserver_run web_server -n -c"
+  echo "./ctf_run"
+  echo ""
   
 }
 

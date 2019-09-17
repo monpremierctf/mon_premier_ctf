@@ -1,2 +1,3 @@
-./go_install_all
+if  ./go_install_tools; then
 ./go_first_install_webserver_run -y -n -c -x -r
+fi
