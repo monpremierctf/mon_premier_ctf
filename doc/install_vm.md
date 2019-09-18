@@ -11,27 +11,27 @@ Si nécessaire installer Virtualbox : https://www.virtualbox.org/
 
 Lancer VirtualBox.
 
-![](doc/screenshot/vbox_importer.jpg)
+![](screenshot/vbox_importer.jpg)
 
 Dans Virtualbox faites: [fichier/Importer un appareil virtuel]
 Selectionnez le fichier yoloctf.ova, faite [Suivant]
 
-![](doc/screenshot/vbox_param.jpg)
+![](screenshot/vbox_param.jpg)
 
 Cliquez sur Reinitialiser l'adresse MAC.
 Puis [Importer]
 
-![](doc/screenshot/vbox_importation.jpg)
+![](screenshot/vbox_importation.jpg)
 
 Par défaut, la carte réseau est en mode bridge, et va se faire attribuer une adresse IP par votre routeur.
 
 #### Lancer la VM et obtenir l'adresse IP
 
 Démarrer la VM.
-![](doc/screenshot/VM_ready.jpg)
+![](screenshot/VM_ready.jpg)
 
 Connectez vous avec le compte 'yoloctf' et le mot de passe 'yoloctf'.
-![](doc/screenshot/VM_logged.jpg)
+![](screenshot/VM_logged.jpg)
 
 Si vous n'êtes pas tout seul sur le réseau, changez le mot de passe:
 ```
@@ -42,7 +42,7 @@ Identifiez l'adresse IP de votre serveur
 ```
 ifconfig | grep enp -A 1
 ```
-![](doc/screenshot/VM_ip.jpg)
+![](screenshot/VM_ip.jpg)
 
 Ici c'est 12.0.0.11
 
@@ -79,7 +79,7 @@ Démarrez le serveur
 ```
 ./ctf_run
 ```
-![](doc/screenshot/VM_running.jpg)
+![](screenshot/VM_running.jpg)
 
 Récupérez les identifiants du compte de l'administrateur du CTF:
 - admin
