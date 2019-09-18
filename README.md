@@ -128,7 +128,7 @@ Sur un autre navigateur (chrome, explorer..) ou si vous avez un antivirus instal
 
 ## Monitoring du serveur et de ses containers
 
-Une fois que votre serveur tourne, c'est une bonne idée de surveiller ce qui se passe et vérifier que l'on a de la mémoire, du CPU et de la place sur le disque.
+Une fois que votre serveur tourne, c'est une bonne idée de surveiller ce qui se passe et vérifier la mémoire libre, la charge du CPU et la place restante sur le disque.
 
 #### Liste des containers
 

@@ -3,5 +3,11 @@
 #
 
 
+# Next
+
+- Docker logs : rolling logs
+- Docker disk usage => Watchdog & kill
+
+
 
 
