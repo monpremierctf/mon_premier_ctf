@@ -25,6 +25,8 @@ Un serveur de test est disponible sur http://yoloctf.org. Vous pouvez vous crée
 
 ### Pour tester tranquillement sur mon PC, ou organiser un CTF sur mon LAN : Je télécharge une VM prète à l'emploi
 
+#### Télécharger la VM
+
 
 Télécharger https://yoloctf.org/yoloctf/iso/yoloctf.ova
 
@@ -34,14 +36,147 @@ Si nécessaire installer Virtualbox : https://www.virtualbox.org/
 
 Lancer VirtualBox.
 
+![](doc/screenshot/vbox_importer.jpg)
+
 Dans Virtualbox faites: [fichier/Importer un appareil virtuel]
 Selectionnez le fichier yoloctf.ova, faite [Suivant]
-cliquez sur Reinitialiser l'adresse MAC.
+
+![](doc/screenshot/vbox_param.jpg)
+
+Cliquez sur Reinitialiser l'adresse MAC.
 Puis [Importer]
 
-Par défaut, la carte réseau est en mode bridge, et va aller chercher une adresse sur votre routeur.
+![](doc/screenshot/vbox_importation.jpg)
+
+Par défaut, la carte réseau est en mode bridge, et va se faire attribuer une adresse IP par votre routeur.
+
+#### Lancer la VM et obtenir l'adresse IP
+
+Démarrer la VM.
+![](doc/screenshot/VM_ready.jpg)
+
+Connectez vous avec le compte 'yoloctf' et le mot de passe 'yoloctf'.
+![](doc/screenshot/VM_logged.jpg)
+
+Si vous n'êtes pas tout seul sur le réseau, changez le mot de passe:
+```
+# passwd
+```
+
+Identifiez l'adresse IP de votre serveur
+```
+ifconfig | grep enp -A 1
+```
+![](doc/screenshot/VM_ip.jpg)
+
+Ici c'est 12.0.0.11
+
+### Personnaliser un peu la config
+
+Vous pouvez personnaliser votre serveur Web en modifiant le fichier:
+```
+web_server/.env
+```
+
+#### Code d'invitation 
+
+Vous pouvez définir un code d'inviation pour filtrer les participants en enlevant le # en début de ligne.
+
+```
+# CTF_REGISTER_CODE=YOLO
+==>
+CTF_REGISTER_CODE=MonCode
+```
 
 
+#### Titre perso
+Vous pouvez donner un titre peso à votre CTF en enlevant le # en début de ligne.
+
+```
+#CTF_SUBTITLE=Mon 2nd CTF
+==>
+CTF_SUBTITLE=Montargis CTF
+```
+
+### Lancer le serveur
+
+Démarrez le serveur
+```
+./ctf_run
+```
+![](doc/screenshot/VM_running.jpg)
+
+Vous récupérer les identifiants du compte de l'administrateur du CTF:
+- admin
+- lvlwxnjygeycmias
+
+
+Note : le serveur ssh étant activé, si vous connaissez l'IP de votre box, vous pouvez faire toutes ces manip à distance.
+
+
+
+### Monitorer le serveur et les containers
+
+#### Liste des containers
+
+![](doc/screenshot/VM_docker.jpg)
+
+```
+docker ps --format '{{.Names}}'
+```
+
+#### Consommation CPU e tmémoire par les containers
+
+![](doc/screenshot/VM_stats.jpg)
+
+```
+docker stats --format "table {{.Container}}\t{{.CPUPerc}}\t{{.MemUsage}}"
+```
+
+#### Analyse de logs
+
+```
+# docker logs challenge-box-provider
+```
+
+#### Monitoring global en interface web sur http://localhost:8888
+
+````
+chmod a+x tools/monitor.sh
+tools/monitor.sh
+````
+
+
+
+### Accéder au site Web du CTF
+
+Vous pouvez vous connecter avec votre navigateur Web : 
+```
+http://IP_DU_SERVEUR/
+```
+
+La connection en HTTP (tout les messages sont en clairs) va être redirigée vers une connection en HTTPS (les messages sont chiffrés et le serveur est authentifié).
+Vous allez avoir une alerte de sécurité. C'est normal.
+
+![](doc/screenshot/site_alerte_firefox.png)
+
+Le serveur Web a généré ses propres certificats pour utiliser une liaison HTTPS (HTTP Sécurisée). L'alerte vous prévient qu'aucune autorité de certification 'officielle' ne valide les clefs de sécurité de ce site, et qu'il peut donc y a donc un risque.
+
+![](doc/screenshot/site_alerte_firefox_accept.png)
+
+Il faut ajouter une exception  pour accepter le certificat non signé qui est présenté par le site.
+Cliquez sur [ Accepter le risque et poursuivre]
+
+Sur un autre navigateur (chrome, explorer..) ou si vous avez un antivirus installé le message peut être différent. Mais le principe reste le même. Il faut accepter de prendre le risque de reconnaitre le certificat autosigné du site.
+
+
+
+![](doc/screenshot/site_alerte_bitdefender.jpg)
+
+
+
+
+![](doc/new_install.md)
 
 
 
@@ -52,13 +187,6 @@ Par défaut, la carte réseau est en mode bridge, et va aller chercher une adres
 
 ## Administrer le CTF
 
-### Personnaliser la config
-
-
-### Lancer le serveur
-
-
-### Monitorer le serveur
 
 
 ## Participer au CTF
@@ -110,6 +238,8 @@ Eventuellement installer wget
 $ sudo apt-get install wget
 ```
 </br>
+
+
 
 ## Démarrage rapide 
 
@@ -192,25 +322,7 @@ Lancer un navigateur sur http://localhost:/yoloctf/
 
 # Monitoring du serveur et des containers
 
-Stats sur les dockers
-````
-docker stats
-````
 
-Log de ctf-xxx
-```
-cd ctf-xxx
-docker-compose logs
-````
-
-Monitoring global en interface web sur http://localhost:8888
-````
-chmod a+x tools/monitor.sh
-tools/monitor.sh
-````
-## Installation d'un serveur Yolo Ctf
-
-docker stats --format "table {{.Container}}\t{{.CPUPerc}}\t{{.MemUsage}}" 
 
 </br>
 
