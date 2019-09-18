@@ -5,7 +5,7 @@
 
 Télécharger https://yoloctf.org/yoloctf/iso/yoloctf.ova
 
-Il fait 4,4G. En fonction de votre liaison adsl/fibre ça peut prendre du temps.
+Le fichier fait 4,4G. En fonction de votre liaison adsl/fibre ça peut prendre du temps.
 
 Si nécessaire installer Virtualbox : https://www.virtualbox.org/
 
