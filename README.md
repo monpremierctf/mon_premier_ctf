@@ -2,18 +2,28 @@
 
 
 
-Si vous désirez organiser un Capture The flag à destination de grands débutants, ce repo est pour vous.
+Vous désirez organiser un Capture The flag à destination de grands débutants ? Ce repo est pour vous !
+
 Vous trouverez ici, une série de challenges destinés à permettre aux participants de commencer à se constituer la trousse à outil minimale pour participer à un CTF.
+
 
 </br>
 Un jeu de slide à destination des participants est disponible en https://github.com/monpremierctf/mon_premier_ctf/blob/master/doc/Introduction_au_CTF.pdf
 </br>
 
+
+## Pour découvrir sans contrainte : http://yoloctf.org
+
 </br>
 Un serveur de test est disponible sur http://yoloctf.org. Vous pouvez vous créer un compte avec le code 'yolo'. Il est régulièrement effaçé et réinstallé. La durée de vie d'un profil est de 30h... Idéal pour un atelier de 2h qui déborde un peu. Ensuite le terminal ne se lance plus. Il faudra recréer un profil.
 </br>
 
-## Installation dans une VM, pour un CTF sur le LAN
+
+
+## Installation d'un serveur Yolo Ctf
+
+
+### Pour tester tranquillement sur mon PC, ou organiser un CTF sur mon LAN : Je télécharge une VM prète à l'emploi
 
 
 Télécharger https://yoloctf.org/yoloctf/iso/yoloctf.ova
@@ -24,14 +34,38 @@ Si nécessaire installer Virtualbox : https://www.virtualbox.org/
 
 Lancer VirtualBox.
 
-[fichier/Importer un appareil virtuel]
+Dans Virtualbox faites: [fichier/Importer un appareil virtuel]
 Selectionnez le fichier yoloctf.ova, faite [Suivant]
 cliquez sur Reinitialiser l'adresse MAC.
 Puis [Importer]
 
+Par défaut, la carte réseau est en mode bridge, et va aller chercher une adresse sur votre routeur.
 
 
 
+
+
+
+
+### Pour organiser un CTF sur Internet : Je fais une installation sur un Ubuntu Server vierge chez Amazon ou OVH
+
+
+## Administrer le CTF
+
+### Personnaliser la config
+
+
+### Lancer le serveur
+
+
+### Monitorer le serveur
+
+
+## Participer au CTF
+
+
+## Créer de nouveaux challenges
+## 
 
 ## Prerequis
 
@@ -174,6 +208,9 @@ Monitoring global en interface web sur http://localhost:8888
 chmod a+x tools/monitor.sh
 tools/monitor.sh
 ````
+## Installation d'un serveur Yolo Ctf
+
+docker stats --format "table {{.Container}}\t{{.CPUPerc}}\t{{.MemUsage}}" 
 
 </br>
 
