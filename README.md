@@ -35,7 +35,7 @@ https://yoloctf.org/yoloctf/iso/yoloctf.ova
 
 Pour tester tranquillement sur mon PC, ou organiser un CTF sur mon LAN : Je télécharge une VM prète à l'emploi
 
-[==> Installation de la VM](doc/install_vm.md)
+[==> Installation pas à pas de la VM](doc/install_vm.md)
 
 
 ### Install Package
