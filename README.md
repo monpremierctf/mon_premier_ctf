@@ -12,14 +12,49 @@ Un jeu de slide à destination des participants est disponible en https://github
 
 </br>
 
-Vous trouverez dans ce document des instructions détaillées pour :
+Vous trouverez dans ce document des instructions détaillées sur :
 
-- [Installer et faire tourner le serveur](#Installer-et-démarrer-le-serveur)
-- [Participer au CTF](#Participer-au-CTF)
+- [Les fonctionnalités de la plateforme](#Fonctionnalités)
+- [Installer et lancer le serveur](#Installer-et-démarrer-le-serveur)
+- [Se connecter au CTF](#Participer-au-CTF)
 - [Administrer le serveur avec l'interface web](#Administrer-le-CTF)
 - [Monitorer le serveur dans la console](#Monitorer)
 - [Customiser le CTF en choisissant/ajoutant des challenges](#Customisation)
 
+
+
+</br>
+</br>
+
+# Fonctionnalités
+
+Tous les challenges sont accessibles à travers le navigateur Web.
+Il n'y a aucune installation à faire sur le poste des utilisateurs.
+
+
+## Challenges textuels
+
+![](doc/screenshot/challenge_text.png)
+
+
+## Utilisation d'un terminal 'Kali like' dans le browser
+
+![](doc/screenshot/challenge_xterm.png)
+
+
+## Lancement à la demande de serveurs dédiés
+
+![](doc/screenshot/challenge_server.png)
+
+
+## Serveur de type ssh ou Web
+
+![](doc/screenshot/challenge_sqli.png)
+
+
+## Editeur et Execution de code python
+
+![](doc/screenshot/challenge_python.png)
 
 
 </br>
@@ -33,8 +68,10 @@ Vous trouverez dans ce document des instructions détaillées pour :
 - Installation de la VM pré-configurée
 - Installation de zéro sur un serveur ubuntu
 
+</br>
+
 ## Methode 1: Zero install  
-(#install)
+
 
 ```
 http://yoloctf.org
@@ -116,12 +153,66 @@ Sur un autre navigateur (chrome, explorer..) ou si vous avez un antivirus instal
 
 
 
+</br>
+</br>
+</br>
 
 
 
 # Administrer le CTF
 
+## Se logguer avec le compte Admin
 
+![](doc/screenshot/localhost_login_admin.png)
+
+Le mot de passe du compte admin est donné dans le terminal:
+- admin
+- lvlwxnjygeycmias
+
+</br>
+
+## Changer le mot de passe du compte Admin
+
+Le mot de passe étant prédéfini sur la VM, il est nécessaire de le changer :
+![](doc/screenshot/localhost_profile_tab.png)
+
+Allez sur l'onglet 'Mon Compte' dans la table des matières en bas à gauche.
+Définissez un nouveau mot de passe et cliquez [Change].
+
+</br>
+
+
+## Monitoring light
+
+![](doc/screenshot/localhost_admin.png)
+
+L'onglet [Admin] en bas à gauche permet de voir :
+- Le nombre de sessions actives
+- Le nombre d'utilisateurs
+- Les flags soumis par les utilisateurs
+- Les containers démarrés par les utilisateurs
+
+</br>
+
+
+## Reseter les Flags
+
+![](doc/screenshot/localhost_admin.png)
+
+Dès l'instant ou le serveur est démarré, les participants peuvent commencer à valider les flags.
+Vous pouvez aussi vouloir tester un peu. Le lien [ClearFlags] en bas de page permet d'effacer tous les flags validés.
+
+</br>
+
+
+## Consultez les feedbacks
+
+L'onglet Feedback est à utiliser pour obtenir un retour des utilisateurs en fin de CTF, et permet de détailler un problème rencontré sur le site ou un challenge.
+
+
+</br>
+</br>
+</br>
 
 
 # Monitorer
@@ -160,6 +251,7 @@ tools/monitor.sh
 ````
 
 
+</br>
 </br>
 
 # Customisation

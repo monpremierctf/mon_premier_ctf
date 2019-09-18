@@ -1,6 +1,7 @@
 
+# Installation de la VM 
 
-#### Télécharger la VM
+## Télécharger la VM
 
 
 Télécharger https://yoloctf.org/yoloctf/iso/yoloctf.ova
@@ -14,6 +15,7 @@ Lancer VirtualBox.
 ![](screenshot/vbox_importer.jpg)
 
 Dans Virtualbox faites: [fichier/Importer un appareil virtuel]
+
 Selectionnez le fichier yoloctf.ova, faite [Suivant]
 
 ![](screenshot/vbox_param.jpg)
@@ -25,7 +27,7 @@ Puis [Importer]
 
 Par défaut, la carte réseau est en mode bridge, et va se faire attribuer une adresse IP par votre routeur.
 
-#### Lancer la VM et obtenir l'adresse IP
+## Lancer la VM et obtenir l'adresse IP
 
 Démarrer la VM.
 ![](screenshot/VM_ready.jpg)
@@ -46,34 +48,36 @@ ifconfig | grep enp -A 1
 
 Ici c'est 12.0.0.11
 
-### Personnaliser un peu la config
+## Personnaliser un peu la config
 
 Vous pouvez personnaliser votre serveur Web en modifiant le fichier:
 ```
 web_server/.env
 ```
 
-#### Code d'invitation 
+### Code d'invitation 
 
 Vous pouvez définir un code d'invitation pour filtrer les participants en enlevant le # en début de ligne.
 
 ```
 # CTF_REGISTER_CODE=YOLO
-==>
+```
+```
 CTF_REGISTER_CODE=MonCode
 ```
 
 
-#### Titre perso
+### Titre perso
 Vous pouvez donner un titre perso à votre CTF en enlevant le # en début de ligne.
 
 ```
 #CTF_SUBTITLE=Mon 2nd CTF
-==>
+```
+```
 CTF_SUBTITLE=Montargis CTF
 ```
 
-### Lancer le serveur
+## Lancer le serveur
 
 Démarrez le serveur
 ```

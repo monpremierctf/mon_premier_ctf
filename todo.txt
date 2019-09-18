@@ -5,8 +5,10 @@
 
 # Next
 
-- Docker logs : rolling logs
-- Docker disk usage => Watchdog & kill
+- Docker : log rotate
+- Challenge_box_provider : Monitor containers disk usage & kill
+
+
 
 
 
