@@ -12,7 +12,11 @@ Un jeu de slide à destination des participants est disponible en https://github
 </br>
 
 
-## Pour découvrir sans contrainte : http://yoloctf.org
+## Pour découvrir sans contrainte 
+
+```
+http://yoloctf.org
+```
 
 </br>
 Un serveur de test est disponible sur http://yoloctf.org. Vous pouvez vous créer un compte avec le code 'yolo'. Il est régulièrement effaçé et réinstallé. La durée de vie d'un profil est de 30h... Idéal pour un atelier de 2h qui déborde un peu. Ensuite le terminal ne se lance plus. Il faudra recréer un profil.
@@ -23,95 +27,28 @@ Un serveur de test est disponible sur http://yoloctf.org. Vous pouvez vous crée
 ## Installation d'un serveur Yolo Ctf
 
 
-### Pour tester tranquillement sur mon PC, ou organiser un CTF sur mon LAN : Je télécharge une VM prète à l'emploi
-
-#### Télécharger la VM
-
-
-Télécharger https://yoloctf.org/yoloctf/iso/yoloctf.ova
-
-Il fait 4,4G. En fonction de votre liaison adsl/fibre ça peut prendre du temps.
-
-Si nécessaire installer Virtualbox : https://www.virtualbox.org/
-
-Lancer VirtualBox.
-
-![](doc/screenshot/vbox_importer.jpg)
-
-Dans Virtualbox faites: [fichier/Importer un appareil virtuel]
-Selectionnez le fichier yoloctf.ova, faite [Suivant]
-
-![](doc/screenshot/vbox_param.jpg)
-
-Cliquez sur Reinitialiser l'adresse MAC.
-Puis [Importer]
-
-![](doc/screenshot/vbox_importation.jpg)
-
-Par défaut, la carte réseau est en mode bridge, et va se faire attribuer une adresse IP par votre routeur.
-
-#### Lancer la VM et obtenir l'adresse IP
-
-Démarrer la VM.
-![](doc/screenshot/VM_ready.jpg)
-
-Connectez vous avec le compte 'yoloctf' et le mot de passe 'yoloctf'.
-![](doc/screenshot/VM_logged.jpg)
-
-Si vous n'êtes pas tout seul sur le réseau, changez le mot de passe:
-```
-# passwd
-```
-
-Identifiez l'adresse IP de votre serveur
-```
-ifconfig | grep enp -A 1
-```
-![](doc/screenshot/VM_ip.jpg)
-
-Ici c'est 12.0.0.11
-
-### Personnaliser un peu la config
-
-Vous pouvez personnaliser votre serveur Web en modifiant le fichier:
-```
-web_server/.env
-```
-
-#### Code d'invitation 
-
-Vous pouvez définir un code d'inviation pour filtrer les participants en enlevant le # en début de ligne.
+### VM
 
 ```
-# CTF_REGISTER_CODE=YOLO
-==>
-CTF_REGISTER_CODE=MonCode
+https://yoloctf.org/yoloctf/iso/yoloctf.ova
 ```
 
+Pour tester tranquillement sur mon PC, ou organiser un CTF sur mon LAN : Je télécharge une VM prète à l'emploi
 
-#### Titre perso
-Vous pouvez donner un titre peso à votre CTF en enlevant le # en début de ligne.
+[doc/install_vm.md](doc/install_vm.md)
+
+
+### Install Package
 
 ```
-#CTF_SUBTITLE=Mon 2nd CTF
-==>
-CTF_SUBTITLE=Montargis CTF
+https://yoloctf.org/yoloctf/iso/mon_premier_ctf_install.zip
 ```
 
-### Lancer le serveur
-
-Démarrez le serveur
-```
-./ctf_run
-```
-![](doc/screenshot/VM_running.jpg)
-
-Vous récupérer les identifiants du compte de l'administrateur du CTF:
-- admin
-- lvlwxnjygeycmias
+Pour organiser un CTF sur Internet, je fais une installation sur un Ubuntu Server vierge chez Amazon ou OVH
 
 
-Note : le serveur ssh étant activé, si vous connaissez l'IP de votre box, vous pouvez faire toutes ces manip à distance.
+[doc/install_ubuntu.md](doc/install_ubuntu.md)
+
 
 
 
@@ -125,7 +62,7 @@ Note : le serveur ssh étant activé, si vous connaissez l'IP de votre box, vous
 docker ps --format '{{.Names}}'
 ```
 
-#### Consommation CPU e tmémoire par les containers
+#### Consommation CPU et mémoire par les containers
 
 ![](doc/screenshot/VM_stats.jpg)
 
@@ -176,13 +113,11 @@ Sur un autre navigateur (chrome, explorer..) ou si vous avez un antivirus instal
 
 
 
-![](doc/new_install.md)
 
 
 
 
 
-### Pour organiser un CTF sur Internet : Je fais une installation sur un Ubuntu Server vierge chez Amazon ou OVH
 
 
 ## Administrer le CTF
