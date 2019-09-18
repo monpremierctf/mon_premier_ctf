@@ -35,7 +35,7 @@ https://yoloctf.org/yoloctf/iso/yoloctf.ova
 
 Pour tester tranquillement sur mon PC, ou organiser un CTF sur mon LAN : Je télécharge une VM prète à l'emploi
 
-[doc/install_vm.md](doc/install_vm.md)
+[==> Installation de la VM](doc/install_vm.md)
 
 
 ### Install Package
@@ -47,7 +47,8 @@ https://yoloctf.org/yoloctf/iso/mon_premier_ctf_install.zip
 Pour organiser un CTF sur Internet, je fais une installation sur un Ubuntu Server vierge chez Amazon ou OVH
 
 
-[doc/install_ubuntu.md](doc/install_ubuntu.md)
+[==> Installation sur un serveur ubuntu vierge](doc/install_ubuntu.md)
+
 
 
 
