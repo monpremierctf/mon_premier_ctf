@@ -15,6 +15,7 @@ NOCONFIG=0
 NOSYSTEMCHECK=0
 INSTALLPACKAGES=0
 NORUN=0
+FORCENEEDEDREBOOT=0
 TIME_START=$(date +%s);
 CTF_INSTALL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 CTF_CHALL_LIST=''
@@ -33,6 +34,7 @@ usage () {
   echo "[-s] : No check system" 1>&2; 
   echo "[-x] : Extract and load Docker images" 1>&2;
   echo "[-r] : No run" 1>&2;
+  echo "[-R] : Force neede Reboot" 1>&2;
   exit 1;
 }
 
@@ -91,6 +93,11 @@ case $i in
     shift # past argument=value
     ;;
 
+    -R)
+    echo "- Force needed Reboot"
+    FORCENEEDEDREBOOT=1
+    shift # past argument=value
+    ;;
 
     -h)
     usage
