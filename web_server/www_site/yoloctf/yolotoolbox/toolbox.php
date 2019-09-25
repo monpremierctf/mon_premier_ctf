@@ -76,15 +76,12 @@
 <!---- Header container ---->  
 <div class="container-fluid">
 
- 
- 
-
 <div class="jumbotron ctf-title text-center">
 <div class="row">
     
     <div class="col-md-4">
         <h1 class="row-md-4 ctf-title-size">YOLO CTF</h1>
-        <p><pre class='row-md-4 ctf-subtitle-size'> Documentation</pre></p>  
+        <p><pre class='row-md-4 ctf-subtitle-size'>Toolbox</pre></p>  
         <a href="/yoloctf/index.php"><pre class="row-md-4 text-left"><=== Back to CTF</pre></a>
     </div>
     
@@ -113,12 +110,20 @@
         return $ret;
     }
 
+    $menu = array(
+        array('id'=>'Intro', 'name'=> 'Intro', 'file'=> 'p_intro.md'),
+        array('id'=>'NetEnum', 'name'=> 'Net Enum', 'file'=> 'p_netenum.md'),
+        array('id'=>'Apps', 'name'=> 'Application', 'file'=> 'p_apps.md'),
+        array('id'=>'Shells', 'name'=> 'Reverse Shells', 'file'=> 'p_shells.md'),
+        array('id'=>'EscUx', 'name'=> 'Escalation Ux', 'file'=> 'p_esc_ux.md'),
+    );
 
     
-    $filename = "README.md";
-    if ($_GET['p']=="VM") { $filename = "install_vm.md"; }
-    if ($_GET['p']=="Ubuntu") { $filename = "install_ubuntu.md"; }
-    if ($_GET['p']=="New") { $filename = "create_new_challenges.md"; }
+    $filename = $menu[0]['file'];
+
+    foreach ($menu as $topic) {
+        if ($_GET['p']===$topic['id']) { $filename = $topic['file']; }
+    }
 
     $file = file_get_contents($filename);
     $string = pre_process_desc_for_md_doc($file);
@@ -133,31 +138,16 @@
 
         <div class="col-md-2 "> 
         <?php
-        print '<a href="install.php"><pre class="ctf-menu-color">Read Me</pre></a> ';
-        if ($filename === "README.md") {
-            foreach ($links as $id) {
-                print '<a href="#'.str_replace(" ", "-", $id).'"><pre class="ctf-submenu-color ctf-submenu-size">- '.$id.'</pre></a> ';
+
+        foreach ($menu as $topic) {
+            print '<a href="toolbox.php?p='.$topic['id'].'"><pre class="ctf-menu-color">'.$topic['name'].'</pre></a> ';
+            if ($filename === $topic['file']) {
+                foreach ($links as $id) {
+                    print '<a href="#'.str_replace(" ", "-", $id).'"><pre class="ctf-submenu-color ctf-submenu-size">- '.$id.'</pre></a> ';
+                }
             }
         }
 
-        print '<a href="install.php?p=VM"><pre class="ctf-menu-color">Install VM</pre></a> ';
-        if ($filename === "install_vm.md") {
-            foreach ($links as $id) {
-                print '<a href="#'.str_replace(" ", "-", $id).'"><pre class="ctf-submenu-color ctf-submenu-size">- '.$id.'</pre></a> ';
-            }
-        }
-        print '<a href="install.php?p=Ubuntu"><pre class="ctf-menu-color">Install Ubuntu Server</pre></a> ';
-        if ($filename === "install_ubuntu.md") {
-            foreach ($links as $id) {
-                print '<a href="#'.str_replace(" ", "-", $id).'"><pre class="ctf-submenu-color ctf-submenu-size">- '.$id.'</pre></a> ';
-            }
-        }
-        print '<a href="install.php?p=New"><pre class="ctf-menu-color">Nouveaux Challenges</pre></a> ';
-        if ($filename === "create_new_challenges.md") {
-            foreach ($links as $id) {
-                print '<a href="#'.str_replace(" ", "-", $id).'"><pre class="ctf-submenu-color ctf-submenu-size">- '.$id.'</pre></a> ';
-            }
-        }
 
         
         ?>
