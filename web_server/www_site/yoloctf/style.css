@@ -40,6 +40,14 @@ pre {
 .ctf-menu-color {
     color: rgb(94, 90, 16);
 }
+.ctf-submenu-color {
+    color: rgb(94, 90, 16);
+}
+.ctf-submenu-size {
+    font-size: 0.6rem;
+    overflow-x:hidden;
+    overflow-y:hidden;
+}
 
 .ctf-toc-backcolor {
     background-color: rgb(221, 216, 214);
@@ -69,11 +77,14 @@ pre {
 }
 
 h3 {
+    font-size: 1.2rem;
     margin-top: 2rem !important;
 }
 h4 {
+    font-size: 1.0rem;
     margin-top: 2rem !important;
 }
 h5 {
+    font-size: 0.5rem;
     margin-top: 2rem !important;
 }

@@ -8,8 +8,7 @@ Testé sur Ubuntu 18.04.01-desktop et Ubuntu 18.04.02-server.
 
 - Les ports HTTP, HTTPS, SSH sont ouverts.
 - L'utilisateur a les droits sudo.
-- S'il y a besoin d'un proxy, il est configuré pour 'apt-get'.
-
+- S'il y a besoin d un proxy, il est configuré pour 'apt-get'.
 
 
 ## Télécharger & dézipper le package d'install

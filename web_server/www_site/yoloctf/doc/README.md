@@ -1,16 +1,11 @@
 # Mon premier CTF
 
-
-
+.
+.
 Vous désirez organiser un Capture The flag à destination de grands débutants ? Ce repo est pour vous !
-
 Vous trouverez ici, une série de challenges destinés à permettre aux participants de commencer à se constituer la trousse à outil minimale pour participer à un CTF.
 
-
-</br>
-Un jeu de slide à destination des participants est disponible ici (introduction_au_CTF.pdf)[introduction_au_CTF.pdf]
-
-</br>
+Un jeu de slide à destination des participants est disponible ici [introduction_au_CTF.pdf](introduction_au_CTF.pdf)
 
 Vous trouverez dans ce document des instructions détaillées sur :
 
@@ -22,45 +17,43 @@ Vous trouverez dans ce document des instructions détaillées sur :
 - [Customiser le CTF en choisissant/ajoutant des challenges](#Customisation)
 
 
-
-</br>
-</br>
-
-# Fonctionnalités
+.
+## Fonctionnalités
 
 Tous les challenges sont accessibles à travers le navigateur Web.
 Il n'y a aucune installation à faire sur le poste des utilisateurs.
 
-
-## Challenges textuels
+.
+### Challenges textuels
 
 <img src="screenshot/challenge_text.png" width="50%" height="50%">
 
 
-
-## Utilisation d'un terminal 'Kali like' dans le browser
+.
+### Utilisation d'un terminal 'Kali like' dans le browser
 
 
 <img src="screenshot/challenge_xterm.png" width="50%" height="50%">
 
-## Lancement à la demande de serveurs dédiés
+.
+### Lancement à la demande de serveurs dédiés
 
 <img src="screenshot/challenge_server.png" width="50%" height="50%">
 
 
-
-## Serveur de type ssh ou Web
+.
+### Serveur de type ssh ou Web
 
 <img src="screenshot/challenge_sqli.png" width="50%" height="50%">
 
 
-
-## Editeur et Execution de code python
+.
+### Editeur et Execution de code python
 
 <img src="screenshot/challenge_python.png" width="50%" height="50%">
 
-
-# Installer et démarrer le serveur
+.
+## Installer et démarrer le serveur
 
 3 types d'installations sont possibles:
 
@@ -70,7 +63,7 @@ Il n'y a aucune installation à faire sur le poste des utilisateurs.
 
 </br>
 
-## Methode 1: Zero install  
+### Methode 1: Zero install  
 
 
 ```
@@ -82,7 +75,7 @@ Un serveur de test est disponible sur http://yoloctf.org. Vous pouvez vous crée
 
 </br>
 
-## Methode 2: Installation de la VM YOLO CTF
+### Methode 2: Installation de la VM YOLO CTF
 
 ```
 https://yoloctf.org/yoloctf/iso/yoloctf.ova
@@ -94,7 +87,7 @@ Pour tester tranquillement sur mon PC, ou organiser un CTF sur mon LAN : Je tél
 
 </br>
 
-## Methode 3: Installation from scratch sur Ubuntu
+### Methode 3: Installation from scratch sur Ubuntu
 
 ```
 https://yoloctf.org/yoloctf/iso/mon_premier_ctf_install.zip
@@ -108,10 +101,10 @@ Pour organiser un CTF sur Internet, je fais une installation sur un Ubuntu Serve
 
 
 
-# Participer au CTF
+## Participer au CTF
 
 
-## Accéder au site Web du CTF
+### Accéder au site Web du CTF
 
 Vous pouvez vous connecter avec votre navigateur Web : 
 ```
@@ -155,7 +148,7 @@ Le mot de passe du compte admin est donné dans le terminal:
 
 </br>
 
-## Changer le mot de passe du compte Admin
+### Changer le mot de passe du compte Admin
 
 Le mot de passe étant prédéfini sur la VM, il est nécessaire de le changer :
 <img src="screenshot/localhost_profile_tab.png" width="50%" height="50%">
@@ -167,7 +160,7 @@ Définissez un nouveau mot de passe et cliquez [Change].
 </br>
 
 
-## Monitoring light
+### Monitoring light
 
 <img src="screenshot/localhost_admin.png" width="50%" height="50%">
 
@@ -181,7 +174,7 @@ L'onglet [Admin] en bas à gauche permet de voir :
 </br>
 
 
-## Reseter les Flags
+### Reseter les Flags
 
 <img src="screenshot/localhost_admin.png" width="50%" height="50%">
 
@@ -191,7 +184,7 @@ Vous pouvez aussi vouloir tester un peu. Le lien [ClearFlags] en bas de page per
 </br>
 
 
-## Consultez les feedbacks
+### Consultez les feedbacks
 
 L'onglet Feedback est à utiliser pour obtenir un retour des utilisateurs en fin de CTF, et permet de détailler un problème rencontré sur le site ou un challenge.
 
@@ -200,9 +193,9 @@ L'onglet Feedback est à utiliser pour obtenir un retour des utilisateurs en fin
 
 
 
-# Monitorer
+## Monitorer
 
-## Monitoring du serveur et de ses containers
+### Monitoring du serveur et de ses containers
 
 Une fois que votre serveur tourne, c'est une bonne idée de surveiller ce qui se passe et vérifier la mémoire libre, la charge du CPU et la place restante sur le disque.
 
@@ -241,7 +234,7 @@ tools/monitor.sh
 </br>
 
 
-# Customisation
+## Customisation
 
 Pour ajouter des challenges jetez un oeil à : [install.php?p=New](install.php?p=New)
 

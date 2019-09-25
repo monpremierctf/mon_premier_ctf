@@ -37,7 +37,7 @@
     $Parsedown = new Parsedown();
     
     
-    function pre_process_desc_for_md($desc)
+    function pre_process_desc_for_md_doc($desc)
     {
     // Remplacer \r\n et \r par \n et mettre des espaces autour de ```
     $desc =  str_replace ("\r\n", "\n", $desc);
@@ -46,9 +46,13 @@
     $desc =  str_replace ("\n```\n", "\n ``` \n", $desc);
     $desc_out="";
 
-    $is_in_code=false; // Ne pas mettre de </br> dans un bloc de code ```
+
+    
+    $is_in_code=false; // Ne pas mettre de </br> dans un bloc de code ```, ni en fin de liste - 
     foreach(preg_split('~[\n]~', $desc) as $line) {
-        if (trim($line)=='.') { $line=" ";}
+        if (trim($line)=='.') { $line="</br>";}
+        $desc_out = $desc_out.$line." \n";
+        /*
         if (strpos($line, "```") !== false) {
         $desc_out = $desc_out.$line." \n ";
         $is_in_code = ! $is_in_code;
@@ -61,6 +65,7 @@
             }
         }
         }
+        */
     } 
     return $desc_out;
     }
@@ -86,15 +91,71 @@
 </div>
 
 
+<?php
+    function getH2($text) {
+        $ret = array();
+        $text = str_replace(array("\r\n", "\r"), "\n", $text);
+
+        # remove surrounding line breaks
+        $text = trim($text, "\n");
+
+        # split text into lines
+        $lines = explode("\n", $text);
+        foreach ($lines as $line){
+            if (substr( $line, 0, 3 ) === "## ") {
+                $line = trim($line);
+                $ret[] = substr($line, 3);
+            }
+
+        }
+        return $ret;
+    }
+
+
+    $filename = "README.md";
+    if ($_GET['p']=="VM") { $filename = "install_vm.md"; }
+    if ($_GET['p']=="Ubuntu") { $filename = "install_ubuntu.md"; }
+    if ($_GET['p']=="New") { $filename = "create_new_challenges.md"; }
+
+    $file = file_get_contents($filename);
+    $string = pre_process_desc_for_md_doc($file);
+    $links = getH2($string);
+
+?>
+
 <div class="container-fluid">
     <div class="row">
         <!--- Page TOC  -->
-        <div class="col-md-auto">
+
+
+        <div class="col-md-2 "> 
         <?php
         print '<a href="install.php"><pre class="ctf-menu-color">Read Me</pre></a> ';
+        if ($filename === "README.md") {
+            foreach ($links as $id) {
+                print '<a href="install.php#'.str_replace(" ", "-", $id).'"><pre class="ctf-submenu-color ctf-submenu-size">- '.$id.'</pre></a> ';
+            }
+        }
+
         print '<a href="install.php?p=VM"><pre class="ctf-menu-color">Install VM</pre></a> ';
+        if ($filename === "install_vm.md") {
+            foreach ($links as $id) {
+                print '<a href="install.php#'.str_replace(" ", "-", $id).'"><pre class="ctf-submenu-color ctf-submenu-size">- '.$id.'</pre></a> ';
+            }
+        }
         print '<a href="install.php?p=Ubuntu"><pre class="ctf-menu-color">Install Ubuntu Server</pre></a> ';
+        if ($filename === "install_ubuntu.md") {
+            foreach ($links as $id) {
+                print '<a href="install.php#'.str_replace(" ", "-", $id).'"><pre class="ctf-submenu-color ctf-submenu-size">- '.$id.'</pre></a> ';
+            }
+        }
         print '<a href="install.php?p=New"><pre class="ctf-menu-color">Nouveaux Challenges</pre></a> ';
+        if ($filename === "create_new_challenges.md") {
+            foreach ($links as $id) {
+                print '<a href="install.php#'.str_replace(" ", "-", $id).'"><pre class="ctf-submenu-color ctf-submenu-size">- '.$id.'</pre></a> ';
+            }
+        }
+
         print '<div></div> ';
         print '<a href="../index.php"><pre class="ctf-menu-color">YOLO CTF</pre></a> ';
         ?>
@@ -105,13 +166,7 @@
         <div class="row-md-auto">
 
 <?php
-    $file = file_get_contents("README.md");
 
-    if ($_GET['p']=="VM") { $file = file_get_contents("install_vm.md"); }
-    if ($_GET['p']=="Ubuntu") { $file = file_get_contents("install_ubuntu.md"); }
-    if ($_GET['p']=="New") { $file = file_get_contents("create_new_challenges.md"); }
-    //if ($file=="") { $file = file_get_contents("README.md"); }
-    $string = pre_process_desc_for_md($file);
     print $Parsedown->text($string);
 
 ?>
