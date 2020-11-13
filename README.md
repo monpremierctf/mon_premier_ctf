@@ -79,7 +79,7 @@ http://hacklab.yoloctf.org
 
 </br>
 Un serveur de test est disponible sur http://hacklab.yoloctf.org. Vous pouvez vous créer un compte avec le code 'PT' (on vous demande de ne pas tout péter ;) c'est plus un terrain de jeu qu'un serveur de prod, et il est régulièrement down). Il est régulièrement effaçé et réinstallé. 
-
+Ce serveur utilise des repo git supplémentaires qui sont testés et intégré à yoloctf au fur et à mesure. Lancement de VM de vulnhub, challs supplémentaires...
 
 </br>
 </br>
