@@ -74,11 +74,11 @@ Il n'y a aucune installation à faire sur le poste des utilisateurs.
 
 
 ```
-http://yoloctf.org
+http://hacklab.yoloctf.org
 ```
 
 </br>
-Un serveur de test est disponible sur http://yoloctf.org. Vous pouvez vous créer un compte avec le code 'yolo'. Il est régulièrement effaçé et réinstallé. La durée de vie d'un profil est de 30h... Idéal pour un atelier de 2h qui déborde un peu. Ensuite le terminal ne se lance plus. Il faudra recréer un profil.
+Un serveur de test est disponible sur http://hacklab.yoloctf.org. Vous pouvez vous créer un compte avec le code 'PT' (on vous demande de ne pas tout péter ;) c'est plus un terrain de jeu qu'un serveur de prod, et il est régulièrement down). Il est régulièrement effaçé et réinstallé. 
 
 
 </br>
