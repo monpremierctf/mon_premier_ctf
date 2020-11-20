@@ -26,6 +26,10 @@ Puis [Importer]
 
 ![](screenshot/vbox_importation.jpg)
 
+
+Une fois la machine importée, allez dans Configuration, puis Réseau.
+Vérifiez que vous avez bien 'Accès pas port', et choisissez le Nom de votre carte réseau dans la liste déroulante.
+
 Par défaut, la carte réseau est en mode bridge, et va se faire attribuer une adresse IP par votre routeur.
 
 ## Lancer la VM et obtenir l'adresse IP
