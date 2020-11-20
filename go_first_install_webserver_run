@@ -210,7 +210,7 @@ if [[ $(which python) ]]; then
     printf "${RED}Ko${NC}\n"
     echo "Pour installer python rapidement:"
     echo "sudo apt-get update"
-    echo "sudo apt-get install python-minimal"
+    echo "sudo apt-get install python2"
     exit;
 fi
 
