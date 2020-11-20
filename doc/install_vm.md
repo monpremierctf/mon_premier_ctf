@@ -35,6 +35,7 @@ Par défaut, la carte réseau est en mode bridge, et va se faire attribuer une a
 ## Lancer la VM et obtenir l'adresse IP
 
 Démarrer la VM.
+
 ![](screenshot/VM_ready.jpg)
 
 Connectez vous avec le compte 'yoloctf' et le mot de passe 'yoloctf'.
