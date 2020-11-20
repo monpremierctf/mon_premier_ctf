@@ -58,7 +58,7 @@ web_server/.env
 ### Code d'invitation 
 
 Vous pouvez définir un code d'invitation pour filtrer les participants en enlevant le # en début de ligne.
-
+Dans web_server/.env
 ```
 # CTF_REGISTER_CODE=YOLO
 ```
@@ -69,13 +69,23 @@ CTF_REGISTER_CODE=MonCode
 
 ### Titre perso
 Vous pouvez donner un titre perso à votre CTF en enlevant le # en début de ligne.
-
+Dans web_server/.env
 ```
 #CTF_SUBTITLE=Mon 2nd CTF
 ```
 ```
 CTF_SUBTITLE=Montargis CTF
 ```
+
+### Mot de passe admin statique 
+Vous pouvez préciser le nom du compte admin, et son mot de passe.
+Par défaut, c'est admin, et un mot de passe aléatoire à copier/coller.
+Si vous modifiez le mot de passe, ou l enom du compte, il faut mettre à jour la base de donnée.
+Dans web_server/.env
+```
+./go_rebuild_db
+```
+
 
 ## Lancer le serveur
 
