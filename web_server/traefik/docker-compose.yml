@@ -2,7 +2,7 @@ version: '2'
 
 services:
   traefik:
-    image: traefik:latest
+    image: traefik:1.7
     restart: always
     container_name: traefik
     ports:
