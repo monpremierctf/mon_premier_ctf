@@ -205,7 +205,7 @@ fi
 printf "=> Verification : python 2.7 installé : "
 if [[ $(which python2) ]]; then
     echo "Ok"
-    printf "$(python --version)"
+    printf "$(python2 --version)"
   else
     printf "${RED}Ko${NC}\n"
     echo "Pour installer python rapidement:"
