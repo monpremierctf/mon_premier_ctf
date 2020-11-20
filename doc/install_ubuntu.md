@@ -21,10 +21,7 @@ Il contient toutes les images docker nécessaires aux challenges.
 
 
 ```
-# wget https://yoloctf.org/yoloctf/iso/mon_premier_ctf_install.zip
-# sudo apt-get update
-# sudo apt-get install unzip
-# unzip mon_premier_ctf_install.zip
+# git clone https://github.com/monpremierctf/mon_premier_ctf.git
 ```
 
 
@@ -32,17 +29,17 @@ Il contient toutes les images docker nécessaires aux challenges.
 
 ```
 # cd mon_premier_ctf
-# ./ctf_install
+# ./go_first_install_webserver_run
 ```
 
-Si Docker n'était pas installé ou si l'utilisateur n'était pas dans le groupe Docker, il faut <red>REBOOTER</red> le serveur.
+Si Docker n'était pas installé ou si l'utilisateur n'était pas dans le groupe Docker, il faut suivre les instructions et <red>REBOOTER</red> le serveur.
 
-Note: on peut ne pas rebooter en utilisant 'newgrp docker', mais c'est plus propre de rebooter...
+Note: on peut ne pas rebooter en utilisant 'newgrp docker', et réouvrant un terminal, mais c'est plus propre de rebooter...
 
 Si on a rebooté, on relance l'installation
 ```
 # cd mon_premier_ctf
-# ./ctf_install
+# ./go_first_install_webserver_run
 ```
 
 Le script vérifie que l'installation des outils est correcte et passe à l'installation du CTF.
