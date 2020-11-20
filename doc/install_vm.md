@@ -21,6 +21,7 @@ Selectionnez le fichier yoloctf.ova, faite [Suivant]
 ![](screenshot/vbox_param.jpg)
 
 Cliquez sur Reinitialiser l'adresse MAC.
+Sur VirtualBox 6.1, choisir: Générer de nouvelles adresses Mac pour toutes les interfaces réseau.
 Puis [Importer]
 
 ![](screenshot/vbox_importation.jpg)
