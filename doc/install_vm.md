@@ -52,7 +52,8 @@ Ici c'est 12.0.0.11
 
 Vous pouvez personnaliser votre serveur Web en modifiant le fichier:
 ```
-web_server/.env
+cd web_server
+nano .env
 ```
 
 ### Code d'invitation 
@@ -83,6 +84,7 @@ Par défaut, c'est admin, et un mot de passe aléatoire à copier/coller.
 Si vous modifiez le mot de passe, ou l enom du compte, il faut mettre à jour la base de donnée.
 Dans web_server/.env
 ```
+cd web_server 
 ./go_rebuild_db
 ```
 
@@ -91,7 +93,7 @@ Dans web_server/.env
 
 Démarrez le serveur
 ```
-./ctf_run
+./go_first_install_webserver_run
 ```
 ![](screenshot/VM_running.jpg)
 
