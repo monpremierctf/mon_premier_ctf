@@ -103,7 +103,9 @@ Pour tester tranquillement sur mon PC, ou organiser un CTF sur mon LAN : Je tél
 ## Methode 3: Installation from scratch sur Ubuntu
 
 ```
-https://yoloctf.org/yoloctf/iso/mon_premier_ctf_install.zip
+git clone https://github.com/monpremierctf/mon_premier_ctf.git
+cd monpremierctf
+./go_launch_first_install_webserver_run
 ```
 
 Pour organiser un CTF sur Internet, je fais une installation sur un Ubuntu Server vierge chez Amazon ou OVH
