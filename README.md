@@ -104,7 +104,7 @@ Pour tester tranquillement sur mon PC, ou organiser un CTF sur mon LAN : Je tél
 
 ```
 git clone https://github.com/monpremierctf/mon_premier_ctf.git
-cd monpremierctf
+cd mon_premier_ctf
 ./go_launch_first_install_webserver_run
 ```
 
