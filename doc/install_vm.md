@@ -54,11 +54,18 @@ ifconfig | grep enp -A 1
 
 Ici c'est 12.0.0.11
 
+## Répertoire
+
+Tous les fichiers sont dans le répertoire ~/mon_premier_ctf
+```
+cd ~/mon_premier_ctf
+```
+
 ## Personnaliser un peu la config
 
 Vous pouvez personnaliser votre serveur Web en modifiant le fichier:
 ```
-cd web_server
+cd ~/mon_premier_ctf/web_server
 nano .env
 ```
 
@@ -99,6 +106,7 @@ cd web_server
 
 Démarrez le serveur
 ```
+cd ~/mon_premier_ctf
 ./go_first_install_webserver_run
 ```
 ![](screenshot/VM_running.jpg)
