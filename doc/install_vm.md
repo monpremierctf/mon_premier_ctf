@@ -4,7 +4,7 @@
 ## Télécharger la VM
 
 
-Télécharger https://yoloctf.org/yoloctf/iso/yoloctf.ova
+Télécharger https://drive.google.com/file/d/1Wn_LfDInEkpE5HRb8l1_1C-YpgKK0D8F/view?usp=sharing
 
 Le fichier fait 4,4G. En fonction de votre liaison adsl/fibre ça peut prendre du temps.
 
