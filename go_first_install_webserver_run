@@ -203,7 +203,7 @@ fi
 #
 # python 2.xx installed
 printf "=> Verification : python 2.7 installé : "
-if [[ $(which python) ]]; then
+if [[ $(which python2) ]]; then
     echo "Ok"
     printf "$(python --version)"
   else
