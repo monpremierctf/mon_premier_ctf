@@ -451,8 +451,8 @@ cd - > /dev/null
 # Build dockers images for challenges
 #
 
-python -c 'from gen_config import build_challenges; build_challenges()'
-#python -c 'from gen_config import start_challenges; start_challenges()'
+python2 -c 'from gen_config import build_challenges; build_challenges()'
+#python2 -c 'from gen_config import start_challenges; start_challenges()'
  
 
 
