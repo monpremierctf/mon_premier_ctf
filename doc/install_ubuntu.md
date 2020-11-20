@@ -28,7 +28,7 @@ Il contient toutes les images docker nécessaires aux challenges.
 ## Installation des outils
 
 ```
-# cd mon_premier_ctf
+# cd monpremierctf
 # ./go_first_install_webserver_run
 ```
 
@@ -38,7 +38,7 @@ Note: on peut ne pas rebooter en utilisant 'newgrp docker', et réouvrant un ter
 
 Si on a rebooté, on relance l'installation
 ```
-# cd mon_premier_ctf
+# cd monpremierctf
 # ./go_first_install_webserver_run
 ```
 
