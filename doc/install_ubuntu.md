@@ -14,21 +14,21 @@ Testé sur Ubuntu 18.04.01-desktop et Ubuntu 18.04.02-server.
 ## Télécharger & dézipper le package d'install
 
 
-Télécharger https://yoloctf.org/yoloctf/iso/mon_premier_ctf_install.zip
+Télécharger https://drive.google.com/file/d/1LvcRQ8aUUXzW4xIUsc8UmsR_kseuti4i/view?usp=sharing
 
+````
+wget https://drive.google.com/file/d/1LvcRQ8aUUXzW4xIUsc8UmsR_kseuti4i/view?usp=sharing
+unzip monpremierctf_install.zip
+````
 Le fichier fait 3,5G. En fonction de votre liaison adsl/fibre ça peut prendre du temps.
 Il contient toutes les images docker nécessaires aux challenges.
 
-
-```
-# git clone https://github.com/monpremierctf/mon_premier_ctf.git
-```
 
 
 ## Installation des outils
 
 ```
-# cd monpremierctf
+# cd mon_premier_ctf
 # ./go_first_install_webserver_run
 ```
 
