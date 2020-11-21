@@ -15,10 +15,12 @@ Testé sur Ubuntu 18.04.01-desktop et Ubuntu 18.04.02-server.
 
 
 Télécharger https://drive.google.com/file/d/1LvcRQ8aUUXzW4xIUsc8UmsR_kseuti4i/view?usp=sharing
-
+Le téléchargement se fait à partir d'un navigateur web ou d'un script.
 ````
-wget https://drive.google.com/file/d/1LvcRQ8aUUXzW4xIUsc8UmsR_kseuti4i/view?usp=sharing
-unzip monpremierctf_install.zip
+wget https://raw.githubusercontent.com/monpremierctf/mon_premier_ctf/master/downld_from_googledrive_zippackage.sh
+chmod a+x downld_from_googledrive_zippackage.sh
+./downld_from_googledrive_zippackage.sh
+unzip mon_premier_ctf_install.zip
 ````
 Le fichier fait 3,5G. En fonction de votre liaison adsl/fibre ça peut prendre du temps.
 Il contient toutes les images docker nécessaires aux challenges.
@@ -29,17 +31,19 @@ Il contient toutes les images docker nécessaires aux challenges.
 
 ```
 # cd mon_premier_ctf
-# ./go_first_install_webserver_run
+# ./ctf_install
 ```
 
-Si Docker n'était pas installé ou si l'utilisateur n'était pas dans le groupe Docker, il faut suivre les instructions et <red>REBOOTER</red> le serveur.
+Si Docker n'était pas installé ou si l'utilisateur n'était pas dans le groupe Docker, il faut suivre les instructions:
+- Si vous êtes sur le serveur en direct, il faut le <red>REBOOTER</red>.
+- Si vous êtes en ssh, il faut simplement vous déconnecter et vous reconnecter pour que votre environnement et vos nouveaux groupes soient pris en compte.
 
 Note: on peut ne pas rebooter en utilisant 'newgrp docker', et réouvrant un terminal, mais c'est plus propre de rebooter...
 
 Si on a rebooté, on relance l'installation
 ```
-# cd monpremierctf
-# ./go_first_install_webserver_run
+# cd mon_premier_ctf
+# ./ctf_install
 ```
 
 Le script vérifie que l'installation des outils est correcte et passe à l'installation du CTF.
