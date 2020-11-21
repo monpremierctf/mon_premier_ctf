@@ -21,12 +21,12 @@ $SUDO apt-get update
 #
 # python 2.xx installed
 printf "=> Verification : python 2.7 installé : "
-if [[ $(which python) ]]; then
+if [[ $(which python2) ]]; then
     echo "Ok"
-    printf "$(python --version)"
+    printf "$(python2 --version)"
   else
     printf "Installing python\n"
-    $SUDO apt-get install -y python-minimal
+    $SUDO apt-get install -y python2
 fi
 
 
