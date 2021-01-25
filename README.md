@@ -64,7 +64,7 @@ Il n'y a aucune installation à faire sur le poste des utilisateurs.
 
 3 types d'installations sont possibles:
 
-- Zéro install: le site http://hacklab.yoloctf.org
+- Zéro install: le site http://hacklab.yoloctf.org  (il est down, je peux le remonter si c'est utile, faites moi signe)
 - Installation de la VM pré-configurée
 - Installation de zéro sur un serveur ubuntu
 
