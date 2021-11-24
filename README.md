@@ -70,22 +70,8 @@ Il n'y a aucune installation à faire sur le poste des utilisateurs.
 
 </br>
 
-## Methode 1: Zero install  
 
-
-```
-http://hacklab.yoloctf.org
-```
-
-</br>
-Un serveur de test est disponible sur http://hacklab.yoloctf.org. Vous pouvez vous créer un compte avec le code 'PT' (on vous demande de ne pas tout péter ;) c'est plus un terrain de jeu qu'un serveur de prod, et il est régulièrement down). Il est régulièrement effaçé et réinstallé. 
-Ce serveur utilise des repo git supplémentaires qui sont testés et intégré à yoloctf au fur et à mesure. Lancement de VM de vulnhub, challs supplémentaires...
-
-</br>
-</br>
-</br>
-
-## Methode 2: Installation de la VM YOLO CTF
+## Methode 1: Installation de la VM YOLO CTF
 
 ```
 https://drive.google.com/file/d/1LvcRQ8aUUXzW4xIUsc8UmsR_kseuti4i/view?usp=sharing
@@ -100,7 +86,7 @@ Pour tester tranquillement sur mon PC, ou organiser un CTF sur mon LAN : Je tél
 </br>
 </br>
 
-## Methode 3: Installation from scratch sur Ubuntu
+## Methode 2: Installation from scratch sur Ubuntu
 
 ```
 git clone https://github.com/monpremierctf/mon_premier_ctf.git
